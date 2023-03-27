@@ -43,4 +43,21 @@ db.Sequelize = Sequelize;
 const UserModel = require('./user')
 db.User = UserModel(sequelize, Sequelize)
 
+const ProductModel = require('./product')
+db.Product = ProductModel(sequelize, Sequelize)
+
+const CategoryModel = require('./category')
+db.Category = CategoryModel(sequelize, Sequelize)
+
+const { Category, Product } = db
+
+Category.hasMany(Product, {
+  foreignKey: 'category_id',
+  as: 'category'
+})
+Product.belongsTo(Category, {
+  foreignKey: 'category_id',
+  as: 'category'
+})
+
 module.exports = db;
