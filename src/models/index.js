@@ -49,6 +49,9 @@ db.Product = ProductModel(sequelize, Sequelize)
 const CategoryModel = require('./category')
 db.Category = CategoryModel(sequelize, Sequelize)
 
+const ArticleModel = require('./articles')
+db.Article = ArticleModel(sequelize, Sequelize)
+
 const { Category, Product } = db
 
 Category.hasMany(Product, {
