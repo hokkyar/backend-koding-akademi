@@ -1,4 +1,7 @@
 require('dotenv').config()
+
+const ClientError = require('./exceptions/ClientError')
+
 const express = require('express')
 const app = express()
 
@@ -11,7 +14,12 @@ const api = require('./api/index')
 app.use('/api', api)
 
 app.use((req, res, next) => res.status(404).send({ message: 'Not Found' }))
-app.use((err, req, res, next) => res.status(500).send({ message: 'Internal Server Error', error: err }))
+
+app.use((error, req, res, next) => {
+  if (error instanceof ClientError) res.status(error.statusCode).send({ message: error.message })
+  res.status(500).send({ message: error })
+})
+
 
 const PORT = 3000
 app.listen(PORT, () => console.log(`Server Running at http://localhost:${PORT}`))
