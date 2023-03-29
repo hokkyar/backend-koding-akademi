@@ -1,10 +1,4 @@
-const {
-  getUsersService,
-  getDetailUserService,
-  postUserService,
-  putUserService,
-  deleteUserService
-} = require('./services')
+const { getUsersService, getDetailUserService, postUserService, putUserService, deleteUserService } = require('./services')
 
 exports.getUsers = async (req, res) => {
   const users = await getUsersService()

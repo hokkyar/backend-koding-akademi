@@ -1,13 +1,13 @@
-const express = require('express')
-const router = express.Router()
+const router = require('express').Router()
+const asyncHandler = require('express-async-handler')
 
 const { getArticle, getDetailArticle, postArticle, putArticle, deleteArticle } = require('./controllers')
 
-router.get('/articles', getArticle)
-router.get('/articles/:id', getDetailArticle)
-router.post('/articles', postArticle)
-router.put('/articles/:id', putArticle)
-router.delete('/articles/:id', deleteArticle)
+router.get('/articles', asyncHandler(getArticle))
+router.get('/articles/:id', asyncHandler(getDetailArticle))
+router.post('/articles', asyncHandler(postArticle))
+router.put('/articles/:id', asyncHandler(putArticle))
+router.delete('/articles/:id', asyncHandler(deleteArticle))
 
 
 module.exports = router

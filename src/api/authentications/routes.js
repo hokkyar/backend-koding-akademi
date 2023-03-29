@@ -1,14 +1,10 @@
-const express = require('express')
-const router = express.Router()
+const router = require('express').Router()
+const asyncHandler = require('express-async-handler')
 
-const {
-  postAuthentication,
-  putAuthentication,
-  deleteAuthentication
-} = require('./controllers')
+const { postAuthentication, putAuthentication, deleteAuthentication } = require('./controllers')
 
-router.post('/authentications', postAuthentication)
-router.put('/authentications', putAuthentication)
-router.delete('/authentications', deleteAuthentication)
+router.post('/authentications', asyncHandler(postAuthentication))
+router.put('/authentications', asyncHandler(putAuthentication))
+router.delete('/authentications', asyncHandler(deleteAuthentication))
 
 module.exports = router

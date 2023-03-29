@@ -1,13 +1,8 @@
 const InvariantError = require('../../exceptions/InvariantError')
-const asyncHandler = require('express-async-handler')
 
-const {
-  loginUser,
-  updateToken,
-  deleteToken
-} = require('./services')
+const { loginUser, updateToken, deleteToken } = require('./services')
 
-exports.postAuthentication = asyncHandler(async (req, res, next) => {
+exports.postAuthentication = async (req, res) => {
   const { email, password, confirmPassword } = req.body
 
   if (password !== confirmPassword) throw new InvariantError('password tidak sama')
@@ -19,7 +14,7 @@ exports.postAuthentication = asyncHandler(async (req, res, next) => {
     accessToken,
     refreshToken
   })
-})
+}
 
 exports.putAuthentication = async (req, res) => {
   const { refreshToken } = req.body
