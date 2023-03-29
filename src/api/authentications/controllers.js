@@ -1,23 +1,38 @@
-const NotFoundError = require('../../exceptions/NotFoundError')
+const { loginUser, updateToken, deleteToken } = require('./services')
+const InvariantError = require('../../exceptions/InvariantError')
+const jwt = require('jsonwebtoken')
+const asyncHandler = require('express-async-handler')
 
-exports.postAuthentication = (req, res) => {
-  const { email, password } = req.body
+exports.postAuthentication = asyncHandler(async (req, res, next) => {
+  const { email, password, confirmPassword } = req.body
 
-  res.status(201).json({
-    message: 'Login berhasil',
-    accessToken: 'asdf',
-    refreshToken: 'asdf'
+  if (password !== confirmPassword) throw new InvariantError('password tidak sama')
+
+  const { accessToken, refreshToken } = await loginUser(email, password)
+
+  return res.status(201).json({
+    message: 'Login Berhasil',
+    accessToken,
+    refreshToken
+  })
+})
+
+exports.putAuthentication = async (req, res) => {
+  const { refreshToken } = req.body
+  await updateToken(refreshToken)
+
+  const accessToken = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
+
+  return res.json({
+    message: 'Token diupdate',
+    accessToken
   })
 }
 
-exports.putAuthentication = (req, res) => {
-  res.json({
-    message: 'berhasil'
-  })
-}
-
-exports.deleteAuthentication = (req, res) => {
-  res.json({
-    message: 'berhasil'
+exports.deleteAuthentication = async (req, res) => {
+  const { refreshToken } = req.body
+  deleteToken(refreshToken)
+  return res.json({
+    message: 'Token dihapus'
   })
 }
