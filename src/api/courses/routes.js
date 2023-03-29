@@ -9,4 +9,5 @@ router.post('/courses', postCourse)
 router.put('/courses/:id', putCourse)
 router.delete('/courses/:id', deleteCourse)
 
+
 module.exports = router
