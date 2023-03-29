@@ -14,8 +14,7 @@ app.use((req, res, next) => res.status(404).send({ message: 'Not Found' }))
 
 const ClientError = require('./exceptions/ClientError')
 app.use((error, req, res, next) => {
-  if (error instanceof ClientError) return res.status(error.statusCode).send({ message: error.message })
-  return res.status(500).send({ message: error })
+  return (error instanceof ClientError) ? res.status(error.statusCode).send({ message: error.message }) : res.status(500).send({ message: error })
 })
 
 const PORT = 3000
