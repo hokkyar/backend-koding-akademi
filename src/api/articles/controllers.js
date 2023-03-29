@@ -1,9 +1,13 @@
-const { Article } = require('../../models/index')
-const {nanoid} = require('nanoid')
+const {
+  getArticleService,
+  getDetailArticleService,
+  postArticleService,
+  putArticleService,
+  deleteArticleService
+} = require('./services')
 
 exports.getArticle = async (req, res) => {
-  const articles = await Article.findAll()
-
+  const articles = await getArticleService()
   return res.json({
     message: 'get all article',
     articles
@@ -12,36 +16,23 @@ exports.getArticle = async (req, res) => {
 
 exports.getDetailArticle = async (req, res) => {
   const { id } = req.params
-  const detailArticle = await Article.findOne({
-    where: {
-      id
-    }
-  })
+  const article = await getDetailArticleService(id)
   return res.json({
     message: 'get detail article',
-    detailArticle
+    article
   })
 }
 
 exports.postArticle = async (req, res) => {
-  const { image_url, title, content } = req.body
-  const id = `article-${nanoid(16)}`
-  await Article.create({
-    id, image_url, title, content
-  })
+  await postArticleService(req.body)
   return res.json({
     message: 'Article berhasil ditambahkan'
   })
 }
 
 exports.putArticle = async (req, res) => {
-  const { image_url, title, content } = req.body
   const { id } = req.params
-  await Article.update({
-    image_url, title, content
-  }, {
-    where: { id }
-  })
+  await putArticleService(id, req.body)
   return res.json({
     message: 'Article berhasil diedit'
   })
@@ -49,10 +40,7 @@ exports.putArticle = async (req, res) => {
 
 exports.deleteArticle = async (req, res) => {
   const { id } = req.params
-  await Article.destroy({
-    where: { id }
-  })
-
+  await deleteArticleService(id)
   return res.json({
     message: 'Article berhasil dihapus'
   })
