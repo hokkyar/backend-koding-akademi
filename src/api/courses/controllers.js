@@ -1,7 +1,6 @@
 const { Product, Category } = require('../../models/index')
-
 exports.getCourses = async (req, res) => {
-  const products = await Product.findAll({
+  const courses = await Product.findAll({
     include: [
       {
         model: Category,
@@ -10,14 +9,11 @@ exports.getCourses = async (req, res) => {
       }
     ],
     attributes: ['name'],
-    where: {
-      category_id: 1
-    }
   })
 
   return res.json({
     message: 'get all courses',
-    products
+    courses
   })
 }
 
@@ -35,9 +31,35 @@ exports.getDetailCourse = async (req, res) => {
 }
 
 exports.postCourse = async (req, res) => {
-  try {
+  const {name, price, discount_price, description, category_id, img_url, quota} = req.body
+  const id = 'KN123'
+  await Product.create({
+    id, name, price, discount_price, description, category_id, img_url, quota
+  })
+  res.json({
+    message: 'Course berhasil ditambahkan'
+  })
+}
 
-  } catch (error) {
-    res.json({ message: error })
-  }
+exports.putCourse = async (req, res) => {
+  const {name, price, discount_price, description, category_id, img_url, quota} = req.body
+  const {id} = req.params
+  await Product.update({
+    name, price, discount_price, description, category_id, img_url, quota
+  },{
+    where: {id}
+  })
+  res.json({
+    message: 'Course berhasil diedit'
+  })
+}
+
+exports.deleteCourse = async (req, res) => {
+  const {id} = req.params
+  await Product.destroy({
+    where: {id}
+  })
+  res.json({
+    message: 'Course berhasil dihapus'
+  })
 }
