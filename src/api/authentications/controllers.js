@@ -1,23 +1,39 @@
-const NotFoundError = require('../../exceptions/NotFoundError')
+const { loginUser, updateToken, deleteToken } = require('./services')
+const jwt = require('jsonwebtoken')
 
-exports.postAuthentication = (req, res) => {
-  const { email, password } = req.body
+exports.postAuthentication = async (req, res, next) => {
+  const { email, password, confirmPassword } = req.body
+
+  if (password !== confirmPassword) return res.status(400).json({ message: 'password salah' })
+
+  const id = await loginUser(email, password)
+
+  const accessToken = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
+  const refreshToken = jwt.sign({ id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '2d' })
 
   res.status(201).json({
-    message: 'Login berhasil',
-    accessToken: 'asdf',
-    refreshToken: 'asdf'
+    message: 'Login Berhasil',
+    accessToken,
+    refreshToken
   })
 }
 
-exports.putAuthentication = (req, res) => {
+exports.putAuthentication = async (req, res) => {
+  const { refreshToken } = req.body
+  await updateToken(refreshToken)
+
+  const accessToken = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
+
   res.json({
-    message: 'berhasil'
+    message: 'Token diupdate',
+    accessToken
   })
 }
 
-exports.deleteAuthentication = (req, res) => {
+exports.deleteAuthentication = async (req, res) => {
+  const { refreshToken } = req.body
+  deleteToken(refreshToken)
   res.json({
-    message: 'berhasil'
+    message: 'Token dihapus'
   })
 }
