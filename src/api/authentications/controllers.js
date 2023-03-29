@@ -1,7 +1,11 @@
-const { loginUser, updateToken, deleteToken } = require('./services')
 const InvariantError = require('../../exceptions/InvariantError')
-const jwt = require('jsonwebtoken')
 const asyncHandler = require('express-async-handler')
+
+const {
+  loginUser,
+  updateToken,
+  deleteToken
+} = require('./services')
 
 exports.postAuthentication = asyncHandler(async (req, res, next) => {
   const { email, password, confirmPassword } = req.body

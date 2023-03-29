@@ -1,55 +1,46 @@
-const { User } = require('../../models/index')
-const {nanoid} = require('nanoid')
+const {
+  getUsersService,
+  getDetailUserService,
+  postUserService,
+  putUserService,
+  deleteUserService
+} = require('./services')
 
 exports.getUsers = async (req, res) => {
-  const users = await User.findAll()
+  const users = await getUsersService()
   return res.json({
+    message: 'get all users',
     users
   })
 }
 
 exports.getDetailUser = async (req, res) => {
   const { id } = req.params
-  const detailUser = await User.findOne({
-    where: {
-      id
-    }
-  })
+  const user = await getDetailUserService(id)
   return res.json({
-    message: 'get detail users',
-    detailUser
+    message: 'get detail user',
+    user
   })
 }
 
 exports.postUser = async (req, res) => {
-  const {email, password, name, verified, phone_number} = req.body
-  const id = `user-${nanoid(16)}`
-  await User.create({
-    id, email, password, name, verified, phone_number
-  })
+  await postUserService(req.body)
   res.json({
     message: 'User berhasil ditambahkan'
   })
 }
 
 exports.putUser = async (req, res) => {
-  const {email, password, name, verified, phone_number} = req.body
-  const {id} = req.params
-  await User.update({
-    email, password, name, verified, phone_number
-  },{
-    where : {id}
-  })
+  const { id } = req.params
+  await putUserService(id, req.body)
   res.json({
     message: 'User berhasil diedit'
   })
 }
 
 exports.deleteUser = async (req, res) => {
-  const {id} = req.params
-  await User.destroy({
-    where : {id}
-  })
+  const { id } = req.params
+  await deleteUserService(id)
   res.json({
     message: 'User berhasil dihapus'
   })
