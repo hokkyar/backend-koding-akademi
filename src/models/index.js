@@ -56,7 +56,7 @@ db.Article = ArticleModel(sequelize, Sequelize)
 const AdminModel = require('./admin')
 db.Admin = AdminModel(sequelize, Sequelize)
 
-const AuthTokenModel = require('./cart_items')
+const AuthTokenModel = require('./auth_tokens')
 db.AuthToken = AuthTokenModel(sequelize, Sequelize)
 
 const CartModel = require('./carts')

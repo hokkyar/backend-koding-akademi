@@ -18,9 +18,7 @@ exports.loginUser = async (email, password) => {
   const refreshToken = jwt.sign({ id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '2d' })
 
   // selanjutnya simpan refreshToken di db
-  await AuthToken.create({ token: refreshToken, user_id: id })
-
-  // setelah itu tambahkan token di cookie atau session
+  // await AuthToken.create({ token: refreshToken, user_id: id })
 
   return { name: user.dataValues.name, accessToken, refreshToken }
 }
