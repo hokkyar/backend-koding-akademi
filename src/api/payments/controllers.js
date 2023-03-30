@@ -17,7 +17,7 @@ exports.getDetailPayment = async (req, res) => {
   })
 }
 
-exports.postPayment = async (req, res) => {
+exports.createInvoice = async (req, res) => {
   const { amount, payerEmail, description } = req.body
 
   const { invoice_url } = await i.createInvoice({
@@ -25,7 +25,7 @@ exports.postPayment = async (req, res) => {
     amount,
     payerEmail,
     description,
-    // shouldSendEmail: true,
+    shouldSendEmail: true,
   })
 
   res.json({
@@ -34,8 +34,9 @@ exports.postPayment = async (req, res) => {
 }
 
 exports.xenditCallback = (req, res) => {
-  // const { external_id, status, payment_method, bank_code, amount, payer_email } = req.body
-  // simpan ke db
+  // const { external_id, status, payment_method, payment_channel, amount, payer_email } = req.body
+  // addSuccessCallback(external_id, status, payment_method, payment_channel, amount, payer_email)
+
   console.log(req.body)
   res.sendStatus(200)
 }
