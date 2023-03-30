@@ -1,4 +1,5 @@
 const { getArticleService, getDetailArticleService, postArticleService, putArticleService, deleteArticleService } = require('./services')
+const { validateArticlesBody } = require('../../validator/articles')
 
 exports.getArticle = async (req, res) => {
   const articles = await getArticleService()
@@ -18,6 +19,7 @@ exports.getDetailArticle = async (req, res) => {
 }
 
 exports.postArticle = async (req, res) => {
+  validateArticlesBody(req.body)
   await postArticleService(req.body)
   return res.json({
     message: 'Article berhasil ditambahkan'
@@ -25,6 +27,7 @@ exports.postArticle = async (req, res) => {
 }
 
 exports.putArticle = async (req, res) => {
+  validateArticlesBody(req.body)
   const { id } = req.params
   await putArticleService(id, req.body)
   return res.json({

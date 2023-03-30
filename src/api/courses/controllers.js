@@ -1,10 +1,5 @@
-const {
-  getCoursesService,
-  getDetailCourseService,
-  postCourseService,
-  putCourseService,
-  deleteCourseService
-} = require('./services')
+const { getCoursesService, getDetailCourseService, postCourseService, putCourseService, deleteCourseService } = require('./services')
+const { validateCoursesBody } = require('../../validator/courses')
 
 exports.getCourses = async (req, res) => {
   const courses = await getCoursesService()
@@ -24,6 +19,7 @@ exports.getDetailCourse = async (req, res) => {
 }
 
 exports.postCourse = async (req, res) => {
+  validateCoursesBody(req.body)
   await postCourseService(req.body)
   return res.json({
     message: 'Course berhasil ditambahkan'
@@ -31,6 +27,7 @@ exports.postCourse = async (req, res) => {
 }
 
 exports.putCourse = async (req, res) => {
+  validateCoursesBody(req.body)
   const { id } = req.params
   await putCourseService(id, req.body)
   return res.json({
