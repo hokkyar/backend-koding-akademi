@@ -8,6 +8,6 @@ router.get('/payments/:id', asyncHandler(getDetailPayment))
 router.post('/payments', asyncHandler(createInvoice))
 router.put('/payments/:id', asyncHandler(putPayment))
 router.delete('/payments/:id', asyncHandler(deletePayment))
-router.post('/xendit-callback', xenditCallback)
+router.post('/xendit-callback', asyncHandler(xenditCallback))
 
 module.exports = router
