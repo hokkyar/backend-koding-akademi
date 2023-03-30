@@ -1,4 +1,5 @@
 const { getUsersService, getDetailUserService, postUserService, putUserService, deleteUserService } = require('./services')
+const { validateUsersBody } = require('../../validator/users')
 
 exports.getUsers = async (req, res) => {
   const users = await getUsersService()
@@ -18,6 +19,7 @@ exports.getDetailUser = async (req, res) => {
 }
 
 exports.postUser = async (req, res) => {
+  validateUsersBody(req.body)
   await postUserService(req.body)
   res.json({
     message: 'User berhasil ditambahkan'
@@ -25,6 +27,7 @@ exports.postUser = async (req, res) => {
 }
 
 exports.putUser = async (req, res) => {
+  validateUsersBody(req.body)
   const { id } = req.params
   await putUserService(id, req.body)
   res.json({
