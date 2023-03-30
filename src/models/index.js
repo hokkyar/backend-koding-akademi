@@ -40,6 +40,7 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+// connect
 const UserModel = require('./user')
 db.User = UserModel(sequelize, Sequelize)
 
@@ -52,6 +53,40 @@ db.Category = CategoryModel(sequelize, Sequelize)
 const ArticleModel = require('./articles')
 db.Article = ArticleModel(sequelize, Sequelize)
 
+const AdminModel = require('./admin')
+db.Admin = AdminModel(sequelize, Sequelize)
+
+const AuthTokenModel = require('./cart_items')
+db.AuthToken = AuthTokenModel(sequelize, Sequelize)
+
+const CartModel = require('./carts')
+db.Cart = CartModel(sequelize, Sequelize)
+
+const CartItemModel = require('./cart_items')
+db.CartItem = CartItemModel(sequelize, Sequelize)
+
+const CouponModel = require('./coupons')
+db.Coupon = CouponModel(sequelize, Sequelize)
+
+const CouponCategoryModel = require('./coupon_categories')
+db.CouponCategory = CouponCategoryModel(sequelize, Sequelize)
+
+const UserCouponModel = require('./user_coupons')
+db.UserCoupon = UserCouponModel(sequelize, Sequelize)
+
+const EventDateModel = require('./event_dates')
+db.EventDate = EventDateModel(sequelize, Sequelize)
+
+const OrderModel = require('./orders')
+db.Order = OrderModel(sequelize, Sequelize)
+
+const OrderItemModel = require('./order_items')
+db.OrderItem = OrderItemModel(sequelize, Sequelize)
+
+const TransactionModel = require('./transactions')
+db.Transaction = TransactionModel(sequelize, Sequelize)
+
+// relations
 const { Category, Product } = db
 
 Category.hasMany(Product, {
