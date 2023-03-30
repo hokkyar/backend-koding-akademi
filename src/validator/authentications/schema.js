@@ -2,10 +2,7 @@ const Joi = require('joi')
 
 exports.PostAuthenticationSchema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().required(),
-  confirmPassword: Joi.string().required().valid(Joi.ref('password')).messages({
-    'any.only': 'Password do not match'
-  })
+  password: Joi.string().required()
 })
 
 exports.PutAuthenticationSchema = Joi.object({

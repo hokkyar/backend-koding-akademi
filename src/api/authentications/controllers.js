@@ -5,10 +5,11 @@ exports.postAuthentication = async (req, res) => {
   validatePostAuthentication(req.body)
 
   const { email, password } = req.body
-  const { accessToken, refreshToken } = await loginUser(email, password)
+  const { name, accessToken, refreshToken } = await loginUser(email, password)
 
   return res.status(201).json({
-    message: 'Login Berhasil',
+    message: 'Login success',
+    name,
     accessToken,
     refreshToken
   })
@@ -16,22 +17,20 @@ exports.postAuthentication = async (req, res) => {
 
 exports.putAuthentication = async (req, res) => {
   validatePutAuthentication(req.body)
-
-  await updateToken(req.body)
-  const accessToken = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
+  const dummyUserId = 'user-8ZKQO8siJb'
+  const { accessToken } = await updateToken(req.body, dummyUserId)
 
   return res.json({
-    message: 'Token diupdate',
+    message: 'Token updated',
     accessToken
   })
 }
 
 exports.deleteAuthentication = async (req, res) => {
   validateDeleteAuthentication(req.body)
-
   deleteToken(req.body)
 
   return res.json({
-    message: 'Token dihapus'
+    message: 'Token deleted'
   })
 }
