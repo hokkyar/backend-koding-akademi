@@ -29,6 +29,9 @@ module.exports = {
       img_url: {
         type: Sequelize.STRING
       },
+      quota: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
