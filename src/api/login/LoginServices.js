@@ -3,12 +3,15 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const NotFoundError = require('../../exceptions/NotFoundError')
 const InvariantError = require('../../exceptions/InvariantError')
+const AuthenticationError = require('../../exceptions/AuthenticationError')
 
 exports.userLoginService = async ({ email, password }) => {
   const user = await User.findOne({
     where: { email }
   })
   if (!user) throw new NotFoundError('User not found')
+  if (!user.dataValues.verified) throw new AuthenticationError(`Check your email inbox: (${email})`)
+
   const isPasswordMatch = await bcrypt.compare(password, user.dataValues.password)
   if (!isPasswordMatch) throw new InvariantError('Wrong password')
 

@@ -3,6 +3,6 @@ const asyncHandler = require('express-async-handler')
 
 const { userRegister } = require('./RegisterControllers')
 
-router.post('/register', asyncHandler(userRegister))
+router.post('/', asyncHandler(userRegister))
 
 module.exports = router
