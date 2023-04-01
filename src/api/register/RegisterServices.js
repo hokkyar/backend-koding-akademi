@@ -1,4 +1,5 @@
 const { User } = require('../../models/index')
+// const sendEmailVerification = require('../../utils/sendEmailVerification')
 const { nanoid } = require('nanoid')
 const bcrypt = require('bcrypt')
 const ConflictError = require('../../exceptions/ConflictError')
@@ -21,11 +22,7 @@ exports.registerService = async ({ email, password, name, phone_number }) => {
   })
 
   const email_token = `verify-${nanoid(8)}`
-  // await sendVerificationEmail(email, id, email_token)
+  // await sendEmailVerification(email, id, email_token)
 
   return id
-}
-
-async function sendVerificationEmail(email, id, email_token) {
-  // use nodemailer here
 }
