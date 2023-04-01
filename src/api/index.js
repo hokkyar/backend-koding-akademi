@@ -5,11 +5,12 @@ const verifyAdmin = require('../middleware/verifyAdmin')
 router.use('/login', require('./login/LoginRoutes'))
 router.use('/register', require('./register/RegisterRoutes'))
 router.use('/verify', require('./email-verification/EmailVerificationRoutes'))
-// testing dengan token
+
+// routes dengan token
 // router.use('/admin', verifyToken, verifyAdmin, require('./admin/index'))
 // router.use('/user', verifyToken, require('./user/index'))
 
-// testing tanpa token
+// routes tanpa token
 router.use('/admin', require('./admin/index'))
 router.use('/user', require('./user/index'))
 
