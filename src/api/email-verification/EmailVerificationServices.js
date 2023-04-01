@@ -1,7 +1,7 @@
 const { AuthToken, User } = require('../../models/index')
 const NotFoundError = require('../../exceptions/NotFoundError')
 
-exports.emailVerificationService = async (id, email_token) => {
+exports.emailVerificationService = async ({ id, email_token }) => {
   const token = await AuthToken.findOne({
     where: { token: email_token }
   })

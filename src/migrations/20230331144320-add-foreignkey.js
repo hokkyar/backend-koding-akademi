@@ -3,6 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    // event_dates
     await queryInterface.addConstraint('event_dates', {
       fields: ['product_id'],
       type: 'foreign key',
@@ -13,7 +14,7 @@ module.exports = {
       },
       onDelete: 'CASCADE'
     })
-
+    // products
     await queryInterface.addConstraint('products', {
       fields: ['category_id'],
       type: 'foreign key',

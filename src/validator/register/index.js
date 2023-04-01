@@ -1,7 +1,7 @@
-const { UsersBodySchema } = require('./schema')
+const { RegisterSchema } = require('./schema')
 const InvariantError = require('../../exceptions/InvariantError')
 
-exports.validateUsersBody = (body) => {
-  const validationResult = UsersBodySchema.validate(body)
+exports.validateRegister = (body) => {
+  const validationResult = RegisterSchema.validate(body)
   if (validationResult.error) throw new InvariantError(validationResult.error.message)
 }

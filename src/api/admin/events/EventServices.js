@@ -63,7 +63,7 @@ exports.postEventService = async ({ name, price, discount_price, description, im
   return id
 }
 
-exports.putEventService = async (id, { name, price, discount_price, description, category_id, img_url, quota, dates }) => {
+exports.putEventService = async (id, { name, price, discount_price, description, img_url, quota, dates }) => {
   const event = await Product.findOne({
     where: {
       category_id: 'cat-event-1',
@@ -72,20 +72,37 @@ exports.putEventService = async (id, { name, price, discount_price, description,
   })
   if (!event) throw new NotFoundError('Event not found')
 
-  await EventDate.destroy({ where: { product_id: id } })
+  const eventDate = await EventDate.findAll({
+    where: { product_id: id }
+  })
 
+  if (dates.length === 0) {
+    await Product.update({ name, price, discount_price, description, img_url, quota }, {
+      where: { id }
+    })
+    return
+  }
+
+  if (eventDate.length === 0) { // jika dates di database kosong
+    await createEventDate(id, dates)
+  } else { // jika dates di databse tidak kosong
+    await EventDate.destroy({ where: { product_id: id } })
+    await createEventDate(id, dates)
+  }
+
+  await Product.update({ name, price, discount_price, description, img_url, quota }, {
+    where: { id }
+  })
+
+}
+
+async function createEventDate(product_id, dates) {
   for (let i = 0; i < dates.length; i++) {
     await EventDate.create({
-      product_id: id,
+      product_id,
       date: dates[i]
     })
   }
-
-  await Product.update({
-    name, price, discount_price, description, category_id, img_url, quota
-  }, {
-    where: { id }
-  })
 }
 
 exports.deleteEventService = async (id) => {

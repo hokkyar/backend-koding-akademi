@@ -1,8 +1,8 @@
 const { userLoginService, adminLoginService } = require('./LoginServices')
-const { validatePostAuthentication } = require('../../validator/authentications')
+const { validateAdminLogin, validateUserLogin } = require('../../validator/login')
 
 exports.adminLogin = async (req, res) => {
-  // validatePostAuthentication(req.body)
+  validateAdminLogin(req.body)
   const { accessToken, refreshToken } = await adminLoginService(req.body)
   res.json({
     message: 'Login success',
@@ -12,7 +12,7 @@ exports.adminLogin = async (req, res) => {
 }
 
 exports.userLogin = async (req, res) => {
-  validatePostAuthentication(req.body)
+  validateUserLogin(req.body)
   const { accessToken, refreshToken } = await userLoginService(req.body)
   res.json({
     message: 'Login success',

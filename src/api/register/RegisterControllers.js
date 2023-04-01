@@ -1,8 +1,8 @@
 const { registerService } = require('./RegisterServices')
-const { validateUsersBody } = require('../../validator/users')
+const { validateRegister } = require('../../validator/register')
 
 exports.userRegister = async (req, res) => {
-  validateUsersBody(req.body)
+  validateRegister(req.body)
   const id = await registerService(req.body)
   return res.json({
     message: 'Register success',
