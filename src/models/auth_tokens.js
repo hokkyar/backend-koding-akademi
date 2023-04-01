@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   auth_tokens.init({
     token: DataTypes.STRING,
-    user_id: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'auth_tokens',

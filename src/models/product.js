@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     discount_price: DataTypes.INTEGER,
     description: DataTypes.TEXT,
     category_id: DataTypes.STRING,
-    img_url: DataTypes.STRING
+    img_url: DataTypes.STRING,
+    quota: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Product',

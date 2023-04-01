@@ -9,5 +9,5 @@ exports.UsersBodySchema = Joi.object({
     'any.only': 'Password do not match'
   }),
   name: Joi.string().required(),
-  phone_number: Joi.string()
+  phone_number: Joi.string().allow(null)
 })

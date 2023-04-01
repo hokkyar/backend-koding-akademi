@@ -98,4 +98,8 @@ Product.belongsTo(Category, {
   as: 'category'
 })
 
+Product.hasMany(EventDate, {
+  foreignKey: 'product_id'
+})
+
 module.exports = db;
