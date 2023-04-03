@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     category_id: DataTypes.STRING,
     img_url: DataTypes.STRING,
-    quota: DataTypes.INTEGER
+    quota: DataTypes.INTEGER,
+    duration: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Product',

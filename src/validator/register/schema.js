@@ -8,6 +8,6 @@ exports.RegisterSchema = Joi.object({
   confirmPassword: Joi.string().required().valid(Joi.ref('password')).messages({
     'any.only': 'Password do not match'
   }),
-  name: Joi.string().required(),
+  full_name: Joi.string().required(),
   phone_number: Joi.string().allow(null)
 })
