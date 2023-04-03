@@ -22,6 +22,9 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
+      requirement: {
+        type: Sequelize.TEXT
+      },
       category_id: {
         allowNull: false,
         type: Sequelize.STRING
@@ -30,6 +33,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       quota: {
+        type: Sequelize.INTEGER
+      },
+      duration: {
         type: Sequelize.INTEGER
       },
       createdAt: {

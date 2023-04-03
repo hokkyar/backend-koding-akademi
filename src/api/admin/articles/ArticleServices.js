@@ -17,15 +17,15 @@ exports.getDetailArticleService = async (id) => {
   return article
 }
 
-exports.postArticleService = async ({ image_url, title, content }) => {
+exports.postArticleService = async ({ img_url, title, content }) => {
   const id = `article-${nanoid(16)}`
   await Article.create({
-    id, image_url, title, content
+    id, img_url, title, content
   })
   return id
 }
 
-exports.putArticleService = async (id, { image_url, title, content }) => {
+exports.putArticleService = async (id, { img_url, title, content }) => {
   const article = await Article.findOne({
     where: {
       id
@@ -33,7 +33,7 @@ exports.putArticleService = async (id, { image_url, title, content }) => {
   })
   if (!article) throw new NotFoundError('Article not found')
   await Article.update({
-    image_url, title, content
+    img_url, title, content
   }, {
     where: { id }
   })

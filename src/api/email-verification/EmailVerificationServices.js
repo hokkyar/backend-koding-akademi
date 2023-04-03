@@ -12,10 +12,10 @@ exports.emailVerificationService = async ({ id, email_token }) => {
   })
   if (!user) throw new NotFoundError('Invalid user id')
 
-  await AuthToken.destroy({
-    where: { token: email_token }
-  })
   await User.update({ verified: true }, {
     where: { id }
+  })
+  await AuthToken.destroy({
+    where: { token: email_token }
   })
 }

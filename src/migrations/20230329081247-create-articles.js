@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.UUID
       },
-      image_url: {
+      img_url: {
         type: Sequelize.TEXT
       },
       title: {

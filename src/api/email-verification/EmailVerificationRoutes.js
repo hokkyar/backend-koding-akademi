@@ -3,6 +3,6 @@ const asyncHandler = require('express-async-handler')
 
 const { emailVerification } = require('./EmailVerificationControllers')
 
-router.get('/email-verification', asyncHandler(emailVerification))
+router.get('/', asyncHandler(emailVerification))
 
 module.exports = router
