@@ -10,7 +10,8 @@ const sendEmailVerification = async (email, id, email_token) => {
     }
   })
 
-  const link = `${process.env.HOST}/email-verification?id=${id}&email_token=${email_token}`
+  // const link = `${process.env.HOST}/email-verification?id=${id}&email_token=${email_token}`
+  const link = `${process.env.NGROK}/email-verification?id=${id}&email_token=${email_token}`
   await transporter.sendMail({
     from: 'no-reply@koding-akademi',
     to: email,

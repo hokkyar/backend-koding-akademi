@@ -36,7 +36,7 @@ exports.putArticle = async (req, res) => {
     id
   })
 }
-
+// localhost:3000/admin/articles/asdabsdb
 exports.deleteArticle = async (req, res) => {
   const { id } = req.params
   await deleteArticleService(id)

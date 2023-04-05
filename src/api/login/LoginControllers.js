@@ -5,18 +5,18 @@ exports.adminLogin = async (req, res) => {
   validateAdminLogin(req.body)
   const { accessToken, refreshToken } = await adminLoginService(req.body)
   res.json({
+    status: 'success',
     message: 'Login success',
-    accessToken,
-    refreshToken
+    data: { accessToken, refreshToken }
   })
 }
 
 exports.userLogin = async (req, res) => {
   validateUserLogin(req.body)
-  const { accessToken, refreshToken } = await userLoginService(req.body)
+  const { full_name, accessToken, refreshToken } = await userLoginService(req.body)
   res.json({
+    status: 'success',
     message: 'Login success',
-    accessToken,
-    refreshToken
+    data: { full_name, accessToken, refreshToken },
   })
 }

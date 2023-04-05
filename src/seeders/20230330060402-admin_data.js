@@ -8,7 +8,7 @@ module.exports = {
     queryInterface.bulkInsert('admins', [
       {
         username: 'koding_akademi',
-        password: bcrypt.hashSync('123', 10),
+        password: bcrypt.hashSync('123abc@@@', 10),
         createdAt: new Date(),
         updatedAt: new Date()
       },

@@ -10,22 +10,23 @@ exports.userLoginService = async ({ email, password }) => {
     where: { email }
   })
   if (!user) throw new NotFoundError('User not found')
-  if (!user.dataValues.verified) throw new AuthenticationError(`Check your email inbox: (${email})`)
 
   const isPasswordMatch = await bcrypt.compare(password, user.dataValues.password)
   if (!isPasswordMatch) throw new InvariantError('Wrong password')
 
+  if (!user.dataValues.verified) throw new AuthenticationError(`Check your email inbox: (${email})`)
+
   const userId = user.dataValues.id
-  const userName = user.dataValues.name
-  const accessToken = jwt.sign({ id: userId, name: userName, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
-  const refreshToken = jwt.sign({ id: userId, name: userName, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' })
+  const full_name = user.dataValues.full_name
+  const accessToken = jwt.sign({ id: userId, name: full_name, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
+  const refreshToken = jwt.sign({ id: userId, name: full_name, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' })
 
   await AuthToken.create({
     token: refreshToken,
     user_id: userId
   })
 
-  return { accessToken, refreshToken }
+  return { full_name, accessToken, refreshToken }
 }
 
 exports.adminLoginService = async ({ username, password }) => {

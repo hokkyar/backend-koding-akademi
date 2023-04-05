@@ -45,7 +45,7 @@ exports.getDetailCourseService = async (id) => {
 exports.postCourseService = async ({ name, price, discount_price, description, category_id, img_url, quota = 1000 }) => {
   const id = `course-${nanoid(16)}`
   await Product.create({
-    id, name, price, discount_price, description, category_id, img_url, quota
+    id, name, price, discount_price, description, category_id, img_url, quota,
   })
   return id
 }

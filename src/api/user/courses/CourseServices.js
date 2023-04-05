@@ -1,5 +1,6 @@
 const { Product, Category } = require('../../../models/index')
 const NotFoundError = require('../../../exceptions/NotFoundError')
+const { Op } = require('sequelize')
 
 exports.getCoursesService = async () => {
   const courses = await Product.findAll({

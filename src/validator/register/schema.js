@@ -9,5 +9,7 @@ exports.RegisterSchema = Joi.object({
     'any.only': 'Password do not match'
   }),
   full_name: Joi.string().required(),
-  phone_number: Joi.string().allow(null)
+  phone_number: Joi.string().allow(null).pattern(/^(?:\+62|08)[0-9]{8,10}$/).messages({
+    'string.pattern.base': 'Invalid phone number'
+  })
 })
