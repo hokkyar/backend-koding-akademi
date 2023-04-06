@@ -103,4 +103,11 @@ Product.hasMany(EventDate, {
   foreignKey: 'product_id'
 })
 
+Product.hasOne(CartItem, {
+  foreignKey: 'product_id'
+})
+CartItem.belongsTo(Product, {
+  foreignKey: 'product_id'
+})
+
 module.exports = db;

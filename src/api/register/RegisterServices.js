@@ -1,4 +1,4 @@
-const { User, AuthToken } = require('../../models/index')
+const { User, AuthToken, Cart } = require('../../models/index')
 const sendEmailVerification = require('../../utils/sendEmailVerification')
 const { nanoid } = require('nanoid')
 const bcrypt = require('bcrypt')
@@ -22,6 +22,9 @@ exports.registerService = async ({ email, password, full_name, phone_number }) =
   const email_token = `verify-${nanoid(8)}`
   await AuthToken.create({ token: email_token })
   await sendEmailVerification(email, user_id, email_token)
+
+  const cartId = `cart-${nanoid(16)}`
+  await Cart.create({ id: cartId, user_id })
 
   return { user_id, email_token }
 }

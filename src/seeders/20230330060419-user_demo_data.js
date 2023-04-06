@@ -1,13 +1,12 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
-const { nanoid } = require('nanoid')
 const bcrypt = require('bcrypt')
 
 module.exports = {
   async up(queryInterface, Sequelize) {
     queryInterface.bulkInsert('users', [
       {
-        id: `user-${nanoid(10)}`,
+        id: 'user-YbKLaWaZBK',
         email: 'hokky@gmail.com',
         password: bcrypt.hashSync('123', 10),
         full_name: 'Hokky Aryasta',
@@ -17,7 +16,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: `user-${nanoid(10)}`,
+        id: 'user-BOeEA2rrUV',
         email: 'agung@gmail.com',
         password: bcrypt.hashSync('123', 10),
         full_name: 'Agung Pernata',
