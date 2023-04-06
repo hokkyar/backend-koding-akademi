@@ -29,6 +29,12 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: 'cat-course-5',
+        name: 'Robotic',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
         id: 'cat-event-1',
         name: 'Event',
         createdAt: new Date(),
