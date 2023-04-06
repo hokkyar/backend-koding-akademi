@@ -16,7 +16,7 @@ exports.postCart = async (req, res) => {
   await postCartService(userId, productId)
   res.json({
     status: 'success',
-    message: 'Add cart',
+    // message: 'Add cart item success',
   })
 }
 
@@ -25,6 +25,6 @@ exports.deleteCart = async (req, res) => {
   await deleteCartService(cartId, productId)
   res.json({
     status: 'success',
-    message: 'Delete cart'
+    // message: 'Delete cart item success'
   })
 }

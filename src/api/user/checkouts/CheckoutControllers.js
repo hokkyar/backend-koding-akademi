@@ -1,10 +1,11 @@
-const { checkoutByProductIdService } = require('./CheckoutServices')
+const { checkoutProductsService } = require('./CheckoutServices')
 
-exports.checkoutByProductId = async (req, res) => {
-  const product_id = req.params.id
-  const user_id = req.user.id
-  await checkoutByProductIdService(product_id, user_id)
+exports.checkoutProducts = async (req, res) => {
+  const userId = req.user.id
+  const { productLists } = req.body // productList dalam bentuk array of product id
+  await checkoutProductsService(productLists, userId)
   res.json({
-    message: 'Payment success'
+    status: 'success',
+    message: 'Checkout success'
   })
 }
