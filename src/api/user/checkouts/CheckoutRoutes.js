@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const asyncHandler = require('express-async-handler')
 
-const { checkoutByProductId } = require('./CheckoutControllers')
+const { checkoutProducts } = require('./CheckoutControllers')
 
-router.get('/checkouts/:id', asyncHandler(checkoutByProductId))
+router.post('/checkouts', asyncHandler(checkoutProducts))
 
 module.exports = router

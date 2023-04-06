@@ -1,5 +1,6 @@
-const { Cart, CartItem, Product } = require('../../../models/index')
+const { Cart, CartItem, Product, Order, OrderItem } = require('../../../models/index')
 const NotFoundError = require('../../../exceptions/NotFoundError')
+const ConflictError = require('../../../exceptions/ConflictError')
 
 exports.getCartService = async (userId) => {
   const cart = await Cart.findOne({
@@ -23,6 +24,7 @@ exports.getCartService = async (userId) => {
 }
 
 exports.postCartService = async (userId, productId) => {
+  // cek apakah cart tersedia
   const cart = await Cart.findOne({
     where: {
       user_id: userId
@@ -30,6 +32,10 @@ exports.postCartService = async (userId, productId) => {
   })
   if (!cart) throw new NotFoundError('Cart not found')
 
+  // ambil cartId nya
+  const cartId = cart.dataValues.id
+
+  // cek apakah product tersebut ada
   const product = await Product.findOne({
     where: {
       id: productId
@@ -37,7 +43,30 @@ exports.postCartService = async (userId, productId) => {
   })
   if (!product) throw new NotFoundError('Product not found')
 
-  const cartId = cart.dataValues.id
+  // lihat semua order yang dimiliki oleh user
+  const user_orders = await Order.findAll({
+    where: { user_id: userId }
+  })
+
+  const orderLength = user_orders.length
+  if (orderLength) {
+    for (let i = 0; i < orderLength; i++) {
+      const orderId = user_orders[i].dataValues.id
+      // apakah product yang user akan masukkan ke keranjang sudah diorder
+      const orderItem = await OrderItem.findOne({
+        where: { order_id: orderId, product_id: productId }
+      })
+      if (orderItem) throw new ConflictError('Product already ordered')
+    }
+  }
+
+  // cek apakah ada product yang double di cart usernya
+  const cartItem = await CartItem.findOne({
+    where: { cart_id: cartId, product_id: productId }
+  })
+  if (cartItem) throw new ConflictError('Product already added in your cart')
+
+  // tambahkan cart item ke db
   await CartItem.create({ cart_id: cartId, product_id: productId })
 }
 
