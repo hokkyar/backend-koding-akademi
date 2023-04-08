@@ -104,10 +104,21 @@ Product.hasMany(EventDate, {
 })
 
 Product.hasOne(CartItem, {
-  foreignKey: 'product_id'
+  foreignKey: 'product_id',
+  as: 'product'
 })
 CartItem.belongsTo(Product, {
-  foreignKey: 'product_id'
+  foreignKey: 'product_id',
+  as: 'product'
+})
+
+Order.hasMany(OrderItem, {
+  foreignKey: 'order_id',
+  as: 'order'
+})
+OrderItem.belongsTo(Order, {
+  foreignKey: 'order_id',
+  as: 'order'
 })
 
 module.exports = db;

@@ -7,6 +7,6 @@ router.use(require('./authentications/AuthenticationRoutes'))
 router.use(require('./search/SearchRoutes'))
 router.use(require('./checkouts/CheckoutRoutes'))
 router.use(require('./orders/OrderRoutes'))
-router.use(require('./carts/CartRoutes'))
+router.use(require('./cart/CartRoutes'))
 
 module.exports = router
