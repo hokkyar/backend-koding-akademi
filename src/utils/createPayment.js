@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const Xendit = require('xendit-node')
 const x = new Xendit({
   secretKey: process.env.XENDIT_TOKEN_SECRET,
@@ -11,7 +13,7 @@ const createPayment = async (amount, payerEmail, description) => {
     amount,
     payerEmail,
     description,
-    shouldSendEmail: true,
+    // shouldSendEmail: true,
   })
   return invoice_url
 }

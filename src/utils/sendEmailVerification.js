@@ -1,6 +1,6 @@
 require('dotenv').config()
-const nodemailer = require('nodemailer')
 
+const nodemailer = require('nodemailer')
 const sendEmailVerification = async (email, id, email_token) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
