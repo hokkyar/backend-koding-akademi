@@ -1,10 +1,16 @@
-const { getCoursesService, getDetailCourseService } = require('./CourseServices')
+const { getCoursePromoService, getCoursesService, getDetailCourseService } = require('./CourseServices')
 
 exports.getCourses = async (req, res) => {
-  const courses = await getCoursesService()
+  const { promo } = req.query
+  let courses
+  if (promo === 'true') {
+    courses = await getCoursePromoService()
+  } else {
+    courses = await getCoursesService()
+  }
   return res.json({
     status: 'success',
-    message: 'Get all courses',
+    message: 'Get courses',
     data: courses
   })
 }
