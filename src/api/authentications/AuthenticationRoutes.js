@@ -3,7 +3,7 @@ const asyncHandler = require('express-async-handler')
 
 const { putAuthentication, deleteAuthentication } = require('./AuthenticationControllers')
 
-router.put('/authentications', asyncHandler(putAuthentication))
-router.delete('/authentications', asyncHandler(deleteAuthentication))
+router.put('/', asyncHandler(putAuthentication))
+router.delete('/', asyncHandler(deleteAuthentication))
 
 module.exports = router

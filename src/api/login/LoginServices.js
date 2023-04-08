@@ -18,12 +18,11 @@ exports.userLoginService = async ({ email, password }) => {
 
   const userId = user.dataValues.id
   const full_name = user.dataValues.full_name
-  const accessToken = jwt.sign({ id: userId, name: full_name, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
-  const refreshToken = jwt.sign({ id: userId, name: full_name, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' })
+  const accessToken = jwt.sign({ id: userId, name: full_name, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
+  const refreshToken = jwt.sign({ id: userId, name: full_name, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
 
   await AuthToken.create({
-    token: refreshToken,
-    user_id: userId
+    token: refreshToken
   })
 
   return { full_name, accessToken, refreshToken }
@@ -37,8 +36,8 @@ exports.adminLoginService = async ({ username, password }) => {
   const isPasswordMatch = await bcrypt.compare(password, admin.dataValues.password)
   if (!isPasswordMatch) throw new InvariantError('Wrong password')
 
-  const accessToken = jwt.sign({ username: admin.dataValues.username, role: 'admin' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
-  const refreshToken = jwt.sign({ username: admin.dataValues.username, role: 'admin' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' })
+  const accessToken = jwt.sign({ username: admin.dataValues.username, role: 'admin' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
+  const refreshToken = jwt.sign({ username: admin.dataValues.username, role: 'admin' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
 
   await AuthToken.create({
     token: refreshToken

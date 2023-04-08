@@ -1,5 +1,5 @@
-const { AuthToken } = require('../../../models/index')
-const NotFoundError = require('../../../exceptions/NotFoundError')
+const { AuthToken } = require('../../models/index')
+const NotFoundError = require('../../exceptions/NotFoundError')
 const jwt = require('jsonwebtoken')
 
 exports.putAuthenticationService = async ({ refreshToken }) => {
@@ -7,8 +7,19 @@ exports.putAuthenticationService = async ({ refreshToken }) => {
     where: { token: refreshToken }
   })
   if (!token) throw new NotFoundError('Token not found')
-  const { id, name, role } = jwt.decode(token.dataValues.token)
-  const accessToken = jwt.sign({ id, name, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
+
+  const decodedToken = jwt.decode(token.dataValues.token)
+  const accessToken = jwt.sign(
+    {
+      id: decodedToken.id,
+      name: decodedToken.name,
+      username: decodedToken.username,
+      role: decodedToken.role,
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: process.env.ACCESS_TOKEN_EXPIRED }
+  )
+
   return accessToken
 }
 
