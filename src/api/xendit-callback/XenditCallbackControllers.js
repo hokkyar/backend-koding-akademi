@@ -1,8 +1,15 @@
-const router = require('express').Router()
-const asyncHandler = require('express-async-handler')
-
 const { xenditCallbackService } = require('./XenditCallbackServices')
-/* 
+
+exports.xenditCallbackController = async (req, res) => {
+  const order_id = await xenditCallbackService(req.body)
+  res.json({
+    status: 'success',
+    message: 'Order updated',
+    order_id
+  })
+}
+
+/* RESPONSE CALLBACKNYA
     {
       id: '579c8d61f23fa4ca35e52da4',
       external_id: 'invoice_123124123',
@@ -25,24 +32,14 @@ const { xenditCallbackService } = require('./XenditCallbackServices')
       payment_channel: 'PERMATA',
       payment_destination: '888888888888'
     }
-    external_id --> order_id
-    payment_method --> payment_method
-    status --> payment_status
-    amount --> amount
-    paid_at --> date
-    bank_code --> bank_name
-    ??? --> account_number
   */
 
-router.post('/', asyncHandler(async (req, res) => {
-  const { external_id } = req.body
-  await xenditCallbackService(external_id)
-  res.json({
-    status: 'success',
-    message: 'Order updated',
-    order_id: external_id
-  })
-}))
-
-
-module.exports = router
+/* YANG DIMASUKIN KE TABEL TRANSAKSI
+external_id --> order_id
+payment_method --> payment_method
+status --> payment_status
+amount --> amount
+paid_at --> date
+bank_code --> bank_name
+??? --> account_number
+*/

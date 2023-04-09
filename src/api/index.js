@@ -8,7 +8,7 @@ router.use('/register', require('./register/RegisterRoutes'))
 router.use('/email-verification', require('./email-verification/EmailVerificationRoutes'))
 router.use('/authentications', require('./authentications/AuthenticationRoutes'))
 router.use('/forgot-password', require('./forgot-password/ForgotPasswordRoutes'))
-router.use('/xendit-callback', require('./xendit-callback/XenditCallback'))
+router.use('/xendit-callback', require('./xendit-callback/XenditCallbackRoutes'))
 
 router.use('/admin', verifyToken, verifyAdmin, require('./admin/index'))
 router.use('/user', verifyToken, verifyUser, require('./user/index'))
