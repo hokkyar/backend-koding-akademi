@@ -2,29 +2,23 @@ const { Product, Category } = require('../../../models/index')
 const NotFoundError = require('../../../exceptions/NotFoundError')
 const { Op } = require('sequelize')
 
-exports.getCoursePromoService = async () => {
-  const coursePromo = await Product.findAll({
-    attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'quota'],
-    include: [
-      {
-        model: Category,
-        as: 'category',
-        attributes: ['name']
-      }
-    ],
-    where: {
-      discount_price: {
-        [Op.not]: null
-      },
-      category_id: {
-        [Op.like]: '%course%'
-      }
+exports.getCoursesService = async (category, promo) => {
+  let condition = {
+    category_id: {
+      [Op.like]: '%course%'
     }
-  })
-  return coursePromo
-}
+  }
 
-exports.getCoursesService = async () => {
+  if (category) {
+    condition['$category.name$'] = category
+  }
+
+  if (promo === 'true') {
+    condition['discount_price'] = {
+      [Op.not]: null
+    }
+  }
+
   const courses = await Product.findAll({
     attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'quota'],
     include: [
@@ -34,11 +28,7 @@ exports.getCoursesService = async () => {
         attributes: ['name']
       }
     ],
-    where: {
-      category_id: {
-        [Op.like]: '%course%'
-      }
-    }
+    where: condition
   })
   return courses
 }
