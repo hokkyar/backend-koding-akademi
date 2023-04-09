@@ -20,7 +20,7 @@ exports.getOrdersService = async (userId, orderStatus) => {
       {
         model: OrderItem,
         attributes: ['product_id'],
-        as: 'ordered_item',
+        as: 'order',
         include: [
           {
             model: Product,

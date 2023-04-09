@@ -7,15 +7,15 @@ const x = new Xendit({
 const { Invoice } = x
 const i = new Invoice({})
 
-const createPayment = async (amount, payerEmail, description) => {
-  const { invoice_url } = await i.createInvoice({
-    externalID: 'INV-' + Date.now(),
+const createPayment = async (orderId, amount, payerEmail, description) => {
+  const data = await i.createInvoice({
+    externalID: orderId,
     amount,
     payerEmail,
-    description,
+    description
     // shouldSendEmail: true,
   })
-  return invoice_url
+  return data
 }
 
 module.exports = createPayment

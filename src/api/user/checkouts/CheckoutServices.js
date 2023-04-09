@@ -36,8 +36,8 @@ exports.checkoutProductsService = async (productLists, userId) => {
   const description = generateDescription(productNames)
 
   // buat invoice_url nya
-  const invoice_url = await createPayment(amount, email, description)
-  return invoice_url
+  const responseXendit = await createPayment(orderId, amount, email, description)
+  return responseXendit
 }
 
 async function getUserCartId(userId) {
