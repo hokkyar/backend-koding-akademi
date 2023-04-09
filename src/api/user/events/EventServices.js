@@ -6,11 +6,6 @@ exports.getEventsService = async () => {
     attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'quota'],
     include: [
       {
-        model: Category,
-        as: 'category',
-        attributes: ['name']
-      },
-      {
         model: EventDate,
         attributes: ['date']
       }
@@ -24,12 +19,8 @@ exports.getEventsService = async () => {
 
 exports.getDetailEventService = async (id) => {
   const event = await Product.findOne({
+    attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'quota'],
     include: [
-      {
-        model: Category,
-        as: 'category',
-        attributes: ['name']
-      },
       {
         model: EventDate,
         attributes: ['date']
