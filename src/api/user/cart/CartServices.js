@@ -6,7 +6,7 @@ const ConflictError = require('../../../exceptions/ConflictError')
 exports.getCartItemsService = async (userId) => {
   const cartId = await getUserCartId(userId)
   const cart_items = await CartItem.findAll({
-    attributes: ['createdAt'],
+    attributes: [],
     include: [
       {
         model: Product,
@@ -16,7 +16,9 @@ exports.getCartItemsService = async (userId) => {
     ],
     where: { cart_id: cartId }
   })
-  return { cartId, cart_items }
+
+  const cart_item_responses = cart_items.map((cart_item) => cart_item.product.toJSON())
+  return { cartId, cart_items: cart_item_responses }
 }
 
 exports.postCartItemService = async (userId, productId) => {
