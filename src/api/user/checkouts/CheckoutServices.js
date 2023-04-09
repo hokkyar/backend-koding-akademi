@@ -4,8 +4,6 @@ const { nanoid } = require('nanoid')
 const NotFoundError = require('../../../exceptions/NotFoundError')
 const createPayment = require('../../../utils/createPayment')
 
-// order_status = active, finished, pending, canceled
-
 exports.checkoutProductsService = async (productLists, userId) => {
   // ambil cartId yang user punya
   const cartId = await getUserCartId(userId)
