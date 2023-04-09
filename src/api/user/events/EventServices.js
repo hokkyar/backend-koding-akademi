@@ -1,4 +1,4 @@
-const { Product, Category, EventDate } = require('../../../models/index')
+const { Product, EventDate } = require('../../../models/index')
 const NotFoundError = require('../../../exceptions/NotFoundError')
 
 exports.getEventsService = async () => {

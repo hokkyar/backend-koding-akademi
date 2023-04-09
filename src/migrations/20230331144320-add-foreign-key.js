@@ -62,13 +62,25 @@ module.exports = {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     })
-    // order_items --> order
+    // order_items --> orders
     await queryInterface.addConstraint('order_items', {
       fields: ['order_id'],
       type: 'foreign key',
       name: 'fk_order_items_order_id',
       references: {
         table: 'orders',
+        field: 'id'
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    })
+    // order_items --> products
+    await queryInterface.addConstraint('order_items', {
+      fields: ['product_id'],
+      type: 'foreign key',
+      name: 'fk_order_items_product_id',
+      references: {
+        table: 'products',
         field: 'id'
       },
       onDelete: 'CASCADE',
@@ -83,5 +95,6 @@ module.exports = {
     await queryInterface.removeConstraint('cart_items', 'fk_cart_items_cart_id')
     await queryInterface.removeConstraint('cart_items', 'fk_cart_items_product_id')
     await queryInterface.removeConstraint('order_items', 'fk_order_items_order_id')
+    await queryInterface.removeConstraint('order_items', 'fk_order_items_product_id')
   }
 };

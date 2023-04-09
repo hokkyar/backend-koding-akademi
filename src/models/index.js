@@ -121,4 +121,11 @@ OrderItem.belongsTo(Order, {
   as: 'order'
 })
 
+Product.hasMany(OrderItem, {
+  foreignKey: 'product_id',
+})
+OrderItem.belongsTo(Product, {
+  foreignKey: 'product_id',
+})
+
 module.exports = db;
