@@ -16,7 +16,7 @@ exports.forgotPasswordService = async ({ email }) => {
   console.log(`${process.env.HOST}/forgot-password?token=${token}&id=${userId}`)
 }
 
-exports.confirmForgotPasswordService = async (token, id) => {
+exports.resetPassswordPageService = async (token, id) => {
   const data = await AuthToken.findOne({
     where: { token }
   })
@@ -28,7 +28,7 @@ exports.confirmForgotPasswordService = async (token, id) => {
   if (!user) throw new NotFoundError('Invalid user')
 }
 
-exports.verifyForgotPasswordService = async ({ password, userId, token }) => {
+exports.updatePasswordService = async ({ password, userId, token }) => {
   const hashedPassword = await bcrypt.hash(password, 10)
   await User.update({
     password: hashedPassword

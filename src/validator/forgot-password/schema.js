@@ -4,7 +4,7 @@ exports.ForgotPasswordSchema = Joi.object({
   email: Joi.string().required().email()
 })
 
-exports.VerifyForgotPasswordSchema = Joi.object({
+exports.UpdatePasswordSchema = Joi.object({
   password: Joi.string().required().min(8).regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/).messages({
     'string.pattern.base': 'Password must contain at least one letter, one number, and one symbol',
   }),

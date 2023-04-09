@@ -1,5 +1,5 @@
-const { forgotPasswordService, confirmForgotPasswordService, verifyForgotPasswordService } = require('./ForgotPasswordServices')
-const { validateForgotPasswordBody, validateVerifyForgotPasswordBody } = require('../../validator/forgot-password')
+const { forgotPasswordService, resetPassswordPageService, updatePasswordService } = require('./ForgotPasswordServices')
+const { validateForgotPasswordBody, validateUpdatePasswordBody } = require('../../validator/forgot-password')
 const NotFoundError = require('../../exceptions/NotFoundError')
 
 exports.forgotPassword = async (req, res) => {
@@ -11,16 +11,16 @@ exports.forgotPassword = async (req, res) => {
   })
 }
 
-exports.confirmForgotPassword = async (req, res) => {
+exports.resetPassswordPage = async (req, res) => {
   const { token, id } = req.query
   if (!token || !id) throw new NotFoundError(`Page not found`)
-  await confirmForgotPasswordService(token, id)
+  await resetPassswordPageService(token, id)
   res.render('forgotPasswordPages')
 }
 
-exports.verifyForgotPassword = async (req, res) => {
-  validateVerifyForgotPasswordBody(req.body)
-  await verifyForgotPasswordService(req.body)
+exports.updatePassword = async (req, res) => {
+  validateUpdatePasswordBody(req.body)
+  await updatePasswordService(req.body)
   res.json({
     message: 'Your password has been updated'
   })
