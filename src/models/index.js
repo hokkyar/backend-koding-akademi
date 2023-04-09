@@ -114,11 +114,11 @@ CartItem.belongsTo(Product, {
 
 Order.hasMany(OrderItem, {
   foreignKey: 'order_id',
-  as: 'ordered_item'
+  as: 'order'
 })
 OrderItem.belongsTo(Order, {
   foreignKey: 'order_id',
-  as: 'ordered_item'
+  as: 'order'
 })
 
 Product.hasMany(OrderItem, {
