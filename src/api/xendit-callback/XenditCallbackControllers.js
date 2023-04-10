@@ -2,9 +2,8 @@ const { xenditCallbackService } = require('./XenditCallbackServices')
 
 exports.xenditCallbackController = async (req, res) => {
   const order_id = await xenditCallbackService(req.body)
-  res.json({
+  res.status(201).json({
     status: 'success',
-    message: 'Order updated',
     order_id
   })
 }

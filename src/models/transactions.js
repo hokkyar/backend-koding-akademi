@@ -19,8 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     payment_status: DataTypes.STRING,
     amount: DataTypes.INTEGER,
     date: DataTypes.DATE,
-    bank_name: DataTypes.STRING,
-    account_number: DataTypes.STRING
+    bank_name: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'transactions',

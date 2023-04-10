@@ -6,7 +6,7 @@ exports.checkoutProducts = async (req, res) => {
   validateCheckoutBody(req.body)
   const { productLists } = req.body // productList dalam bentuk array of product id
   const { invoice_url } = await checkoutProductsService(productLists, userId)
-  res.json({
+  res.status(201).json({
     status: 'success',
     message: 'Checkout success',
     invoice_url

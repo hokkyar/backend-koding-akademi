@@ -19,7 +19,7 @@ exports.postCartItem = async (req, res) => {
   validateCartBody(req.body)
   const { productId } = req.body
   await postCartItemService(userId, productId)
-  res.json({
+  res.status(201).json({
     status: 'success',
     message: 'Add cart item success'
   })
