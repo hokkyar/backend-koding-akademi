@@ -16,8 +16,6 @@ module.exports = (sequelize, DataTypes) => {
   order_items.init({
     order_id: DataTypes.STRING,
     product_id: DataTypes.STRING,
-    status: DataTypes.STRING,
-    expired_date: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'order_items',

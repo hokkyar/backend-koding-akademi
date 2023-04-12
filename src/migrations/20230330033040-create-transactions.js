@@ -7,7 +7,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       order_id: {
         type: Sequelize.STRING
@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       amount: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       date: {
         type: Sequelize.DATE

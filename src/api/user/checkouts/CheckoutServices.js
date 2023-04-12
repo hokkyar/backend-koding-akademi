@@ -11,7 +11,7 @@ exports.checkoutProductsService = async (productLists, userId) => {
   // cek apakah cartnya masih kosong (kalo kosong gak bisa checkout)
   await isCartEmptyCheck(cartId)
 
-  // cek apakah product yang akan di checkout ada di db, dan apakah di ada di cart user
+  // cek apakah product yang akan di checkout ada di db, dan apakah ada di cart user
   await isProductAndUserCartItemExist(cartId, productLists)
 
   // buat ordernya

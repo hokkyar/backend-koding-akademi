@@ -87,8 +87,11 @@ db.OrderItem = OrderItemModel(sequelize, Sequelize)
 const TransactionModel = require('./transactions')
 db.Transaction = TransactionModel(sequelize, Sequelize)
 
+const UserProductModel = require('./user_products')
+db.UserProduct = UserProductModel(sequelize, Sequelize)
+
 // relations
-const { Category, Product, AuthToken, User, Cart, CartItem, Order, OrderItem, EventDate, Coupon, CouponCategory, UserCoupon } = db
+const { Category, Product, AuthToken, User, Cart, CartItem, Order, OrderItem, EventDate, Coupon, CouponCategory, UserCoupon, UserProduct } = db
 
 Category.hasMany(Product, {
   foreignKey: 'category_id',

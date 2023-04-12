@@ -14,10 +14,10 @@ module.exports = {
       },
       price: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       discount_price: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       description: {
         type: Sequelize.TEXT
@@ -33,10 +33,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       quota: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
+      },
+      participants: {
+        type: Sequelize.INTEGER.UNSIGNED
       },
       duration: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       createdAt: {
         allowNull: false,

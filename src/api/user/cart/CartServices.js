@@ -27,11 +27,11 @@ exports.postCartItemService = async (userId, productId) => {
   // cek apakah product tersebut ada
   await isProductExist(productId)
 
-  // cek apakah product tersebut sudah di order sebelumnya oleh user
-  await isProductAlreadyOrdered(userId, productId)
-
   // cek apakah ada product yang double di cart usernya
   await isProductAlreadyAddedInCart(cartId, productId)
+
+  // cek apakah product tersebut sudah di order sebelumnya oleh user dan statusnya pending atau success
+  await isProductAlreadyOrdered(userId, productId)
 
   // tambahkan cart item ke tabel order_item
   await CartItem.create({ cart_id: cartId, product_id: productId })
@@ -67,7 +67,7 @@ async function isProductExist(productId) {
 }
 
 async function isProductAlreadyOrdered(userId, productId) {
-  const productAlreadyOrdered = await OrderItem.findOne({
+  const item = await OrderItem.findOne({
     where: {
       [Op.and]: [
         { product_id: productId },
@@ -78,11 +78,19 @@ async function isProductAlreadyOrdered(userId, productId) {
       {
         model: Order,
         as: 'order',
-        attributes: ['user_id']
+        attributes: ['user_id', 'order_status']
       }
     ]
   })
-  if (productAlreadyOrdered) throw new ConflictError('Product already ordered')
+  if (item) throw new ConflictError('Product already ordered')
+  // if (item) {
+  //   const status = item.dataValues.order.order_status
+  //   if (status === 'pending') throw new ConflictError('Product already ordered')
+  //   if (status === 'success') throw new ConflictError('Product already ordered') // revisi
+  //   if(status === 'canceled'){
+
+  //   }
+  // }
 }
 
 async function isProductAlreadyAddedInCart(cartId, productId) {

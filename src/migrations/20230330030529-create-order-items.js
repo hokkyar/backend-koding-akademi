@@ -16,12 +16,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.UUID
       },
-      status: {
-        type: Sequelize.STRING
-      },
-      expired_date: {
-        type: Sequelize.DATE
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -13,6 +13,7 @@ exports.forgotPasswordService = async ({ email }) => {
   const token = `forgotpassword-${nanoid(20)}`
   await AuthToken.create({ token })
   await sendEmailForgotPassword(email, userId, token)
+  // console.log(`${process.env}/forgot-password?token=${token}&id=${userId}`)
 }
 
 exports.resetPassswordPageService = async (token, id) => {

@@ -14,7 +14,7 @@ module.exports = {
       },
       discount: {
         allowNull: false,
-        type: Sequelize.DOUBLE(10,2)
+        type: Sequelize.DOUBLE(10, 2)
       },
       coupon_start: {
         allowNull: false,
@@ -26,11 +26,11 @@ module.exports = {
       },
       quota: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       minimum_price: {
         allowNull: false,
-        type: Sequelize.DOUBLE(10,2)
+        type: Sequelize.DOUBLE(10, 2)
       },
       createdAt: {
         allowNull: false,
