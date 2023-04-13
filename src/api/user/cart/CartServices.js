@@ -1,4 +1,4 @@
-const { Cart, CartItem, Product, Order, OrderItem } = require('../../../models/index')
+const { Cart, CartItem, Product, Order, OrderItem, UserProduct } = require('../../../models/index')
 const { Op } = require('sequelize')
 const NotFoundError = require('../../../exceptions/NotFoundError')
 const ConflictError = require('../../../exceptions/ConflictError')
@@ -30,8 +30,9 @@ exports.postCartItemService = async (userId, productId) => {
   // cek apakah ada product yang double di cart usernya
   await isProductAlreadyAddedInCart(cartId, productId)
 
-  // cek apakah product tersebut sudah di order sebelumnya oleh user dan statusnya pending atau success
-  await isProductAlreadyOrdered(userId, productId)
+  // cek apakah product sudah di order berdasarkan status dan cek di user_product berdasarkan status
+  // await isProductAlreadyOrdered(userId, productId)
+  await isProductActive(userId, productId)
 
   // tambahkan cart item ke tabel order_item
   await CartItem.create({ cart_id: cartId, product_id: productId })
@@ -66,8 +67,28 @@ async function isProductExist(productId) {
   if (!product) throw new NotFoundError('Product not found')
 }
 
-async function isProductAlreadyOrdered(userId, productId) {
-  const item = await OrderItem.findOne({
+// async function isProductAlreadyOrdered(userId, productId) {
+//   const item = await OrderItem.findOne({
+//     where: {
+//       [Op.and]: [
+//         { product_id: productId },
+//         { '$order.user_id$': userId }
+//       ]
+//     },
+//     include: [
+//       {
+//         model: Order,
+//         as: 'order',
+//         attributes: ['user_id', 'order_status']
+//       }
+//     ]
+//   })
+//   if (item) throw new ConflictError('Product already ordered')
+// }
+
+async function isProductActive(userId, productId) {
+  // status order check (success, pending, canceled)
+  const order = await OrderItem.findOne({
     where: {
       [Op.and]: [
         { product_id: productId },
@@ -78,19 +99,26 @@ async function isProductAlreadyOrdered(userId, productId) {
       {
         model: Order,
         as: 'order',
-        attributes: ['user_id', 'order_status']
+        attributes: ['order_status']
       }
     ]
   })
-  if (item) throw new ConflictError('Product already ordered')
-  // if (item) {
-  //   const status = item.dataValues.order.order_status
-  //   if (status === 'pending') throw new ConflictError('Product already ordered')
-  //   if (status === 'success') throw new ConflictError('Product already ordered') // revisi
-  //   if(status === 'canceled'){
 
-  //   }
-  // }
+  let orderStatus
+  if (order) {
+    orderStatus = order.dataValues.order.order_status
+    if (orderStatus === 'pending') throw new ConflictError('Kamu sudah memesan item, namun belum melakukan pembayaran')
+  }
+
+  // status user_products check (active, finished)
+  const userProduct = await UserProduct.findOne({
+    where: { product_id: productId, status: 'active' }
+  })
+
+  if (userProduct) {
+    if (orderStatus === 'success' && userProduct.dataValues.status) throw new ConflictError('Kamu sudah mengikuti course ini')
+  }
+
 }
 
 async function isProductAlreadyAddedInCart(cartId, productId) {

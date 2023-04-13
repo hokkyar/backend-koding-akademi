@@ -1,8 +1,10 @@
 const router = require('express').Router()
 const asyncHandler = require('express-async-handler')
 
-const { getContentByQuery } = require('./SearchControllers')
+const { searchCourses, searchEvents, searchArticles } = require('./SearchControllers')
 
-router.get('/search', asyncHandler(getContentByQuery))
+router.get('/search/courses', asyncHandler(searchCourses))
+router.get('/search/events', asyncHandler(searchEvents))
+router.get('/search/articles', asyncHandler(searchArticles))
 
 module.exports = router

@@ -86,6 +86,18 @@ module.exports = {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     })
+    // orders --> users
+    await queryInterface.addConstraint('orders', {
+      fields: ['user_id'],
+      type: 'foreign key',
+      name: 'fk_orders_user_id',
+      references: {
+        table: 'users',
+        field: 'id'
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    })
   },
 
   async down(queryInterface, Sequelize) {
@@ -96,5 +108,6 @@ module.exports = {
     await queryInterface.removeConstraint('cart_items', 'fk_cart_items_product_id')
     await queryInterface.removeConstraint('order_items', 'fk_order_items_order_id')
     await queryInterface.removeConstraint('order_items', 'fk_order_items_product_id')
+    await queryInterface.removeConstraint('orders', 'fk_orders_user_id')
   }
 };
