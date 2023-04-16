@@ -4,7 +4,8 @@ const params = {
   page: 'dashboard',
   title: 'Dashboard',
   sub: '',
-  detail: ''
+  detail: '',
+  data: ''
 }
 
 router.get('/', (req, res) => res.render('index', params))

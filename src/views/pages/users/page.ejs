@@ -11,7 +11,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <form action="">
+        <form action="/admin/users" method="post">
           <div class="modal-body">
             <div class="form-floating mb-3">
               <input id="name" type="text" class="form-control" placeholder="John Doe" autocomplete="off" required>
@@ -25,11 +25,6 @@
             <div class="form-floating mb-3">
               <input id="password" type="password" name="password" class="form-control" placeholder="password" required>
               <label>Password</label>
-            </div>
-            <div class="form-floating">
-              <input id="confirmPassword" type="password" name="confirmPassword" class="form-control"
-                placeholder="password" required>
-              <label>Confirm Password</label>
             </div>
           </div>
           <div class="modal-footer">
@@ -62,8 +57,32 @@
                 <th>Action</th>
               </tr>
             </thead>
+            <tbody>
+              <% for (let i=0; i < data.length; i++) { %>
+                <tr>
+                  <td>
+                    <%= i + 1 %>
+                  </td>
+                  <td>
+                    <%= data[i].name %>
+                  </td>
+                  <td>
+                    <%= data[i].email %>
+                  </td>
+                  <% if (data[i].verified===0) { %>
+                    <td>
+                      <span class="text-danger">No</span>
+                    </td>
+                  <% } else { %>
+                    <td>
+                      <span class="text-success">Yes</span>
+                    </td>
+                  <% } %>
+                    <td><a href="/admin/users/show/<%= data[i].id %>">Lihat Detail</a></td>
+                </tr>
+              <% } %>
+            </tbody>
           </table>
-
         </div>
       </div>
     </div>
@@ -126,31 +145,8 @@
     })
   }
 
-  const users = []
-  axios.get('http://localhost:3000/api/users').then(response => {
-    const { data } = response.data
-    data.forEach((user, i) => {
-      console.log(user)
-      const singleData = {
-        "#": i + 1,
-        "name": user.name,
-        "email": user.email,
-        "verified": (user.verified === 0) ? `<span class="text-danger">No</span>` : '<span class="text-success">Yes</span>',
-        "action": `<a href="/admin/user-handler/show/${user.id}">Lihat Detail</a>`
-      }
-      users.push(singleData)
-    })
-
-    $('#myTable').DataTable({
-      "data": users,
-      "columns": [
-        { "data": "#" },
-        { "data": "name" },
-        { "data": "email" },
-        { "data": "verified" },
-        { "data": "action" },
-      ]
-    })
+  $(document).ready(function () {
+    $('#myTable').DataTable()
   })
 
 </script>

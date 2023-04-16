@@ -4,7 +4,8 @@ const params = {
   page: 'courses',
   title: 'Courses',
   sub: 'Manage',
-  detail: ''
+  detail: '',
+  data: ''
 }
 
 router.get('/', (req, res) => {

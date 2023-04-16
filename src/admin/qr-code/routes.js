@@ -4,7 +4,8 @@ const params = {
   page: 'qr-code',
   title: 'Scan QR Code',
   sub: 'QR',
-  detail: ''
+  detail: '',
+  data: ''
 }
 
 router.get('/', (req, res) => {
