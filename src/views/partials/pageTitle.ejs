@@ -1,0 +1,33 @@
+<div class="pagetitle">
+  <h1>
+    <%= title %>
+  </h1>
+  <nav>
+    <ol class="breadcrumb">
+      <% if (sub==='' || sub==='Kelola' || sub==='QR' ) { %>
+        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+        <% }else{ %>
+          <li class="breadcrumb-item"><a href="/admin/dashboard">Other</a></li>
+          <% } %>
+            <% if (sub==='Kelola' ) { %>
+              <li class="breadcrumb-item">Kelola</li>
+              <% } %>
+                <li class="breadcrumb-item active">
+                  <% if(page==='show-user' ){ %>
+                    <a href="/admin/user-handler">
+                      <% }else if(page==='show-course' ){ %>
+                        <a href="/admin/course-handler">
+                          <% }else{ %>
+                            <a href="/admin/<% page %>">
+                              <% } %>
+                                <%= title %>
+                            </a>
+                </li>
+                <% if (detail ) { %>
+                  <li class="breadcrumb-item">
+                    <%= detail.id %>
+                  </li>
+                  <% } %>
+    </ol>
+  </nav>
+</div>

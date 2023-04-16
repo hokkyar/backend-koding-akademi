@@ -15,6 +15,9 @@ app.use(express.json())
 const api = require('./api/index')
 app.use(api)
 
+const admin = require('./admin/index')
+app.use('/admin', admin)
+
 app.use((req, res, next) => res.status(404).send({ message: 'API endpoint not found' }))
 
 const ClientError = require('./exceptions/ClientError')

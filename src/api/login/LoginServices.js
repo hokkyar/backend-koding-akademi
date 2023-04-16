@@ -1,4 +1,4 @@
-const { Admin, User, AuthToken } = require('../../models/index')
+const { User, AuthToken } = require('../../models/index')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const NotFoundError = require('../../exceptions/NotFoundError')
@@ -26,22 +26,4 @@ exports.userLoginService = async ({ email, password }) => {
   })
 
   return { full_name, accessToken, refreshToken }
-}
-
-exports.adminLoginService = async ({ username, password }) => {
-  const admin = await Admin.findOne({
-    where: { username }
-  })
-  if (!admin) throw new InvariantError('Invalid username')
-  const isPasswordMatch = await bcrypt.compare(password, admin.dataValues.password)
-  if (!isPasswordMatch) throw new InvariantError('Wrong password')
-
-  const accessToken = jwt.sign({ username: admin.dataValues.username, role: 'admin' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
-  const refreshToken = jwt.sign({ username: admin.dataValues.username, role: 'admin' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
-
-  await AuthToken.create({
-    token: refreshToken
-  })
-
-  return { accessToken, refreshToken }
 }
