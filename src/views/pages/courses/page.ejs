@@ -1,15 +1,178 @@
-<!DOCTYPE html>
-<html lang="en">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jodit/3.24.2/jodit.es2018.min.css" /> -->
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
+<section class="section">
 
-<body>
-  <h1>COURSE NI</h1>
-</body>
+  <!-- Modal -->
+  <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
 
-</html>
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Course</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <form action="" enctype="multipart/form-data">
+          <div class="modal-body">
+            <div class="mb-3">
+              <input id="name" name="name" type="text" class="form-control" placeholder="Judul Course">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1">Rp.</span>
+              <input id="price" name="price" type="number" class="form-control" placeholder="Harga" aria-label="Harga"
+                aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <input id="quota" name="quota" type="number" class="form-control" placeholder="Quota" aria-label="Quota"
+                aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <input id="img" name="img" type="file" class="form-control" aria-label="Gambar"
+                placeholder="Upload Gambar" aria-describedby="basic-addon1">
+            </div>
+            <!-- <div class="mb-3">
+              <select id="category" name="category" class="form-select" aria-label="Default select example">
+                <option selected>Pilih Kategori</option>
+                <option value="Coding">Coding</option>
+                <option value="Robotics">Robotics</option>
+                <option value="App Programming">App Programming</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Bootcamp">Bootcamp</option>
+              </select>
+            </div> -->
+            <div class="mb-3">
+              <textarea id="desc" name="desc" class="form-control" placeholder="Deskripsi" rows="3"></textarea>
+            </div>
+            <!-- <div class="mb-3">
+              <textarea id="editor" name="editor"></textarea>
+            </div> -->
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-sm btn-success">Tambah</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal -->
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Kelola Data Course</h5>
+          <button type="button" class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#formModal">
+            <i class="bi bi-journal-plus"></i>
+            Tambah Course
+          </button>
+          <table id="myTable" class="hover row-border cell-border">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Quota</th>
+                <th>Price</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"
+  integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jodit/3.24.2/jodit.es2018.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+  const courses = []
+  // const editor = Jodit.make('#editor');
+  // editor.value = '<p>start</p>';
+  axios.get('http://localhost:3000/api/courses').then(response => {
+    const { data } = response.data
+    data.forEach((course, i) => {
+      const singleData = {
+        "#": i + 1,
+        "name": course.name,
+        "quota": course.quota,
+        "price": 'Rp. ' + course.price,
+        "action": `<a href="/admin/course-handler/show/${course.id}">Lihat Detail</a>`
+      }
+      courses.push(singleData)
+    })
+    $('#myTable').DataTable({
+      "data": courses,
+      "columns": [
+        { "data": "#" },
+        { "data": "name" },
+        { "data": "quota" },
+        { "data": "price" },
+        { "data": "action" },
+      ]
+    })
+  })
+
+  $('form').submit(function (event) {
+    event.preventDefault()
+    $('.modal-footer button').prop('disabled', true)
+
+    const name = $('#name').val()
+    const price = $('#price').val()
+    const img = $('#img').val()
+    const quota = $('#quota').val()
+    const desc = $('#desc').val()
+
+    if (name === '' || price === '' || img === '' || quota === '' || desc === '') {
+      swal({
+        title: "Warning!",
+        text: "Data tidak boleh kosong!",
+        icon: "warning",
+        button: "OK",
+      })
+      $('.modal-footer button').prop('disabled', false)
+      return
+    }
+
+    const formData = new FormData($(this)[0])
+
+    $.ajax({
+      url: 'http://localhost:3000/api/courses',
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: (response) => {
+        swal({
+          title: "Success!",
+          text: "Berhasil disimpan!",
+          icon: "success",
+          button: "OK",
+        }).then((clicked) => {
+          if (clicked) {
+            window.location.reload()
+          } else {
+            setInterval(() => {
+              window.location.reload()
+            }, 500)
+          }
+          $('.modal-footer button').prop('disabled', false)
+        })
+      },
+      error: (xhr, status, error) => {
+        swal({
+          title: "Error!",
+          text: xhr.responseText,
+          icon: "error",
+          button: "OK",
+        })
+        $('.modal-footer button').prop('disabled', false)
+      }
+    })
+  })
+</script>

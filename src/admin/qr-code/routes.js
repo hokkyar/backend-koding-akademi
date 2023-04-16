@@ -7,7 +7,7 @@ const params = {
   detail: ''
 }
 
-router.get('/qr-code', (req, res) => {
+router.get('/', (req, res) => {
   res.render('index', params)
 })
 

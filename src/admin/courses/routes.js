@@ -7,7 +7,7 @@ const params = {
   detail: ''
 }
 
-router.get('/courses', (req, res) => {
+router.get('/', (req, res) => {
   res.render('index', params)
 })
 

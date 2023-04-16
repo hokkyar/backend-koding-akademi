@@ -7,6 +7,6 @@ const params = {
   detail: ''
 }
 
-router.get('/dashboard', (req, res) => res.render('index', params))
+router.get('/', (req, res) => res.render('index', params))
 
 module.exports = router
