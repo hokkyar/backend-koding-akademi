@@ -1,7 +1,11 @@
 const router = require('express').Router()
 
+const params = {
+  page: 'users'
+}
+
 router.get('/users', (req, res) => {
-  res.render('pages/users/page')
+  res.render('index', params)
 })
 
 module.exports = router

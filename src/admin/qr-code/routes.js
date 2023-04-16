@@ -1,7 +1,11 @@
 const router = require('express').Router()
 
+const params = {
+  page: 'qr-code'
+}
+
 router.get('/qr-code', (req, res) => {
-  res.render('pages/qr-code/page')
+  res.render('index', params)
 })
 
 module.exports = router

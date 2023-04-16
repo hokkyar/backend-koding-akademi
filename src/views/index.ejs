@@ -1,7 +1,6 @@
 <%- include('partials/header') -%>
-  <%- include('partials/navigation', {sub, title}) %>
+  <%- include('partials/navigation') %>
     <main id="main" class="main">
-      <%- include('partials/pageTitle', {title, sub, detail}) %>
-        <%- include(`pages/${page}`, {detail}) %>
+      <%- include(`pages/${page}/page`) %>
     </main>
     <%- include('partials/footer') %>
