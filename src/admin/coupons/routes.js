@@ -1,7 +1,10 @@
 const router = require('express').Router()
 
 const params = {
-  page: 'coupons'
+  page: 'coupons',
+  title: 'Coupons',
+  sub: 'Manage',
+  detail: ''
 }
 
 router.get('/coupons', (req, res) => {

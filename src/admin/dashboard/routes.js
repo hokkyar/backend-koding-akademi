@@ -1,7 +1,10 @@
 const router = require('express').Router()
 
 const params = {
-  page: 'dashboard'
+  page: 'dashboard',
+  title: 'Dashboard',
+  sub: '',
+  detail: ''
 }
 
 router.get('/dashboard', (req, res) => res.render('index', params))
