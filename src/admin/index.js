@@ -9,7 +9,7 @@ router.use('/qr-code', verifyAdminLogin, require('./qr-code/routes'))
 router.use('/users', verifyAdminLogin, require('./users/routes'))
 router.use('/dashboard', verifyAdminLogin, require('./dashboard/routes'))
 router.use('/profile', verifyAdminLogin, require('./profile/routes'))
-router.use('faq', verifyAdminLogin, require('./faq/routes'))
+router.use('/faq', verifyAdminLogin, require('./faq/routes'))
 router.use('/contact', verifyAdminLogin, require('./contact/routes'))
 
 router.use('/login', require('./login/routes'))
