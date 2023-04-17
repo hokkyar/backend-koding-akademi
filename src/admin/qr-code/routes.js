@@ -2,6 +2,7 @@ const router = require('express').Router()
 
 const params = {
   page: 'qr-code',
+  sub_page: 'page',
   title: 'Scan QR Code',
   sub: 'QR',
   detail: '',

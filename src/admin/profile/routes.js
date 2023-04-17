@@ -2,6 +2,7 @@ const router = require('express').Router()
 
 const params = {
   page: 'profile',
+  sub_page: 'page',
   title: 'Profile',
   sub: 'Profile',
   detail: '',

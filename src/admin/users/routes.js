@@ -1,28 +1,25 @@
 const router = require('express').Router()
+const { User } = require('../../models/index')
 
 const params = {
   page: 'users',
+  sub_page: 'page',
   title: 'Users',
   sub: 'Manage',
-  detail: '',
-  data: [
-    {
-      id: '123aaa',
-      name: 'Hokky Aryasta',
-      email: 'hokky@gmail.com',
-      verified: 1,
-    },
-    {
-      id: '234rrr',
-      name: 'Hokky King',
-      email: 'hokky@email.com',
-      verified: 0,
-    },
-  ]
+  detail: null,
+  data: null
 }
 
-router.get('/', (req, res) => {
-  res.render('index', params)
+router.get('/', async (req, res) => {
+  const data = await User.findAll()
+  res.render('index', { ...params, data })
+})
+
+router.get('/show/:id', async (req, res) => {
+  const data = await User.findOne({
+    where: { id: req.params.id }
+  })
+  res.render('index', { ...params, sub_page: 'show', data })
 })
 
 module.exports = router
