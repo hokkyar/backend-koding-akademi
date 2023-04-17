@@ -2,6 +2,17 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 
+const session = require('express-session')
+app.use(session({
+  secret: process.env.SESSION_SECRET_KEY,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 3600000 }
+}))
+
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({ extended: true }))
+
 app.set('views', './src/views')
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
@@ -14,6 +25,9 @@ app.use(express.json())
 
 const api = require('./api/index')
 app.use(api)
+
+const admin = require('./admin/index')
+app.use('/admin', admin)
 
 app.use((req, res, next) => res.status(404).send({ message: 'API endpoint not found' }))
 

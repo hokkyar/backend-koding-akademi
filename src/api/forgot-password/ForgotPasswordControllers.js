@@ -15,7 +15,7 @@ exports.resetPassswordPage = async (req, res) => {
   const { token, id } = req.query
   if (!token || !id) throw new NotFoundError(`Page not found`)
   await resetPassswordPageService(token, id)
-  res.render('forgotPasswordPages')
+  res.render('forgot-password/page')
 }
 
 exports.updatePassword = async (req, res) => {
@@ -27,5 +27,5 @@ exports.updatePassword = async (req, res) => {
 }
 
 exports.redirectPage = async (req, res) => {
-  res.render('forgotPasswordSuccessPage')
+  res.render('forgot-password/success-page')
 }
