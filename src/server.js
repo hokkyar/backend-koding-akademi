@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.set('views', './src/views')
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
-app.use('/assets', express.static('public/img/'))
+app.use('/public/img/', express.static('public/img/'))
 
 const cors = require('cors')
 app.use(cors())
