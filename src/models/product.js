@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     category_id: DataTypes.STRING,
     img_url: DataTypes.STRING,
     quota: DataTypes.INTEGER,
+    requirement: DataTypes.STRING,
     participants: DataTypes.INTEGER,
     duration: DataTypes.INTEGER
   }, {

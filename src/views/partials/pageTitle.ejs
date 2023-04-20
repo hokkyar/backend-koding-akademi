@@ -4,30 +4,52 @@
   </h1>
   <nav>
     <ol class="breadcrumb">
+
       <% if (sub==='' || sub==='Manage' || sub==='QR' ) { %>
-        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+        <li class="breadcrumb-item"><a>Home</a></li>
         <% }else{ %>
-          <li class="breadcrumb-item"><a href="/admin/dashboard">Other</a></li>
+          <li class="breadcrumb-item"><a>Other</a></li>
           <% } %>
+
             <% if (sub==='Manage' ) { %>
               <li class="breadcrumb-item">Manage</li>
               <% } %>
+
                 <li class="breadcrumb-item active">
-                  <% if(page==='show-user' ){ %>
+                  <% if(page==='users' ){ %>
                     <a href="/admin/users">
-                      <% }else if(page==='show-course' ){ %>
+                      <% }else if(page==='courses' ){ %>
                         <a href="/admin/courses">
-                          <% }else{ %>
-                            <a href="/admin/<% page %>">
-                              <% } %>
-                                <%= title %>
-                            </a>
+                          <% }else if(page==='events' ){ %>
+                            <a href="/admin/events">
+                              <% }else if(page==='articles' ){ %>
+                                <a href="/admin/articles">
+                                  <% }else if(page==='coupons' ){ %>
+                                    <a href="/admin/coupons">
+                                      <% }else{ %>
+                                        <a href="/admin/<%= page %>">
+                                          <% } %>
+                                            <%= title %>
+                                        </a>
                 </li>
-                <% if (detail ) { %>
-                  <li class="breadcrumb-item">
-                    <%= detail.id %>
-                  </li>
+
+                <% if (sub_page==='show' ) { %>
+                  <li class="breadcrumb-item">Show</li>
                   <% } %>
+
+                    <% if (sub_page==='add' ) { %>
+                      <li class="breadcrumb-item"><a href="/admin/<%= page %>/add">Add</a></li>
+                      <% } %>
+
+                        <% if (sub_page==='edit' ) { %>
+                          <li class="breadcrumb-item">Edit</li>
+                          <% } %>
+
+                            <% if (detail) { %>
+                              <li class="breadcrumb-item">
+                                <%= detail %>
+                              </li>
+                              <% } %>
     </ol>
   </nav>
 </div>

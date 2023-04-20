@@ -1,33 +1,60 @@
-<section>
-  <input type="hidden" id="idUser" value="1">
+<section class="bg-white rounded shadow-sm">
+  <input type="hidden" id="idUser" value="<%= data.id %>">
 
-  <div class="profile-user d-flex border border-2 p-4 my-3 gap-2">
-    <img src="https://www.kindpng.com/picc/m/451-4517876_default-profile-hd-png-download.png" alt="profile-picture"
-      width="150">
-    <div class="profile-detail">
-      <h5><span class="fw-bold">Name:</span>
+  <div class="d-flex gap-2 px-4 pt-4 pb-2">
+    <div class="">
+      <h4 class="fw-bold">
         <%= data.name %>
-      </h5>
-      <% if (data.discount_price) { %>
-        <h5><span class="fw-bold">Price:</span>
-          <%= data.discount_price %>
-        </h5>
-        <% }else{ %>
-          <h5><span class="fw-bold">Price:</span>
-            <%= data.price %>
-          </h5>
-          <% } %>
+      </h4>
+    </div>
+    <div class="d-flex gap-2 ms-auto">
+      <button id="deleteBtn" class="btn btn-danger btn-sm">
+        <i class="bi bi-trash"></i>
+        Delete
+      </button>
     </div>
   </div>
 
-  <button id="deleteBtn" class="btn btn-danger btn-sm">
-    <i class="bi bi-trash"></i>
-    Delete
-  </button>
-  <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal">
-    <i class="bi bi-pencil-square"></i>
-    Update
-  </button>
+  <div class="px-4 py-2 gap-2">
+    <div class="d-flex gap-4">
+      <img src="<%= data.img_url %>" alt="picture" width="300">
+    </div>
+  </div>
+
+  <div class="px-4 pb-4 mt-2">
+    <h5><span class="fw-bold">Category:</span>
+      <%= data.category.name %>
+    </h5>
+    <h5 class="fw-bold">Quota: <span class="text-danger">
+        <% if (data.participants) { %>
+          <%= data.participants %>
+            <% }else{ %>
+              0
+              <% } %>
+      </span> / <span class="text-success">
+        <%= data.quota %>
+      </span>
+    </h5>
+    <h5><span class="fw-bold">Price:</span>
+      Rp <%= new Intl.NumberFormat('id-ID').format(data.price) %>
+    </h5>
+    <% if (data.discount_price) { %>
+      <h5><span class="fw-bold">Discount Price:</span>
+        Rp <%= new Intl.NumberFormat('id-ID').format(data.discount_price) %>
+      </h5>
+      <% }else{ %>
+        <h5><span class="fw-bold">Discount Price:</span>
+          None
+        </h5>
+        <% } %>
+          <h5><span class="fw-bold">Description:</span>
+            <%= data.description %>
+          </h5>
+          <h5 id="requirement"><span class="fw-bold">Requirement:</span>
+            <%- data.requirement %>
+          </h5>
+  </div>
+
 
   <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -58,3 +85,40 @@
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"
   integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+  $('#deleteBtn').on('click', () => {
+    swal({
+      title: "Are you sure?",
+      text: '<%= data.name %> will be deleted',
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((confirm) => {
+        if (confirm) {
+          $.ajax({
+            url: 'http://localhost:3000/admin/courses/delete/<%= data.id %>',
+            type: 'DELETE',
+            success: function (result) {
+              swal({
+                title: 'Success!',
+                text: 'Course Deleted',
+                icon: 'success',
+              }).then((result) => {
+                window.location.href = '/admin/courses'
+              })
+            },
+            error: function (err) {
+              swal({
+                title: 'Error!',
+                text: 'An error occured',
+                icon: 'error'
+              })
+            }
+          })
+        }
+      })
+
+  })
+</script>
