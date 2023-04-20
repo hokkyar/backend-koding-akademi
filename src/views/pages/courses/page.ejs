@@ -40,7 +40,11 @@
                       </td>
                       <% } %>
                         <td>
-                          <%= data[i].quota %>
+                          <span class="text-danger">
+                            <%= (data[i].participants) ? data[i].participants : 0 %>
+                          </span>/<span class="text-success">
+                            <%= data[i].quota %>
+                          </span>
                         </td>
                         <td>
                           <a href="/admin/courses/show/<%= data[i].id %>">Show</a> |

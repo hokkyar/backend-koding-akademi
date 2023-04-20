@@ -3,7 +3,8 @@
 <h3 class="fw-bold text-center">Edit Course</h3>
 
 <div class="w-100 bg-white p-4 rounded shadow-sm">
-  <form id="form" action="/admin/courses/edit/:<%= data.id  %>" enctype="multipart/form-data">
+  <form id="form" action="/admin/courses/edit/<%= data.id  %>" enctype="multipart/form-data">
+    <input type="hidden" name="current_img" value="<%= data.img_url %>">
     <div class="modal-body">
 
       <!-- IMG -->
@@ -94,7 +95,7 @@
 
     <div class="mt-4 d-flex gap-2 modal-footer">
       <a href="/admin/courses" class="btn btn-md btn-danger">Cancel</a>
-      <button type="submit" class="btn btn-md btn-success">Save</button>
+      <button type="submit" class="btn btn-md btn-warning">Update</button>
     </div>
   </form>
 </div>
@@ -127,7 +128,7 @@
     $('#form').submit(function (e) {
       e.preventDefault()
       $('button[type="submit"]').prop('disabled', true)
-      const formData = new FormData(this);
+      const formData = new FormData(this)
       $.ajax({
         url: $(this).attr('action'),
         type: 'PUT',

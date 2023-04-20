@@ -2,6 +2,8 @@ const router = require('express').Router()
 const { Product, Category } = require('../../models/index')
 const { Op } = require('sequelize')
 const { nanoid } = require('nanoid')
+const fs = require('fs')
+const path = require('path')
 
 const params = {
   page: 'courses',
@@ -63,9 +65,9 @@ const uploadImage = require('../../middleware/uploadImage')
 router.post('/', uploadImage.single('img'), async (req, res) => {
   const { name, price, quota, category_id, duration } = req.body
 
-  let img_url = 'public/img/default/thomas.png'
+  let img_url = 'https://th.bing.com/th/id/OIP.kzI1EUFN1_qi7eISbXDekgHaHK?pid=ImgDet&rs=1'
   if (req.file) {
-    img_url = req.file.path
+    img_url = `${process.env.HOST}/${req.file.path}`
   }
 
   const discount_price = (req.body.discount_price === '') ? null : req.body.discount_price
@@ -73,7 +75,7 @@ router.post('/', uploadImage.single('img'), async (req, res) => {
   const requirement = (req.body.requirement === '') ? null : req.body.requirement
 
   const id = 'course-' + nanoid(16)
-  await Product.create({ id, img_url: `${process.env.HOST}/${img_url}`, name, price, discount_price, quota, category_id, duration, description, requirement })
+  await Product.create({ id, img_url, name, price, discount_price, quota, category_id, duration, description, requirement })
   res.json({ message: 'success' })
 })
 
@@ -94,31 +96,56 @@ router.get('/edit/:id', async (req, res) => {
 })
 
 // edit course service
-router.put('/edit/:id', async (req, res) => {
-  res.json({
-    message: 'MANTAPP'
+router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
+  const { name, price, quota, category_id, duration, current_img } = req.body
+
+  let img_url = current_img
+  if (req.file) { // if user upload new image
+    if (current_img.includes(process.env.HOST)) {
+      const url = current_img.replace(process.env.HOST, '')
+      const imgDir = path.join(__dirname, '../../../', url)
+      fs.unlink(imgDir, (err) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+        console.log('File deleted successfully')
+      })
+    }
+    img_url = `${process.env.HOST}/${req.file.path}`
+  }
+
+  const discount_price = (req.body.discount_price === '') ? null : req.body.discount_price
+  const description = (req.body.description === '') ? null : req.body.description
+  const requirement = (req.body.requirement === '') ? null : req.body.requirement
+
+  await Product.update({
+    name, img_url, price, quota, category_id, duration, discount_price, description, requirement
+  }, {
+    where: { id: req.params.id }
   })
+
+  res.json({ message: 'success' })
 })
 
 // delete course service
 router.delete('/delete/:id', async (req, res) => {
-  const fs = require('fs')
-  const path = require('path')
-
   const course = await Product.findOne({
     where: { id: req.params.id }
   })
   if (!course) res.render('index', { ...params, sub_page: 'not-found' })
 
-  const img_url = course.img_url.replace('http://localhost:3000', '')
-  const imgDir = path.join(__dirname, '../../../', img_url)
-  fs.unlink(imgDir, (err) => {
-    if (err) {
-      console.error(err)
-      return;
-    }
-    console.log('File deleted successfully')
-  })
+  if (course.img_url.includes(process.env.HOST)) {
+    const img_url = course.img_url.replace(process.env.HOST, '')
+    const imgDir = path.join(__dirname, '../../../', img_url)
+    fs.unlink(imgDir, (err) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+      console.log('File deleted successfully')
+    })
+  }
 
   await Product.destroy({
     where: { id: req.params.id }
