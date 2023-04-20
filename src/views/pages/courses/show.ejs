@@ -12,10 +12,6 @@
         <i class="bi bi-trash"></i>
         Delete
       </button>
-      <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal">
-        <i class="bi bi-pencil-square"></i>
-        Update
-      </button>
     </div>
   </div>
 
@@ -51,11 +47,11 @@
           None
         </h5>
         <% } %>
-          <h5 id="requirement"><span class="fw-bold">Requirement:</span>
-            <%- data.requirement %>
-          </h5>
           <h5><span class="fw-bold">Description:</span>
             <%= data.description %>
+          </h5>
+          <h5 id="requirement"><span class="fw-bold">Requirement:</span>
+            <%- data.requirement %>
           </h5>
   </div>
 
@@ -89,3 +85,40 @@
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"
   integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+  $('#deleteBtn').on('click', () => {
+    swal({
+      title: "Are you sure?",
+      text: 'Delete kontol?',
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((confirm) => {
+        if (confirm) {
+          $.ajax({
+            url: 'http://localhost:3000/admin/courses/delete/<%= data.id %>',
+            type: 'DELETE',
+            success: function (result) {
+              swal({
+                title: 'Success!',
+                text: 'Course Deleted',
+                icon: 'success',
+              }).then((result) => {
+                window.location.href = '/admin/courses'
+              })
+            },
+            error: function (err) {
+              swal({
+                title: 'Error!',
+                text: 'An error occured',
+                icon: 'error'
+              })
+            }
+          })
+        }
+      })
+
+  })
+</script>

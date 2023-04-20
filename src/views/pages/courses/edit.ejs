@@ -1,15 +1,16 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jodit/3.24.7/jodit.min.css" />
 
-<h3 class="fw-bold text-center">Add Course</h3>
+<h3 class="fw-bold text-center">Edit Course</h3>
 
 <div class="w-100 bg-white p-4 rounded shadow-sm">
-  <form id="form" action="/admin/courses" method="post" enctype="multipart/form-data">
+  <form id="form" action="/admin/courses/edit/:<%= data.id  %>" enctype="multipart/form-data">
     <div class="modal-body">
 
       <!-- IMG -->
       <div class="d-flex mb-3 align-items-center">
         <div class="col-2">
-          <img id="cover-img" src="http://localhost:3000/public/img/default/thomas.png" alt="Cover" width="100">
+          <img id="cover-img" src="<%= data.img_url %>" alt="Cover" width="100" onclick="window.open(this.src)"
+            style="cursor: pointer;">
         </div>
         <div class="col">
           <input type="file" name="img" accept="image/*" class="form-control" onchange="previewImage(event)">
@@ -18,7 +19,8 @@
 
       <!-- NAME -->
       <div class="form-floating mb-3">
-        <input type="text" name="name" class="form-control" placeholder="Course" autocomplete="off" required>
+        <input type="text" value="<%= data.name  %>" name="name" class="form-control" placeholder="Course"
+          autocomplete="off" required>
         <label>Course Name</label>
       </div>
 
@@ -27,30 +29,38 @@
         <div class="form-floating col-4">
           <select name="category_id" class="form-select" id="floatingSelectDisabled"
             aria-label="Floating label disabled select example">
-            <option value="cat-course-1" selected>Coding</option>
-            <option value="cat-course-2">App Programming</option>
-            <option value="cat-course-3">Engineering</option>
-            <option value="cat-course-4">Coding Bootcamp</option>
-            <option value="cat-course-5">Robotic</option>
+            <% const categories=['Coding', 'App Programming' , 'Engineering' , 'Coding Bootcamp' , 'Robotic' ] %>
+              <% if (categories.includes(data.category.name)) { %>
+                <option value="<%= data.category_id %>" selected>
+                  <%= data.category.name %>
+                </option>
+                <% } %>
+                  <% categories.forEach((category)=> {
+                    if (category !== data.category.name) { %>
+                    <option value="cat-course-<%= categories.indexOf(category) + 1 %>">
+                      <%= category %>
+                    </option>
+                    <% } }) %>
           </select>
           <label for="floatingSelectDisabled">Category</label>
         </div>
         <!-- QUOTA -->
         <div class="form-floating mb-3 col-4">
-          <input type="number" value="1000" name="quota" class="form-control" placeholder="1" required>
+          <input type="number" value="<%= data.quota  %>" name="quota" class="form-control" placeholder="1" required>
           <label>Quota</label>
         </div>
         <!-- DURATION -->
         <div class="form-floating mb-3 col-4">
-          <input type="number" value="3" name="duration" class="form-control" placeholder="1" required>
+          <input type="number" value="<%= data.duration  %>" name="duration" class="form-control" placeholder="1"
+            required>
           <label>Duration (Month)</label>
         </div>
       </div>
       <!-- PRICE -->
       <div class="form-floating mb-3">
-        <input type="hidden" id="harga" name="price">
+        <input type="hidden" id="harga" name="price" value="<%= data.price  %>">
         <input id="hargaDisplay" onkeyup="formatHarga(this.value)" type="text" class="form-control" placeholder="1"
-          autocomplete="off" required>
+          value="<%= new Intl.NumberFormat('id-ID').format(data.price) %>" autocomplete="off" required>
         <label>Price</label>
       </div>
 
@@ -61,9 +71,9 @@
 
       <!-- DISCOUNT PRICE -->
       <div class="form-floating mb-3 promo" style="display: none;">
-        <input id="discount" type="hidden" name="discount_price">
+        <input id="discount" type="hidden" name="discount_price" value="<%= data.discount_price %>">
         <input id="discountDisplay" onkeyup="formatDiscount(this.value)" type="text" class="form-control"
-          placeholder="1">
+          placeholder="1" value="<%= new Intl.NumberFormat('id-ID').format(data.discount_price) %>">
         <label>Discount Price</label>
       </div>
 
@@ -71,12 +81,12 @@
         <!-- DESCRIPTION -->
         <div class="form-floating col-5">
           <textarea name="description" class="form-control" placeholder="Description" id="floatingTextarea2Disabled"
-            style="height: 200px; resize: none;"></textarea>
+            style="height: 200px; resize: none;"><%= data.description  %></textarea>
           <label for="floatingTextarea2Disabled">Description</label>
         </div>
         <!-- REQUIREMENT -->
         <div class="col">
-          <textarea name="requirement" id="editor" placeholder="Requirement"></textarea>
+          <textarea name="requirement" id="editor" placeholder="Requirement"><%= data.requirement %></textarea>
         </div>
       </div>
 
@@ -97,6 +107,12 @@
   const editor = Jodit.make('#editor')
 
   $(document).ready(function () {
+
+    if ("<%= data.discount_price %>") {
+      $('#inlineCheckbox1').prop('checked', true)
+      $('.promo').show()
+    }
+
     $('#inlineCheckbox1').on('change', function () {
       if ($('#inlineCheckbox1').prop('checked')) {
         $('.promo').show()
@@ -114,14 +130,14 @@
       const formData = new FormData(this);
       $.ajax({
         url: $(this).attr('action'),
-        type: $(this).attr('method'),
+        type: 'PUT',
         data: formData,
         processData: false,
         contentType: false,
         success: function (response) {
           swal({
             title: 'Success!',
-            text: 'Course Added',
+            text: 'Course Updated',
             icon: 'success',
           }).then((result) => {
             window.location.href = '/admin/courses'
@@ -160,9 +176,6 @@
     reader.onload = function () {
       $('#cover-img').attr('src', reader.result)
     }
-    if (file) {
-      reader.readAsDataURL(file)
-    }
+    if (file) reader.readAsDataURL(file)
   }
-
 </script>

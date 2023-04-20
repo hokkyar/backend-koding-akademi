@@ -77,4 +77,54 @@ router.post('/', uploadImage.single('img'), async (req, res) => {
   res.json({ message: 'success' })
 })
 
+// edit course page
+router.get('/edit/:id', async (req, res) => {
+  const course = await Product.findOne({
+    include: [
+      {
+        model: Category,
+        as: 'category',
+        attributes: ['name']
+      }
+    ],
+    where: { id: req.params.id }
+  })
+  if (!course) res.render('index', { ...params, sub_page: 'not-found' })
+  res.render('index', { ...params, sub_page: 'edit', detail: req.params.id, data: course })
+})
+
+// edit course service
+router.put('/edit/:id', async (req, res) => {
+  res.json({
+    message: 'MANTAPP'
+  })
+})
+
+// delete course service
+router.delete('/delete/:id', async (req, res) => {
+  const fs = require('fs')
+  const path = require('path')
+
+  const course = await Product.findOne({
+    where: { id: req.params.id }
+  })
+  if (!course) res.render('index', { ...params, sub_page: 'not-found' })
+
+  const img_url = course.img_url.replace('http://localhost:3000', '')
+  const imgDir = path.join(__dirname, '../../../', img_url)
+  fs.unlink(imgDir, (err) => {
+    if (err) {
+      console.error(err)
+      return;
+    }
+    console.log('File deleted successfully')
+  })
+
+  await Product.destroy({
+    where: { id: req.params.id }
+  })
+
+  res.json({ message: 'success' })
+})
+
 module.exports = router
