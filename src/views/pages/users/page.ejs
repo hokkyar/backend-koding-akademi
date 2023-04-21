@@ -7,28 +7,37 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah User</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add User</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <form action="/admin/users" method="post">
+        <form id="form" action="/admin/users" method="post">
           <div class="modal-body">
             <div class="form-floating mb-3">
-              <input id="name" type="text" class="form-control" placeholder="John Doe" autocomplete="off" required>
-              <label>Nama Lengkap</label>
+              <input type="text" name="full_name" class="form-control" placeholder="John Doe" autocomplete="off"
+                required>
+              <label>Full Name</label>
             </div>
             <div class="form-floating mb-3">
-              <input id="email" type="email" class="form-control" placeholder="contoh@example.com" autocomplete="off"
+              <input type="email" name="email" class="form-control" placeholder="contoh@example.com" autocomplete="off"
                 required>
               <label>Email</label>
             </div>
             <div class="form-floating mb-3">
-              <input id="password" type="password" name="password" class="form-control" placeholder="password" required>
+              <input type="password" name="password" class="form-control" placeholder="password" required>
               <label>Password</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" name="phone_number" class="form-control" placeholder="081" autocomplete="off">
+              <label>Phone Number</label>
+            </div>
+            <div class="form-check form-check-inline mb-3">
+              <input name="verified" class="form-check-input" type="checkbox" id="inlineCheckbox1">
+              <label class="form-check-label" for="inlineCheckbox1">Verified?</label>
             </div>
           </div>
           <div class="modal-footer">
-            <button onclick="" type="button" class="btn btn-md btn-success">Simpan</button>
+            <button type="submit" class="btn btn-md btn-success">Save</button>
           </div>
         </form>
 
@@ -69,16 +78,14 @@
                   <td>
                     <%= data[i].email %>
                   </td>
-                  <% if (data[i].verified===0) { %>
-                    <td>
+                  <td>
+                    <% if (data[i].verified===false) { %>
                       <span class="text-danger">No</span>
-                    </td>
-                    <% } else { %>
-                      <td>
+                      <% } else { %>
                         <span class="text-success">Yes</span>
-                      </td>
-                      <% } %>
-                        <td><a href="/admin/users/show/<%= data[i].id %>">Show</a></td>
+                        <% } %>
+                  </td>
+                  <td><a href="/admin/users/show/<%= data[i].id %>">Show</a></td>
                 </tr>
                 <% } %>
             </tbody>
@@ -93,10 +100,37 @@
   integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script>
+
   $(document).ready(function () {
     $('#myTable').DataTable()
+
+    $('#form').submit(function (e) {
+      e.preventDefault()
+      $('button[type="submit"]').prop('disabled', true)
+      $.ajax({
+        url: $(this).attr('action'),
+        type: $(this).attr('method'),
+        data: $(this).serialize(),
+        success: function (response) {
+          swal({
+            title: 'Success!',
+            text: 'User Added',
+            icon: 'success',
+          }).then((result) => {
+            window.location.href = '/admin/users'
+          })
+        },
+        error: function (err) {
+          swal({
+            title: 'Error!',
+            text: 'An error occured',
+            icon: 'error'
+          })
+        }
+      })
+      $('button[type="submit"]').prop('disabled', false)
+    })
   })
 </script>

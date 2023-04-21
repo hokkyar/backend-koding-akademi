@@ -1,5 +1,7 @@
 const router = require('express').Router()
 const { User } = require('../../models/index')
+const { nanoid } = require('nanoid')
+const bcrypt = require('bcrypt')
 
 const params = {
   page: 'users',
@@ -12,23 +14,44 @@ const params = {
 
 // get all users
 router.get('/', async (req, res) => {
-  const data = await User.findAll()
-  res.render('index', { ...params, data })
+  const users = await User.findAll()
+  res.render('index', { ...params, data: users })
 })
 
 // get detail user
 router.get('/show/:id', async (req, res) => {
-  const data = await User.findOne({
+  const user = await User.findOne({
     where: { id: req.params.id }
   })
-  res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data })
+  if (!user) res.render('index', { ...params, sub_page: 'not-found' })
+  res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: user })
 })
 
-// create user
+// create user service
 router.post('/', async (req, res) => {
-  console.log(req.body)
-  res.send('ok')
-  // await User.create(req.body)
+  const { full_name, email, password } = req.body
+  const phone_number = (req.body.phone_number === '') ? null : req.body.phone_number
+  const verified = (!req.body.verified) ? false : true
+
+  const id = 'user-' + nanoid(16)
+  const hashedPassword = await bcrypt.hash(password, 10)
+  await User.create({ id, full_name, email, password: hashedPassword, phone_number, verified })
+  res.json({ message: 'success' })
+})
+
+// edit user service
+router.put('/edit/:id', async (req, res) => {
+  const verified = req.body.verified ? true : false
+  await User.update({ full_name: req.body.full_name, verified }, { where: { id: req.params.id } })
+  res.json({ message: 'success' })
+})
+
+// delete user service
+router.delete('/delete/:id', async (req, res) => {
+  await User.destroy({
+    where: { id: req.params.id }
+  })
+  res.json({ message: 'success' })
 })
 
 module.exports = router
