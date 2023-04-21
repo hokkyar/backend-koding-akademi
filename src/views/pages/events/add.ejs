@@ -1,4 +1,18 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jodit/3.24.7/jodit.min.css" />
+<style>
+  .date-delete {
+    position: absolute;
+    top: 50%;
+    right: -25px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: .2s;
+  }
+
+  .date-delete:hover {
+    opacity: .8;
+  }
+</style>
 
 <h3 class="fw-bold text-center">Add Event</h3>
 
@@ -7,12 +21,12 @@
     <div class="modal-body">
 
       <!-- IMG -->
-      <div class="d-flex mb-3 align-items-center">
-        <div class="col-2">
+      <div class="d-flex mb-3 align-items-center gap-2">
+        <div class="col-2 text-center">
           <img id="cover-img" src="https://th.bing.com/th/id/OIP.kzI1EUFN1_qi7eISbXDekgHaHK?pid=ImgDet&rs=1" alt="Cover"
             width="100">
         </div>
-        <div class="col">
+        <div class="col-8">
           <input type="file" name="img" accept="image/*" class="form-control" onchange="previewImage(event)">
         </div>
       </div>
@@ -21,6 +35,23 @@
       <div class="form-floating mb-3">
         <input type="text" name="name" class="form-control" placeholder="Event" autocomplete="off" required>
         <label>Event Name</label>
+      </div>
+
+      <div class="d-flex align-items-center mb-1">
+        <div class="col-2 text-center">
+          <button id="addDate" type="button" class="btn btn-success btn-sm"> <i class="bi bi-plus-circle"></i> Add
+            Date</button>
+        </div>
+
+        <!-- DATE -->
+        <div class="col-8" id="dateList">
+          <div class="form-floating mb-2">
+            <input type="date" value="<%= new Date().toISOString().substr(0, 10) %>" class="form-control"
+              placeholder="Event" autocomplete="off" required>
+            <label>Date</label>
+          </div>
+        </div>
+
       </div>
 
       <div class="d-flex">
@@ -35,7 +66,7 @@
         </div>
         <!-- QUOTA -->
         <div class="form-floating mb-3 col-4">
-          <input type="number" value="1000" name="quota" class="form-control" placeholder="1" required>
+          <input type="number" value="100" name="quota" class="form-control" placeholder="1" required>
           <label>Quota</label>
         </div>
       </div>
@@ -69,7 +100,7 @@
     </div>
 
     <div class="mt-4 d-flex gap-2 modal-footer">
-      <a href="/admin/courses" class="btn btn-md btn-danger">Cancel</a>
+      <a href="/admin/events" class="btn btn-md btn-danger">Cancel</a>
       <button type="submit" class="btn btn-md btn-success">Save</button>
     </div>
   </form>
@@ -97,7 +128,11 @@
     $('#form').submit(function (e) {
       e.preventDefault()
       $('button[type="submit"]').prop('disabled', true)
-      const formData = new FormData(this);
+
+      const dates = getInputDates()
+      const formData = new FormData(this)
+      formData.append('dates', JSON.stringify(dates))
+
       $.ajax({
         url: $(this).attr('action'),
         type: $(this).attr('method'),
@@ -107,10 +142,10 @@
         success: function (response) {
           swal({
             title: 'Success!',
-            text: 'Course Added',
+            text: 'Event Added',
             icon: 'success',
           }).then((result) => {
-            window.location.href = '/admin/courses'
+            window.location.href = '/admin/events'
           })
         },
         error: function (err) {
@@ -149,6 +184,30 @@
     if (file) {
       reader.readAsDataURL(file)
     }
+  }
+
+  $('#addDate').on('click', function () {
+    $('#dateList').append(`
+    <div class="form-floating mb-2 position-relative">
+      <input type="date" class="form-control" placeholder="Event" autocomplete="off" required>
+      <label>Date</label>
+      <span class="date-delete" onclick="deleteDate()">
+        <i class="bi bi-trash3 text-danger"></i>
+      </span>
+    </div>
+    `)
+  })
+
+  function deleteDate() {
+    $(event.target).closest('.form-floating').remove()
+  }
+
+  function getInputDates() {
+    const dates = []
+    $("#dateList input[type='date']").each(function () {
+      dates.push($(this).val())
+    })
+    return dates
   }
 
 </script>

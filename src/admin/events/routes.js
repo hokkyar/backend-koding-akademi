@@ -1,5 +1,8 @@
 const router = require('express').Router()
-const { Product, EventDate } = require('../../models/index')
+const { Product, EventDate, sequelize } = require('../../models/index')
+const { nanoid } = require('nanoid')
+const fs = require('fs')
+const path = require('path')
 
 const params = {
   page: 'events',
@@ -49,8 +52,9 @@ router.get('/add', async (req, res) => {
 
 // add event service
 const uploadImage = require('../../middleware/uploadImage')
-router.post('/', async (req, res) => {
-  const { name, price, quota, category_id, duration } = req.body
+router.post('/', uploadImage.single('img'), async (req, res) => {
+  const { name, price, quota, category_id, duration, dates } = req.body
+  const dateObj = JSON.parse(dates)
 
   let img_url = 'https://th.bing.com/th/id/OIP.kzI1EUFN1_qi7eISbXDekgHaHK?pid=ImgDet&rs=1'
   if (req.file) {
@@ -61,8 +65,23 @@ router.post('/', async (req, res) => {
   const description = (req.body.description === '') ? null : req.body.description
   const requirement = (req.body.requirement === '') ? null : req.body.requirement
 
-  const id = 'course-' + nanoid(16)
-  await Product.create({ id, img_url, name, price, discount_price, quota, category_id, duration, description, requirement })
+  try {
+    const id = 'event-' + nanoid(16)
+    await sequelize.transaction(async (t) => {
+      await Product.create({ id, img_url, name, price, discount_price, quota, category_id, duration, description, requirement }, { transaction: t })
+
+      const eventDates = dateObj.map(date => (
+        {
+          product_id: id,
+          date
+        }
+      ))
+      await EventDate.bulkCreate(eventDates, { transaction: t })
+    })
+  } catch (error) {
+    console.log('Error occurred during transaction:', error)
+  }
+
   res.json({ message: 'success' })
 })
 
@@ -85,8 +104,9 @@ router.get('/edit/:id', async (req, res) => {
 })
 
 // edit event service
-router.put('/edit/:id', async (req, res) => {
-  const { name, price, quota, category_id, duration, current_img } = req.body
+router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
+  const { name, price, quota, current_img, dates } = req.body
+  const dateObj = JSON.parse(dates)
 
   let img_url = current_img
   if (req.file) { // if user upload new image
@@ -108,12 +128,31 @@ router.put('/edit/:id', async (req, res) => {
   const description = (req.body.description === '') ? null : req.body.description
   const requirement = (req.body.requirement === '') ? null : req.body.requirement
 
-  await Product.update({
-    name, img_url, price, quota, category_id, duration, discount_price, description, requirement
-  }, {
-    where: { id: req.params.id }
-  })
+  try {
+    await sequelize.transaction(async (t) => {
 
+      await Product.update({
+        name, img_url, price, quota, discount_price, description, requirement
+      }, {
+        where: { id: req.params.id, category_id: 'cat-event-1' },
+        transaction: t
+      })
+
+      await EventDate.destroy({ where: { product_id: req.params.id }, transaction: t })
+
+      const eventDates = dateObj.map(date => (
+        {
+          product_id: req.params.id,
+          date
+        }
+      ))
+
+      await EventDate.bulkCreate(eventDates, { transaction: t })
+
+    })
+  } catch (error) {
+    console.log('Error occurred during transaction:', error)
+  }
   res.json({ message: 'success' })
 })
 

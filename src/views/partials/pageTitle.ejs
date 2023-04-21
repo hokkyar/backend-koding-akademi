@@ -47,7 +47,9 @@
 
                             <% if (detail) { %>
                               <li class="breadcrumb-item">
-                                <%= detail %>
+                                <a href="/admin/<%= page %>/show/<%= detail %>">
+                                  <%= detail %>
+                                </a>
                               </li>
                               <% } %>
     </ol>
