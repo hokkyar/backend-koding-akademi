@@ -1,9 +1,9 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jodit/3.24.7/jodit.min.css" />
 
-<h3 class="fw-bold text-center">Add Course</h3>
+<h3 class="fw-bold text-center">Add Event</h3>
 
 <div class="w-100 bg-white p-4 rounded shadow-sm">
-  <form id="form" action="/admin/courses" method="post" enctype="multipart/form-data">
+  <form id="form" action="/admin/events" method="post" enctype="multipart/form-data">
     <div class="modal-body">
 
       <!-- IMG -->
@@ -19,40 +19,25 @@
 
       <!-- NAME -->
       <div class="form-floating mb-3">
-        <input type="text" name="name" class="form-control" placeholder="Course" autocomplete="off" required>
-        <label>Course Name</label>
+        <input type="text" name="name" class="form-control" placeholder="Event" autocomplete="off" required>
+        <label>Event Name</label>
       </div>
 
       <div class="d-flex">
         <!-- CATEGORY -->
-        <div class="form-floating col-4">
-          <select name="category_id" class="form-select" id="floatingSelectDisabled"
-            aria-label="Floating label disabled select example">
-            <option value="cat-course-1" selected>Coding</option>
-            <option value="cat-course-2">App Programming</option>
-            <option value="cat-course-3">Engineering</option>
-            <option value="cat-course-4">Coding Bootcamp</option>
-            <option value="cat-course-5">Robotic</option>
-          </select>
-          <label for="floatingSelectDisabled">Category</label>
+        <input type="hidden" name="category_id" value="cat-event-1">
+        <!-- PRICE -->
+        <div class="form-floating mb-3 col">
+          <input type="hidden" id="harga" name="price">
+          <input id="hargaDisplay" onkeyup="formatHarga(this.value)" type="text" class="form-control" placeholder="1"
+            autocomplete="off" required>
+          <label>Price (Rp)</label>
         </div>
         <!-- QUOTA -->
         <div class="form-floating mb-3 col-4">
           <input type="number" value="1000" name="quota" class="form-control" placeholder="1" required>
           <label>Quota</label>
         </div>
-        <!-- DURATION -->
-        <div class="form-floating mb-3 col-4">
-          <input type="number" value="3" name="duration" class="form-control" placeholder="1" required>
-          <label>Duration (Month)</label>
-        </div>
-      </div>
-      <!-- PRICE -->
-      <div class="form-floating mb-3">
-        <input type="hidden" id="harga" name="price">
-        <input id="hargaDisplay" onkeyup="formatHarga(this.value)" type="text" class="form-control" placeholder="1"
-          autocomplete="off" required>
-        <label>Price (Rp)</label>
       </div>
 
       <div class="form-check form-check-inline mb-3">

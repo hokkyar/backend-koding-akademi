@@ -14,7 +14,7 @@ const params = {
   data: null
 }
 
-// get all courses (page)
+// get all courses
 router.get('/', async (req, res) => {
   const courses = await Product.findAll({
     attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'quota'],
@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
   res.render('index', { ...params, data: courses })
 })
 
-// get detail course (page)
+// get detail course
 router.get('/show/:id', async (req, res) => {
   const course = await Product.findOne({
     include: [

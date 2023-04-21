@@ -2,59 +2,22 @@
 
 <section class="section">
 
-  <!-- Modal -->
-  <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah User</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <form action="/admin/users" method="post">
-          <div class="modal-body">
-            <div class="form-floating mb-3">
-              <input id="name" type="text" class="form-control" placeholder="John Doe" autocomplete="off" required>
-              <label>Nama Lengkap</label>
-            </div>
-            <div class="form-floating mb-3">
-              <input id="email" type="email" class="form-control" placeholder="contoh@example.com" autocomplete="off"
-                required>
-              <label>Email</label>
-            </div>
-            <div class="form-floating mb-3">
-              <input id="password" type="password" name="password" class="form-control" placeholder="password" required>
-              <label>Password</label>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button onclick="tambahData()" type="button" class="btn btn-md btn-success">Simpan</button>
-          </div>
-        </form>
-
-      </div>
-    </div>
-  </div>
-  <!-- End Modal -->
-
   <div class="row">
     <div class="col-lg-12">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Manage Events</h5>
-          <button type="button" class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#formModal">
+          <a href="/admin/events/add" class="btn btn-sm btn-success mb-3">
             <i class="bi bi-calendar-event"></i>
             Add Event
-          </button>
-
+          </a>
           <table id="myTable" class="hover row-border cell-border">
             <thead>
               <tr>
                 <th>#</th>
-                <th>Name</th>
+                <th>Event Name</th>
                 <th>Price</th>
                 <th>Quota</th>
-                <th>Participants</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -69,20 +32,24 @@
                   </td>
                   <% if (data[i].discount_price) { %>
                     <td>
-                      <%= data[i].discount_price %>
+                      Rp <%= new Intl.NumberFormat('id-ID').format(data[i].discount_price) %>
                     </td>
                     <% }else{ %>
                       <td>
-                        <%= data[i].price %>
+                        Rp <%= new Intl.NumberFormat('id-ID').format(data[i].price) %>
                       </td>
                       <% } %>
                         <td>
-                          <%= data[i].quota %>
+                          <span class="text-danger">
+                            <%= (data[i].participants) ? data[i].participants : 0 %>
+                          </span>/<span class="text-success">
+                            <%= data[i].quota %>
+                          </span>
                         </td>
                         <td>
-                          <%= data[i].participants %>
+                          <a href="/admin/events/show/<%= data[i].id %>">Show</a>
                         </td>
-                        <td><a href="/admin/users/show/<%= data[i].id %>">Show</a></td>
+
                 </tr>
                 <% } %>
             </tbody>
@@ -97,7 +64,6 @@
   integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script>
 

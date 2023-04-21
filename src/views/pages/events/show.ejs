@@ -12,7 +12,7 @@
         <i class="bi bi-trash"></i>
         Delete
       </button>
-      <a href="/admin/courses/edit/<%= data.id %>" class="btn btn-warning btn-sm">
+      <a href="/admin/events/edit/<%= data.id %>" class="btn btn-warning btn-sm">
         <div class="h-100 gap-1 d-flex align-items-center">
           <i class="bi bi-pencil-square"></i>
           Edit
@@ -28,9 +28,19 @@
   </div>
 
   <div class="px-4 pb-4 mt-2">
-    <h5><span class="fw-bold">Category:</span>
-      <%= data.category.name %>
+
+    <h5><span class="fw-bold">Held On:</span><br>
+      <ol style="list-style-type: disc;">
+        <% const options={weekday: 'long' , day: 'numeric' , month: 'long' , year: 'numeric' } %>
+          <% for( let i=0; i < data.event_dates.length; i++ ) { %>
+            <% const date=data.event_dates[i].date %>
+              <li>
+                <%= date.toLocaleDateString('en-US', options) %>
+              </li>
+              <% } %>
+      </ol>
     </h5>
+
     <h5 class="fw-bold">Quota: <span class="text-danger">
         <% if (data.participants) { %>
           <%= data.participants %>
@@ -41,6 +51,7 @@
         <%= data.quota %>
       </span>
     </h5>
+
     <h5><span class="fw-bold">Price:</span>
       Rp <%= new Intl.NumberFormat('id-ID').format(data.price) %>
     </h5>
@@ -53,9 +64,11 @@
           None
         </h5>
         <% } %>
+
           <h5><span class="fw-bold">Description:</span>
             <%= data.description %>
           </h5>
+
           <h5 id="requirement"><span class="fw-bold">Requirement:</span>
             <%- data.requirement %>
           </h5>
@@ -79,15 +92,15 @@
       .then((confirm) => {
         if (confirm) {
           $.ajax({
-            url: 'http://localhost:3000/admin/courses/delete/<%= data.id %>',
+            url: 'http://localhost:3000/admin/events/delete/<%= data.id %>',
             type: 'DELETE',
             success: function (result) {
               swal({
                 title: 'Success!',
-                text: 'Course Deleted',
+                text: 'Event Deleted',
                 icon: 'success',
               }).then((result) => {
-                window.location.href = '/admin/courses'
+                window.location.href = '/admin/events'
               })
             },
             error: function (err) {

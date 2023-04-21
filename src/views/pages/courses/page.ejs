@@ -15,7 +15,7 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Name</th>
+                <th>Course Name</th>
                 <th>Price</th>
                 <th>Quota</th>
                 <th>Action</th>
@@ -47,8 +47,7 @@
                           </span>
                         </td>
                         <td>
-                          <a href="/admin/courses/show/<%= data[i].id %>">Show</a> |
-                          <a href="/admin/courses/edit/<%= data[i].id %>">Edit</a>
+                          <a href="/admin/courses/show/<%= data[i].id %>">Show</a>
                         </td>
                 </tr>
                 <% } %>
@@ -64,7 +63,6 @@
   integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script>
 
