@@ -31,6 +31,7 @@ router.get('/', async (req, res) => {
       }
     }
   })
+
   res.render('index', { ...params, data: courses })
 })
 

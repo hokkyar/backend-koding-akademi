@@ -42,12 +42,16 @@
             <p class="text-center w-100">No products yet</p>
             <% } %>
               <% for( let i=0; i < length; i++ ) { %>
-                <div class="card bg-warning" style="width: 18rem;">
-                  <img src="https://www.kodingakademi.id/wp-content/uploads/2018/05/arduino-class-460x259.jpg"
-                    class="card-img-top" alt="...">
+                <div class="card" style="width: 18rem;">
+                  <img src="<%= data.user_products[i].Product.img_url%>" class="card-img-top" alt="...">
                   <div class="card-body">
-                    <h5 class="card-title">Arduino Intermediet</h5>
-                    <p class="card-text">Expired: 13 April 2022</p>
+                    <h5 class="card-title">
+                      <%= data.user_products[i].Product.name %>
+                    </h5>
+                    <p
+                      class="card-text <%= (data.user_products[i].status === 'active') ? 'text-success' : 'text-danger' %>">
+                      Expired: <%= data.user_products[i].expired_date.toLocaleDateString('id-ID') %>
+                    </p>
                   </div>
                 </div>
                 <% } %>

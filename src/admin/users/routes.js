@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { User, UserProduct } = require('../../models/index')
+const { User, UserProduct, Product } = require('../../models/index')
 const { nanoid } = require('nanoid')
 const bcrypt = require('bcrypt')
 
@@ -26,6 +26,11 @@ router.get('/show/:id', async (req, res) => {
   if (!user) res.render('index', { ...params, sub_page: 'not-found' })
 
   const user_products = await UserProduct.findAll({
+    include: [
+      {
+        model: Product
+      }
+    ],
     where: { user_id: req.params.id }
   })
 

@@ -138,6 +138,11 @@ Order.belongsTo(User, {
   foreignKey: 'user_id',
 })
 
-
+Product.hasMany(UserProduct, {
+  foreignKey: 'product_id'
+})
+UserProduct.belongsTo(Product, {
+  foreignKey: 'product_id'
+})
 
 module.exports = db;
