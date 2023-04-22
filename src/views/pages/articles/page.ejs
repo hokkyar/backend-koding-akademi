@@ -32,7 +32,8 @@
                     <%= data[i].title %>
                   </td>
                   <td>
-                    <%= data[i].updatedAt %>
+                    <% const options={weekday: 'long' , day: 'numeric' , month: 'long' , year: 'numeric' } %>
+                      <%= data[i].updatedAt.toLocaleDateString('id-ID', options) %>
                   </td>
                   <td>
                     <%= data[i].content.slice(0, 70) %>...
