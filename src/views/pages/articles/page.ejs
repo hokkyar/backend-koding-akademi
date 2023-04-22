@@ -17,8 +17,7 @@
               <tr>
                 <th>#</th>
                 <th>Title</th>
-                <th>Date</th>
-                <th>Content</th>
+                <th>Created At</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -32,11 +31,7 @@
                     <%= data[i].title %>
                   </td>
                   <td>
-                    <% const options={weekday: 'long' , day: 'numeric' , month: 'long' , year: 'numeric' } %>
-                      <%= data[i].updatedAt.toLocaleDateString('id-ID', options) %>
-                  </td>
-                  <td>
-                    <%= data[i].content.slice(0, 70) %>...
+                    <%= data[i].createdAt.toLocaleDateString('id-ID') %>
                   </td>
                   <td><a href="/admin/articles/show/<%= data[i].id %>">Show</a></td>
                 </tr>

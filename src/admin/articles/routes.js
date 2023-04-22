@@ -46,7 +46,7 @@ router.get('/edit/:id', async (req, res) => {
   res.render('index', { ...params, sub_page: 'edit', data: article, detail: req.params.id })
 })
 
-router.put('/edit:id', uploadImage.single('img'), async (req, res) => {
+router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
   const { title, content, current_img } = req.body
 
   let img_url = current_img
