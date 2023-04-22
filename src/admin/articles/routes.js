@@ -31,7 +31,7 @@ router.post('/', uploadImage.single('img'), async (req, res) => {
   }
   const id = 'article-' + nanoid(16)
   await Article.create({ id, title, content, img_url })
-  res.json({ message: 'success' })
+  res.sendStatus(201)
 })
 
 router.get('/show/:id', async (req, res) => {
@@ -66,7 +66,7 @@ router.put('/edit:id', uploadImage.single('img'), async (req, res) => {
   }
 
   await Article.update({ img_url, title, content }, { where: { id: req.params.id } })
-  res.json({ message: 'success' })
+  res.sendStatus(200)
 })
 
 router.delete('/delete/:id', async (req, res) => {
@@ -88,7 +88,7 @@ router.delete('/delete/:id', async (req, res) => {
   }
 
   await Article.destroy({ where: { id: req.params.id } })
-  res.json({ message: 'success' })
+  res.sendStatus(200)
 })
 
 
