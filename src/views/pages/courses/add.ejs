@@ -112,7 +112,7 @@
     $('#form').submit(function (e) {
       e.preventDefault()
       $('button[type="submit"]').prop('disabled', true)
-      const formData = new FormData(this);
+      const formData = new FormData(this)
       $.ajax({
         url: $(this).attr('action'),
         type: $(this).attr('method'),
