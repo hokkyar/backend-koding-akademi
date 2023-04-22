@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { User } = require('../../models/index')
+const { User, UserProduct } = require('../../models/index')
 const { nanoid } = require('nanoid')
 const bcrypt = require('bcrypt')
 
@@ -24,7 +24,12 @@ router.get('/show/:id', async (req, res) => {
     where: { id: req.params.id }
   })
   if (!user) res.render('index', { ...params, sub_page: 'not-found' })
-  res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: user })
+
+  const user_products = await UserProduct.findAll({
+    where: { user_id: req.params.id }
+  })
+
+  res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: { user, user_products } })
 })
 
 // create user service

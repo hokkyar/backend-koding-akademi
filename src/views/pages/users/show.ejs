@@ -1,11 +1,9 @@
 <section>
-  <input type="hidden" id="idUser" value="<%= data.id %>">
-
   <div class="bg-white rounded shadow-sm p-4 my-3">
     <div class="d-flex gap-3">
       <div class="position-relative">
         <span
-          class="position-absolute top-0 start-0 translate-middle p-2 <%= (data.verified) ? 'bg-success' : 'bg-danger' %> border border-light rounded-circle">
+          class="position-absolute top-0 start-0 translate-middle p-2 <%= (data.user.verified) ? 'bg-success' : 'bg-danger' %> border border-light rounded-circle">
           <span class="visually-hidden"></span>
         </span>
         <img class="rounded" src="https://www.kindpng.com/picc/m/451-4517876_default-profile-hd-png-download.png"
@@ -14,13 +12,13 @@
 
       <div class="col">
         <h5 id="userName"><span class="fw-bold">Full Name:</span>
-          <%= data.full_name %>
+          <%= data.user.full_name %>
         </h5>
         <h5 id="userEmail"><span class="fw-bold">Email:</span>
-          <%= data.email %>
+          <%= data.user.email %>
         </h5>
         <h5 id="userEmail"><span class="fw-bold">Phone Number:</span>
-          <%= (data.phone_number) ? data.phone_number : 'None' %>
+          <%= (data.user.phone_number) ? data.user.phone_number : 'None' %>
         </h5>
       </div>
       <div class="mt-3">
@@ -38,19 +36,21 @@
     <div class="my-2">
       <h5 class="py-2 fw-bold text-center border">Products</h5>
 
-      <% const length=3%>
+      <% const length=data.user_products.length%>
         <div class="my-3 d-flex gap-2 flex-wrap <%= (length < 3) ? '' : 'justify-content-evenly' %> ">
-          <% for( let i=0; i < length; i++ ) { %>
-            <div class="card bg-warning" style="width: 18rem;">
-              <img src="https://www.kodingakademi.id/wp-content/uploads/2018/05/arduino-class-460x259.jpg"
-                class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">Arduino Intermediet</h5>
-                <p class="card-text">Expired: 13 April 2022</p>
-              </div>
-            </div>
+          <% if (length===0) { %>
+            <p class="text-center w-100">No products yet</p>
             <% } %>
-
+              <% for( let i=0; i < length; i++ ) { %>
+                <div class="card bg-warning" style="width: 18rem;">
+                  <img src="https://www.kodingakademi.id/wp-content/uploads/2018/05/arduino-class-460x259.jpg"
+                    class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">Arduino Intermediet</h5>
+                    <p class="card-text">Expired: 13 April 2022</p>
+                  </div>
+                </div>
+                <% } %>
         </div>
 
     </div>
