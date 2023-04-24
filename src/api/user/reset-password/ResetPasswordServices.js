@@ -1,7 +1,7 @@
 const { nanoid } = require('nanoid')
 const { User } = require('../../../models/index')
 const NotFoundError = require('../../../exceptions/NotFoundError')
-const sendEmailForgotPassword = require('../../utils/sendEmailForgotPassword')
+const sendEmailForgotPassword = require('../../../utils/sendEmailForgotPassword')
 
 // exports.resetPasswordService = async ({ oldPassword, newPassword }, userId) => {
 //   const user = await User.findOne({
