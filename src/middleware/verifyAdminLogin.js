@@ -1,8 +1,7 @@
 exports.verifyAdminLogin = (req, res, next) => {
-  next()
-  // if (req.session.user) {
-  //   next()
-  // } else {
-  //   res.redirect('/admin/login')
-  // }
+  if (req.session.user) {
+    next()
+  } else {
+    res.redirect('/admin/login')
+  }
 }

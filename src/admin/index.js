@@ -15,7 +15,7 @@ router.use('/contact', verifyAdminLogin, require('./contact/routes'))
 router.use('/login', require('./login/routes'))
 router.use('/logout', (req, res) => {
   req.session.destroy((err) => {
-    if (err) return res.sendStatus(204)
+    if (err) return res.sendStatus(200)
     return res.redirect('/admin/login')
   })
 })
