@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jodit/3.24.7/jodit.min.css" />
 <style>
   .date-delete {
     position: absolute;
@@ -106,59 +105,53 @@
   </form>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.3.min.js"
-  integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jodit/3.24.7/jodit.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
   const editor = Jodit.make('#editor')
 
-  $(document).ready(function () {
-    $('#inlineCheckbox1').on('change', function () {
-      if ($('#inlineCheckbox1').prop('checked')) {
-        $('.promo').show()
-        $('#discountDisplay').prop('required', true)
-      } else {
-        $('.promo').hide()
-        $('#discount').val(null)
-        $('#discountDisplay').prop('required', false)
+
+  $('#inlineCheckbox1').on('change', function () {
+    if ($('#inlineCheckbox1').prop('checked')) {
+      $('.promo').show()
+      $('#discountDisplay').prop('required', true)
+    } else {
+      $('.promo').hide()
+      $('#discount').val(null)
+      $('#discountDisplay').prop('required', false)
+    }
+  })
+
+  $('#form').submit(function (e) {
+    e.preventDefault()
+    $('button[type="submit"]').prop('disabled', true)
+
+    const dates = getInputDates()
+    const formData = new FormData(this)
+    formData.append('dates', JSON.stringify(dates))
+
+    $.ajax({
+      url: $(this).attr('action'),
+      type: $(this).attr('method'),
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        swal({
+          title: 'Success!',
+          text: 'Event Added',
+          icon: 'success',
+        }).then((result) => {
+          window.location.href = '/admin/events'
+        })
+      },
+      error: function (err) {
+        swal({
+          title: 'Error!',
+          text: 'An error occured',
+          icon: 'error'
+        })
       }
     })
-
-    $('#form').submit(function (e) {
-      e.preventDefault()
-      $('button[type="submit"]').prop('disabled', true)
-
-      const dates = getInputDates()
-      const formData = new FormData(this)
-      formData.append('dates', JSON.stringify(dates))
-
-      $.ajax({
-        url: $(this).attr('action'),
-        type: $(this).attr('method'),
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-          swal({
-            title: 'Success!',
-            text: 'Event Added',
-            icon: 'success',
-          }).then((result) => {
-            window.location.href = '/admin/events'
-          })
-        },
-        error: function (err) {
-          swal({
-            title: 'Error!',
-            text: 'An error occured',
-            icon: 'error'
-          })
-        }
-      })
-      $('button[type="submit"]').prop('disabled', false)
-    })
-
+    $('button[type="submit"]').prop('disabled', false)
   })
 
   function formatHarga(harga) {

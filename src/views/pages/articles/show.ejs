@@ -34,10 +34,6 @@
 
 </section>
 
-<script src="https://code.jquery.com/jquery-3.6.3.min.js"
-  integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
 <script>
   $('#deleteBtn').on('click', () => {
     swal({
@@ -55,7 +51,7 @@
             success: function (result) {
               swal({
                 title: 'Success!',
-                text: 'Course Deleted',
+                text: 'Article Deleted',
                 icon: 'success',
               }).then((result) => {
                 window.location.href = '/admin/articles'

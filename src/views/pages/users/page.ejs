@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
-
 <section class="section">
 
   <!-- Modal -->
@@ -96,41 +94,31 @@
   </div>
 </section>
 
-<script src="https://code.jquery.com/jquery-3.6.3.min.js"
-  integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
 <script>
-
-  $(document).ready(function () {
-    $('#myTable').DataTable()
-
-    $('#form').submit(function (e) {
-      e.preventDefault()
-      $('button[type="submit"]').prop('disabled', true)
-      $.ajax({
-        url: $(this).attr('action'),
-        type: $(this).attr('method'),
-        data: $(this).serialize(),
-        success: function (response) {
-          swal({
-            title: 'Success!',
-            text: 'User Added',
-            icon: 'success',
-          }).then((result) => {
-            window.location.href = '/admin/users'
-          })
-        },
-        error: function (err) {
-          swal({
-            title: 'Error!',
-            text: 'An error occured',
-            icon: 'error'
-          })
-        }
-      })
-      $('button[type="submit"]').prop('disabled', false)
+  $('#form').submit(function (e) {
+    e.preventDefault()
+    $('button[type="submit"]').prop('disabled', true)
+    $.ajax({
+      url: $(this).attr('action'),
+      type: $(this).attr('method'),
+      data: $(this).serialize(),
+      success: function (response) {
+        swal({
+          title: 'Success!',
+          text: 'User Added',
+          icon: 'success',
+        }).then((result) => {
+          window.location.href = '/admin/users'
+        })
+      },
+      error: function (err) {
+        swal({
+          title: 'Error!',
+          text: 'An error occured',
+          icon: 'error'
+        })
+      }
     })
+    $('button[type="submit"]').prop('disabled', false)
   })
 </script>

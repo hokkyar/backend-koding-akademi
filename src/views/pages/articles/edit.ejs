@@ -1,6 +1,4 @@
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jodit/3.24.7/jodit.min.css" />
-
-<h3 class="fw-bold text-center">Add Article</h3>
+<h3 class="fw-bold text-center">Edit Article</h3>
 
 <div class="d-flex bg-white p-4 rounded shadow-sm">
 
@@ -11,7 +9,7 @@
         <%= data.title %>
       </h5>
       <div class="mx-2" id="content-mobile">
-        <%= data.content %>
+        <%- data.content %>
       </div>
     </div>
   </div>
@@ -52,43 +50,37 @@
   </form>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.3.min.js"
-  integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jodit/3.24.7/jodit.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
   const editor = Jodit.make('#editor')
 
-  $(document).ready(function () {
-    $('#form').submit(function (e) {
-      e.preventDefault()
-      $('button[type="submit"]').prop('disabled', true)
-      const formData = new FormData(this)
-      $.ajax({
-        url: $(this).attr('action'),
-        type: 'PUT',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-          swal({
-            title: 'Success!',
-            text: 'Article Updated',
-            icon: 'success',
-          }).then((result) => {
-            window.location.href = '/admin/articles/show/<%= data.id %>'
-          })
-        },
-        error: function (err) {
-          swal({
-            title: 'Error!',
-            text: 'An error occured',
-            icon: 'error'
-          })
-        }
-      })
-      $('button[type="submit"]').prop('disabled', false)
+  $('#form').submit(function (e) {
+    e.preventDefault()
+    $('button[type="submit"]').prop('disabled', true)
+    const formData = new FormData(this)
+    $.ajax({
+      url: $(this).attr('action'),
+      type: 'PUT',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        swal({
+          title: 'Success!',
+          text: 'Article Updated',
+          icon: 'success',
+        }).then((result) => {
+          window.location.href = '/admin/articles/show/<%= data.id %>'
+        })
+      },
+      error: function (err) {
+        swal({
+          title: 'Error!',
+          text: 'An error occured',
+          icon: 'error'
+        })
+      }
     })
+    $('button[type="submit"]').prop('disabled', false)
   })
 
   function previewImage(event) {

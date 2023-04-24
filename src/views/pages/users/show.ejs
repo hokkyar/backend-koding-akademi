@@ -69,15 +69,15 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <form id="formEdit" action="/admin/users/edit/<%= data.id %>">
+        <form id="formEdit" action="/admin/users/edit/<%= data.user.id %>">
           <div class="modal-body">
             <div class="form-floating mb-3">
-              <input name="full_name" value="<%= data.full_name%>" type="text" class="form-control" placeholder="Name"
-                autocomplete="off" required>
+              <input name="full_name" value="<%= data.user.full_name%>" type="text" class="form-control"
+                placeholder="Name" autocomplete="off" required>
               <label>Full Name</label>
             </div>
             <div class="form-check form-check-inline mb-3">
-              <input id="checkVerified" name="verified" class="form-check-input" type="checkbox" <%=(data.verified)
+              <input id="checkVerified" name="verified" class="form-check-input" type="checkbox" <%=(data.user.verified)
                 ? 'checked' : '' %> >
               <label class="form-check-label" for="checkVerified">Verified?</label>
             </div>
@@ -93,18 +93,15 @@
 
 </section>
 
-<script src="https://code.jquery.com/jquery-3.6.3.min.js"
-  integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
   $('#deleteBtn').on('click', function () {
     swal({
       title: "Are you sure?",
-      text: '<%= data.full_name %> will be deleted', icon: "warning", buttons: true, dangerMode: true,
+      text: '<%= data.user.full_name %> will be deleted', icon: "warning", buttons: true, dangerMode: true,
     }).then((confirm) => {
       if (confirm) {
         $.ajax({
-          url: 'http://localhost:3000/admin/users/delete/<%= data.id %>',
+          url: 'http://localhost:3000/admin/users/delete/<%= data.user.id %>',
           type: 'DELETE',
           success: function (result) {
             swal({
@@ -144,7 +141,7 @@
           text: 'User Updated',
           icon: 'success',
         }).then((result) => {
-          window.location.href = '/admin/users/show/<%= data.id %>'
+          window.location.href = '/admin/users/show/<%= data.user.id %>'
         })
       },
       error: function (err) {
