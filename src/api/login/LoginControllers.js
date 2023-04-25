@@ -7,6 +7,6 @@ exports.userLogin = async (req, res) => {
   res.json({
     status: 'success',
     message: 'Login success',
-    data: { full_name, accessToken, refreshToken },
+    data: { full_name, email, accessToken, refreshToken },
   })
 }

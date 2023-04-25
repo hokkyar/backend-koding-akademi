@@ -17,7 +17,9 @@ exports.userLoginService = async ({ email, password }) => {
   if (!user.dataValues.verified) throw new AuthenticationError(`Check your email inbox: (${email})`)
 
   const userId = user.dataValues.id
+  const email = user.dataValues.email
   const full_name = user.dataValues.full_name
+
   const accessToken = jwt.sign({ id: userId, name: full_name, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
   const refreshToken = jwt.sign({ id: userId, name: full_name, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
 
@@ -25,5 +27,5 @@ exports.userLoginService = async ({ email, password }) => {
     token: refreshToken
   })
 
-  return { full_name, accessToken, refreshToken }
+  return { full_name, email, accessToken, refreshToken }
 }

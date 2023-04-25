@@ -10,7 +10,7 @@ exports.xenditCallbackService = async ({ external_id, payment_method, status, am
     order_id: external_id, payment_method, payment_status: status, amount, date: paid_at, bank_name: bank_code
   })
 
-  const orderItem = await OrderItem.findAll({
+  const orderItems = await OrderItem.findAll({
     include: [
       {
         model: Product,
@@ -32,14 +32,13 @@ exports.xenditCallbackService = async ({ external_id, payment_method, status, am
   const userId = user.dataValues.User.id
 
   const purchase_date = moment(paid_at)
-  for (let i = 0; i < orderItem.length; i++) {
-    const course_duration = orderItem[i].dataValues.Product.duration;
+  for (let i = 0; i < orderItems.length; i++) {
+    const course_duration = orderItems[i].dataValues.Product.duration
     const expired_date = purchase_date.add(course_duration, 'months').format('YYYY-MM-DD')
 
-    // tambahin user_products
     await UserProduct.create({
       user_id: userId,
-      product_id: orderItem[i].dataValues.Product.id,
+      product_id: orderItems[i].dataValues.Product.id,
       status: 'active',
       expired_date
     })
