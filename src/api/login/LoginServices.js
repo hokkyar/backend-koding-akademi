@@ -20,8 +20,8 @@ exports.userLoginService = async ({ email, password }) => {
   const email = user.dataValues.email
   const full_name = user.dataValues.full_name
 
-  const accessToken = jwt.sign({ id: userId, name: full_name, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
-  const refreshToken = jwt.sign({ id: userId, name: full_name, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
+  const accessToken = jwt.sign({ id: userId, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
+  const refreshToken = jwt.sign({ id: userId, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
 
   await AuthToken.create({
     token: refreshToken
