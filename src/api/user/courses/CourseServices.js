@@ -2,7 +2,7 @@ const { Product, Category } = require('../../../models/index')
 const NotFoundError = require('../../../exceptions/NotFoundError')
 const { Op } = require('sequelize')
 
-exports.getCoursesService = async (category, promo) => {
+exports.getCoursesService = async (category, promo, limit) => {
   let condition = {
     category_id: {
       [Op.like]: '%course%'
@@ -28,7 +28,8 @@ exports.getCoursesService = async (category, promo) => {
         attributes: ['name']
       }
     ],
-    where: condition
+    where: condition,
+    limit: parseInt(limit)
   })
   return courses
 }
