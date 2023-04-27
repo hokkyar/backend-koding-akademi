@@ -29,7 +29,7 @@ exports.getCoursesService = async (category, promo, limit) => {
       }
     ],
     where: condition,
-    limit: (limit ? parseInt(limit) : 10)
+    limit
   })
   return courses
 }
