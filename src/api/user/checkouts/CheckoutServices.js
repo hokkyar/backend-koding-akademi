@@ -6,22 +6,16 @@ const InvariantError = require('../../../exceptions/InvariantError')
 const createPayment = require('../../../utils/createPayment')
 
 exports.checkoutProductsService = async (productLists, userId) => {
-  // ambil cartId yang user punya
   const cartId = await getUserCartId(userId)
 
-  // cek apakah cartnya masih kosong (kalo kosong gak bisa checkout)
   await isCartEmptyCheck(cartId)
-
-  // cek apakah product yang akan di checkout ada di db, dan apakah ada di cart user
   await isProductAndUserCartItemExist(cartId, productLists)
 
-  // buat ordernya
   const orderId = `order-${nanoid(16)}`
   await Order.create({
     id: orderId, user_id: userId, order_status: 'pending'
   })
 
-  // cek apakah ada product yang harganya 0
   const zeroPriceProducts = await getZeroPriceProducts(productLists, userId)
   const productToOrder = productLists.filter((product) => !zeroPriceProducts.includes(product))
 
