@@ -1,7 +1,8 @@
-const { User, Order, OrderItem, Product, Cart, CartItem, Sequelize } = require('../../../models/index')
+const { User, Order, OrderItem, Product, Cart, CartItem, UserProduct, Sequelize } = require('../../../models/index')
 const { Op } = require('sequelize')
 const { nanoid } = require('nanoid')
 const NotFoundError = require('../../../exceptions/NotFoundError')
+const InvariantError = require('../../../exceptions/InvariantError')
 const createPayment = require('../../../utils/createPayment')
 
 exports.checkoutProductsService = async (productLists, userId) => {
@@ -25,6 +26,9 @@ exports.checkoutProductsService = async (productLists, userId) => {
 
   // hapus product yang di checkout dari keranjang user
   await deleteCartItem(cartId, productLists)
+
+  // cek apakah ada event
+  await checkEvent(productLists, userId)
 
   // hitung total harga productnya
   const { amount, productNames } = await getTotalAmount(productLists)
@@ -112,6 +116,28 @@ async function getUserEmail(userId) {
     where: { id: userId }
   })
   return email
+}
+
+async function checkEvent(productLists, userId) {
+  const events = await Product.findAll({
+    where: {
+      id: productLists,
+      category_id: 'cat-event-1'
+    }
+  })
+
+  if (events) {
+    for (let i = 0; i < events.length; i++) {
+      if (events[i].quota >= events[i].participants) throw new InvariantError("Quota is full")
+      await Product.increment('participants', { where: { id: events[i].id } })
+    }
+
+    const eventItems = events.map((event) => ({
+      user_id: userId,
+      product_id: event.id
+    }))
+    await UserProduct.bulkCreate(eventItems)
+  }
 }
 
 function generateDescription(productNames) {
