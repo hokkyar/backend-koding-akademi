@@ -8,7 +8,6 @@ router.use('/authentications', require('./authentications/AuthenticationRoutes')
 router.use('/forgot-password', require('./forgot-password/ForgotPasswordRoutes'))
 router.use('/xendit-callback', require('./xendit-callback/XenditCallbackRoutes'))
 
-// router.use('/user', verifyToken, require('./user/index'))
-router.use('/user', require('./user/index'))
+router.use('/user', verifyToken, require('./user/index'))
 
 module.exports = router

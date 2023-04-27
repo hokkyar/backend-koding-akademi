@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const asyncHandler = require('express-async-handler')
 
-const { getCoupons } = require('./CouponControllers')
+const { getUserProducts } = require('./UserProductControllers')
 
-router.get('/coupons', asyncHandler(getCoupons))
+router.get('/user-products', asyncHandler(getUserProducts))
 
 module.exports = router
