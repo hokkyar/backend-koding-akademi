@@ -21,25 +21,16 @@ exports.checkoutProductsService = async (productLists, userId) => {
     id: orderId, user_id: userId, order_status: 'pending'
   })
 
-  // tambahkan setiap productnya ke order item
-  await addProductsToOrderItem(orderId, productLists)
+  // cek apakah ada product yang harganya 0
+  const zeroPriceProducts = await getZeroPriceProducts(productLists, userId)
+  const productToOrder = productLists.filter((product) => !zeroPriceProducts.includes(product))
 
-  // hapus product yang di checkout dari keranjang user
-  await deleteCartItem(cartId, productLists)
+  await addProductsToOrderItem(orderId, productToOrder)
+  await deleteCartItem(cartId, productToOrder)
 
-  // cek apakah ada event
-  await checkEvent(productLists, userId)
-
-  // hitung total harga productnya
-  const { amount, productNames } = await getTotalAmount(productLists)
-
-  // dapatkan email usernya
+  const { amount, productNames } = await getTotalAmount(productToOrder)
   const email = await getUserEmail(userId)
-
-  // buat deskripsi
   const description = generateDescription(productNames)
-
-  // buat invoice_url nya
   const xenditResponse = await createPayment(orderId, amount, email, description)
   return xenditResponse
 }
@@ -118,26 +109,31 @@ async function getUserEmail(userId) {
   return email
 }
 
-async function checkEvent(productLists, userId) {
-  const events = await Product.findAll({
+async function getZeroPriceProducts(productLists, userId) {
+  const zeroProductId = []
+  const products = await Product.findAll({
     where: {
       id: productLists,
-      category_id: 'cat-event-1'
+      price: 0
     }
   })
 
-  if (events) {
-    for (let i = 0; i < events.length; i++) {
-      if (events[i].quota >= events[i].participants) throw new InvariantError("Quota is full")
-      await Product.increment('participants', { where: { id: events[i].id } })
+  if (products) {
+    for (let i = 0; i < products.length; i++) {
+      if (products[i].participants >= products[i].quota) throw new InvariantError("Quota is full")
+      zeroProductId.push(products[i].id)
+      await Product.increment('participants', { where: { id: products[i].id } })
     }
 
-    const eventItems = events.map((event) => ({
+    const eventItems = products.map((event) => ({
       user_id: userId,
-      product_id: event.id
+      product_id: event.id,
+      status: 'active'
     }))
     await UserProduct.bulkCreate(eventItems)
   }
+
+  return zeroProductId
 }
 
 function generateDescription(productNames) {
