@@ -10,23 +10,25 @@ exports.checkoutProductsService = async (productLists, userId) => {
 
   await isCartEmptyCheck(cartId)
   await isProductAndUserCartItemExist(cartId, productLists)
-
-  const orderId = `order-${nanoid(16)}`
-  await Order.create({
-    id: orderId, user_id: userId, order_status: 'pending'
-  })
+  await deleteCartItem(cartId, productLists)
 
   const zeroPriceProducts = await getZeroPriceProducts(productLists, userId)
   const productToOrder = productLists.filter((product) => !zeroPriceProducts.includes(product))
 
-  await addProductsToOrderItem(orderId, productToOrder)
-  await deleteCartItem(cartId, productToOrder)
+  if (productToOrder.length !== 0) {
+    const orderId = `order-${nanoid(16)}`
+    await Order.create({
+      id: orderId, user_id: userId, order_status: 'pending'
+    })
+    await addProductsToOrderItem(orderId, productToOrder)
+    const { amount, productNames } = await getTotalAmount(productToOrder)
+    const email = await getUserEmail(userId)
+    const description = generateDescription(productNames)
+    const xenditResponse = await createPayment(orderId, amount, email, description)
+    return xenditResponse
+  }
 
-  const { amount, productNames } = await getTotalAmount(productToOrder)
-  const email = await getUserEmail(userId)
-  const description = generateDescription(productNames)
-  const xenditResponse = await createPayment(orderId, amount, email, description)
-  return xenditResponse
+  return 'event order success'
 }
 
 async function getUserCartId(userId) {

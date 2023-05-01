@@ -5,12 +5,16 @@ const params = {
   sub_page: 'page',
   title: 'Coupons',
   sub: 'Manage',
-  detail: '',
-  data: ''
+  detail: null,
+  data: null
 }
 
 router.get('/', (req, res) => {
   res.render('index', params)
+})
+
+router.get('/show/:id', async (req, res) => {
+  res.render('index', { ...params, sub_page: 'show' })
 })
 
 module.exports = router
