@@ -68,7 +68,8 @@ router.post('/', uploadImage.single('img'), async (req, res) => {
 
   let img_url = 'https://th.bing.com/th/id/OIP.kzI1EUFN1_qi7eISbXDekgHaHK?pid=ImgDet&rs=1'
   if (req.file) {
-    img_url = `${process.env.HOST}/${req.file.path}`
+    const localUrl = req.file.path.replace(/\\/g, "/")
+    img_url = `${process.env.HOST}/${localUrl}`
   }
 
   const discount_price = (req.body.discount_price === '') ? null : req.body.discount_price
@@ -113,7 +114,9 @@ router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
         console.log('File deleted successfully')
       })
     }
-    img_url = `${process.env.HOST}/${req.file.path}`
+
+    const localUrl = req.file.path.replace(/\\/g, "/")
+    img_url = `${process.env.HOST}/${localUrl}`
   }
 
   const discount_price = (req.body.discount_price === '') ? null : req.body.discount_price

@@ -118,14 +118,15 @@
 </section>
 
 <script>
+
   $('#deleteBtn').on('click', function () {
     swal({
       title: "Are you sure?",
-      text: '<%= "Contoh Coupon" %> will be deleted', icon: "warning", buttons: true, dangerMode: true,
+      text: 'Coupon will be deleted', icon: "warning", buttons: true, dangerMode: true,
     }).then((confirm) => {
       if (confirm) {
         $.ajax({
-          url: 'http://localhost:3000/admin/coupons/delete/<%= "contoh-coupon" %>',
+          url: 'http://localhost:3000/admin/coupons/delete/<%= data.id %>',
           type: 'DELETE',
           success: function (result) {
             swal({
@@ -160,7 +161,7 @@
           text: 'Coupon Updated',
           icon: 'success',
         }).then((result) => {
-          window.location.href = '/admin/coupons/show/<%= "contoh-coupon" %>'
+          window.location.href = '/admin/coupons/show/<%= data.id %>'
         })
       },
       error: function (err) {

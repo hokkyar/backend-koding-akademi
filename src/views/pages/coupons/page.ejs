@@ -1,3 +1,36 @@
+<style>
+  #search-result div {
+    position: relative;
+    z-index: 99;
+    cursor: pointer;
+    transition: .3s;
+    padding: 8px;
+    border: #dddbdb;
+  }
+
+  #search-result div:hover {
+    background-color: #dddbdb;
+  }
+
+  .product-items {
+    position: relative;
+  }
+
+  .close-btn {
+    position: absolute;
+    color: red;
+    cursor: pointer;
+    top: 72%;
+    right: 30px;
+    transform: translate(100%, -100%);
+    transition: .3s;
+  }
+
+  .close-btn:hover {
+    opacity: .8;
+  }
+</style>
+
 <section class="section">
 
   <div class="row">
@@ -20,18 +53,18 @@
               </tr>
             </thead>
             <tbody>
-              <% for (let i=0; i < data.length; i++) { %>
+              <% for (let i=0; i < data.coupons.length; i++) { %>
                 <tr>
                   <td>
                     <%= i + 1 %>
                   </td>
                   <td>
-                    <%= data[i].coupon_code %>
+                    <%= data.coupons[i].coupon_code %>
                   </td>
                   <td>
-                    <%= data[i].quota %>
+                    <%= data.coupons[i].quota %>
                   </td>
-                  <td><a href="/admin/coupons/show/<%= data[i].id %>">Show</a></td>
+                  <td><a href="/admin/coupons/show/<%= data.coupons[i].id %>">Show</a></td>
                 </tr>
                 <% } %>
             </tbody>
@@ -84,23 +117,16 @@
                 placeholder="John Doe" autocomplete="off" required>
               <label>Minimum Price</label>
             </div>
-            <p class="mb-2 mx-2">Categories:</p>
-            <div class="mb-3 mx-2 d-flex gap-3">
-              <div>
-                <input name="coding" class="form-check-input" type="checkbox" id="coding"> <label
-                  for="coding">Coding</label> <br>
-                <input name="robotic" class="form-check-input" type="checkbox" id="robotic"> <label
-                  for="robotic">Robotic</label> <br>
-                <input name="app_programming" class="form-check-input" type="checkbox" id="app"> <label for="app">App
-                  Programming</label> <br>
+            <div>
+              <p class="mb-2 mx-2">Products:</p>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                <input id="search-input" onkeyup=searchProduct(this.value) type="text" class="form-control"
+                  placeholder="Search product..." aria-label="search" aria-describedby="basic-addon1">
               </div>
-              <div>
-                <input name="engineering" class="form-check-input" type="checkbox" id="engineering"> <label
-                  for="engineering">Engineering</label> <br>
-                <input name="coding_bootcamp" class="form-check-input" type="checkbox" id="bootcamp"> <label
-                  for="bootcamp">Coding Bootcamp</label>
-              </div>
+              <div id="search-result" class="my-3"></div>
             </div>
+            <ul id="product-list" class="list-group mb-3"></ul>
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-md btn-success">Save</button>
@@ -113,7 +139,51 @@
 
 </section>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.6/fuse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
+
 <script>
+  const list = []
+  "<% for(let i = 0; i < data.products.length; i++){ %>"
+  list.push({ name: "<%= data.products[i].name %>", img_url: "<%= data.products[i].img_url %>" })
+  "<% } %>"
+
+  const fuse = new Fuse(list, {
+    keys: ['name']
+  })
+
+  function searchProduct(value) {
+    $('#search-result').html('')
+    const result = fuse.search(value)
+    result.map((r) => {
+      $('#search-result').append(
+        `
+        <div onclick=addProductList(this)>
+          <img class="mx-2" src="${r.img_url}" width=50>
+          <span>${(r.name.length > 40) ? r.name.substring(0, 40) + "..." : r.name}</span>
+        </div>
+      `)
+    })
+  }
+
+  function addProductList(div) {
+    $('#search-result').html('')
+    $('#search-input').val('')
+    const productName = $(div).find('span').text()
+    const productImg = $(div).find('img').attr('src')
+    $('#product-list').append(`
+    <li class="list-group-item">
+      <img src="${productImg}" width="50">
+      <span>${(productName.length > 40) ? productName.substring(0, 40) + "..." : productName}</span>
+      <span onclick=deleteItem() class="close-btn"><i class="bi bi-x-circle-fill fs-5"></i></span>
+    </li>
+    `)
+  }
+
+  function deleteItem() {
+    $(event.target).closest('.list-group-item').remove()
+  }
+
   function formatDiscount(discount) {
     const number = discount.replace(/\D/g, '')
     const formattedNumber = new Intl.NumberFormat('id-ID').format(number)

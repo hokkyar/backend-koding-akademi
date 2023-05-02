@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const { nanoid } = require('nanoid')
-const { Coupon, CouponCategory } = require('../../models/index')
+const { Coupon, CouponCategory, Product } = require('../../models/index')
+// const { Op } = require('sequelize')
 
 const params = {
   page: 'coupons',
@@ -13,8 +14,8 @@ const params = {
 
 router.get('/', async (req, res) => {
   const coupons = await Coupon.findAll()
-  console.log(coupons[0])
-  res.render('index', { ...params, data: coupons })
+  const products = await Product.findAll()
+  res.render('index', { ...params, data: { coupons, products } })
 })
 
 router.get('/show/:id', async (req, res) => {
@@ -27,6 +28,9 @@ router.post('/', async (req, res) => { })
 
 router.put('/', async (req, res) => { })
 
-router.delete('/', async (req, res) => { })
+router.delete('/delete/:id', async (req, res) => {
+  await Coupon.destroy({ where: { id: req.params.id } })
+  res.sendStatus(200)
+})
 
 module.exports = router
