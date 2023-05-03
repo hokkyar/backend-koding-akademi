@@ -1,6 +1,6 @@
 <section class="section">
 
-  <!-- Modal -->
+  <!-- Add Modal -->
   <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -42,7 +42,33 @@
       </div>
     </div>
   </div>
-  <!-- End Modal -->
+  <!-- End Add Modal -->
+
+  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Update User</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form class="formEdit" action="/admin/users/edit/">
+          <div class="modal-body">
+            <div class="form-floating mb-3">
+              <input name="full_name" type="text" class="form-control" placeholder="Name" autocomplete="off" required>
+              <label>Full Name</label>
+            </div>
+            <div class="form-check form-check-inline mb-3">
+              <input id="checkVerified" name="verified" class="form-check-input" type="checkbox">
+              <label class="form-check-label" for="checkVerified">Verified?</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-md btn-success">Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-lg-12">
@@ -83,7 +109,22 @@
                         <span class="text-success">Yes</span>
                         <% } %>
                   </td>
-                  <td><a href="/admin/users/show/<%= data[i].id %>">Show</a></td>
+                  <td>
+                    <div class="d-flex gap-2">
+                      <a style="cursor: pointer;" class="text-primary" href="/admin/users/show/<%= data[i].id %>"
+                        data-bs-toggle="tooltip" data-bs-title="Show">
+                        <i class="bi bi-info-circle-fill fs-5"></i>
+                      </a>
+                      <a style="cursor: pointer;" class="text-warning editBtn" data-bs-toggle="tooltip"
+                        data-bs-title="Update" data-user="<%= JSON.stringify(data[i]) %>">
+                        <i data-bs-toggle="modal" data-bs-target="#updateModal" class="bi bi-pencil-fill fs-5"></i>
+                      </a>
+                      <a style="cursor: pointer;" class="text-danger deleteBtn" data-bs-toggle="tooltip"
+                        data-bs-title="Delete" data-user="<%= JSON.stringify(data[i]) %>">
+                        <i class="bi bi-trash-fill fs-5"></i>
+                      </a>
+                    </div>
+                  </td>
                 </tr>
                 <% } %>
             </tbody>
@@ -95,6 +136,7 @@
 </section>
 
 <script>
+
   $('#form').submit(function (e) {
     e.preventDefault()
     $('button[type="submit"]').prop('disabled', true)
@@ -121,4 +163,78 @@
     })
     $('button[type="submit"]').prop('disabled', false)
   })
+
+  $('.deleteBtn').on('click', function () {
+    const data = $(this).data('user')
+    swal({
+      title: "Are you sure?",
+      text: `${data.full_name} will be deleted`, icon: "warning", buttons: true, dangerMode: true,
+    }).then((confirm) => {
+      if (confirm) {
+        $.ajax({
+          url: `http://localhost:3000/admin/users/delete/${data.id}`,
+          type: 'DELETE',
+          success: function (result) {
+            swal({
+              title: 'Success!',
+              text: 'User Deleted',
+              icon: 'success',
+            }).then((result) => {
+              window.location.href = '/admin/users'
+            })
+          },
+          error: function (err) {
+            swal({
+              title: 'Error!',
+              text: 'An error occured',
+              icon: 'error'
+            })
+          }
+        })
+      }
+    })
+  })
+
+  $('.editBtn').on('click', function () {
+    $('.formEdit').off('submit')
+    const data = $(this).data('user')
+
+    $('.formEdit input[name="full_name"]').val(data.full_name)
+    if (data.verified) {
+      $('.formEdit input[name="verified"]').prop('checked', true)
+    }
+
+    $('.formEdit').on('submit', function (e) {
+      e.preventDefault()
+
+      if ($('#checkVerified').is(':checked')) {
+        $('#checkVerified').val(true)
+      } else {
+        $('#checkVerified').val(false)
+      }
+
+      $.ajax({
+        url: $(this).attr('action') + `${data.id}`,
+        type: 'PUT',
+        data: $(this).serialize(),
+        success: function (result) {
+          swal({
+            title: 'Success!',
+            text: 'User Updated',
+            icon: 'success',
+          }).then((result) => {
+            window.location.href = '/admin/users'
+          })
+        },
+        error: function (err) {
+          swal({
+            title: 'Error!',
+            text: 'An error occured',
+            icon: 'error'
+          })
+        }
+      })
+    })
+  })
+
 </script>
