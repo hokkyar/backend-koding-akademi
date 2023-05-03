@@ -12,10 +12,6 @@
     background-color: #dddbdb;
   }
 
-  .product-items {
-    position: relative;
-  }
-
   .close-btn {
     position: absolute;
     color: red;
@@ -125,12 +121,11 @@
                   placeholder="Search product..." aria-label="search" aria-describedby="basic-addon1">
               </div>
               <div id="search-result" class="my-3"></div>
+              <ul id="product-list" class="list-group mb-3"></ul>
             </div>
-            <ul id="product-list" class="list-group mb-3"></ul>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-md btn-success">Save</button>
-          </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-md btn-success">Save</button>
+            </div>
         </form>
       </div>
     </div>
@@ -144,6 +139,8 @@
 
 <script>
   const list = []
+  let selectedList = []
+
   "<% for(let i = 0; i < data.products.length; i++){ %>"
   list.push({ name: "<%= data.products[i].name %>", img_url: "<%= data.products[i].img_url %>" })
   "<% } %>"
@@ -156,31 +153,40 @@
     $('#search-result').html('')
     const result = fuse.search(value)
     result.map((r) => {
-      $('#search-result').append(
-        `
-        <div onclick=addProductList(this)>
-          <img class="mx-2" src="${r.img_url}" width=50>
-          <span>${(r.name.length > 40) ? r.name.substring(0, 40) + "..." : r.name}</span>
-        </div>
-      `)
+      if (!selectedList.includes(r.name)) {
+        $('#search-result').append(
+          `
+          <div onclick=addProductList(this)>
+            <img class="mx-2" src="${r.img_url}" width="50" height="50">
+            <span>${(r.name.length > 40) ? r.name.substring(0, 40) + "..." : r.name}</span>
+            <input type="hidden" value="${r.name}">
+          </div>
+        `)
+      }
     })
   }
 
   function addProductList(div) {
     $('#search-result').html('')
     $('#search-input').val('')
-    const productName = $(div).find('span').text()
+    const productName = $(div).find('input').val()
     const productImg = $(div).find('img').attr('src')
+
+    selectedList.push(productName)
+
     $('#product-list').append(`
-    <li class="list-group-item">
-      <img src="${productImg}" width="50">
-      <span>${(productName.length > 40) ? productName.substring(0, 40) + "..." : productName}</span>
-      <span onclick=deleteItem() class="close-btn"><i class="bi bi-x-circle-fill fs-5"></i></span>
-    </li>
+      <li class="list-group-item">
+        <input type="hidden" value="${productName}">
+        <img src="${productImg}" width="50" height="50">
+        <span>${(productName.length > 40) ? productName.substring(0, 40) + "..." : productName}</span>
+        <span onclick=deleteItem() class="close-btn"><i class="bi bi-x-circle-fill fs-5"></i></span>
+      </li>
     `)
   }
 
   function deleteItem() {
+    const deletedItem = $(event.target).closest('.list-group-item').find('input').val()
+    selectedList = selectedList.filter((s) => s !== deletedItem)
     $(event.target).closest('.list-group-item').remove()
   }
 
