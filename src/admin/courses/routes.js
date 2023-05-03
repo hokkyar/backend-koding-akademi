@@ -74,10 +74,9 @@ router.post('/', uploadImage.single('img'), async (req, res) => {
 
   const discount_price = (req.body.discount_price === '') ? null : req.body.discount_price
   const description = (req.body.description === '') ? null : req.body.description
-  const requirement = (req.body.requirement === '') ? null : req.body.requirement
 
   const id = 'course-' + nanoid(16)
-  await Product.create({ id, img_url, name, price, discount_price, quota, category_id, duration, description, requirement })
+  await Product.create({ id, img_url, name, price, discount_price, quota, category_id, duration, description })
   res.json({ message: 'success' })
 })
 
@@ -121,10 +120,9 @@ router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
 
   const discount_price = (req.body.discount_price === '') ? null : req.body.discount_price
   const description = (req.body.description === '') ? null : req.body.description
-  const requirement = (req.body.requirement === '') ? null : req.body.requirement
 
   await Product.update({
-    name, img_url, price, quota, category_id, duration, discount_price, description, requirement
+    name, img_url, price, quota, category_id, duration, discount_price, description
   }, {
     where: { id: req.params.id }
   })

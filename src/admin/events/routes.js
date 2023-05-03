@@ -64,12 +64,11 @@ router.post('/', uploadImage.single('img'), async (req, res) => {
 
   const discount_price = (req.body.discount_price === '') ? null : req.body.discount_price
   const description = (req.body.description === '') ? null : req.body.description
-  const requirement = (req.body.requirement === '') ? null : req.body.requirement
 
   try {
     const id = 'event-' + nanoid(16)
     await sequelize.transaction(async (t) => {
-      await Product.create({ id, img_url, name, price, discount_price, quota, category_id, duration, description, requirement }, { transaction: t })
+      await Product.create({ id, img_url, name, price, discount_price, quota, category_id, duration, description }, { transaction: t })
 
       const eventDates = dateObj.map(date => (
         {
@@ -128,13 +127,12 @@ router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
 
   const discount_price = (req.body.discount_price === '') ? null : req.body.discount_price
   const description = (req.body.description === '') ? null : req.body.description
-  const requirement = (req.body.requirement === '') ? null : req.body.requirement
 
   try {
     await sequelize.transaction(async (t) => {
 
       await Product.update({
-        name, img_url, price, quota, discount_price, description, requirement
+        name, img_url, price, quota, discount_price, description
       }, {
         where: { id: req.params.id, category_id: 'cat-event-1' },
         transaction: t

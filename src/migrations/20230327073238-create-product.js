@@ -22,9 +22,6 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
-      requirement: {
-        type: Sequelize.TEXT
-      },
       category_id: {
         allowNull: false,
         type: Sequelize.STRING
