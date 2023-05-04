@@ -69,8 +69,8 @@ db.CartItem = CartItemModel(sequelize, Sequelize)
 const CouponModel = require('./coupons')
 db.Coupon = CouponModel(sequelize, Sequelize)
 
-const CouponCategoryModel = require('./coupon_categories')
-db.CouponCategory = CouponCategoryModel(sequelize, Sequelize)
+const CouponProductModel = require('./coupon_products')
+db.CouponProduct = CouponProductModel(sequelize, Sequelize)
 
 const UserCouponModel = require('./user_coupons')
 db.UserCoupon = UserCouponModel(sequelize, Sequelize)
@@ -91,7 +91,7 @@ const UserProductModel = require('./user_products')
 db.UserProduct = UserProductModel(sequelize, Sequelize)
 
 // relations
-const { Category, Product, User, Cart, CartItem, Order, OrderItem, EventDate, Coupon, CouponCategory, UserCoupon, UserProduct } = db
+const { Category, Product, User, Cart, CartItem, Order, OrderItem, EventDate, Coupon, CouponProduct, UserCoupon, UserProduct } = db
 
 Category.hasMany(Product, {
   foreignKey: 'category_id',

@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const { nanoid } = require('nanoid')
-const { Coupon, CouponCategory, Product } = require('../../models/index')
+const { Coupon, Product } = require('../../models/index')
 // const { Op } = require('sequelize')
 
 const params = {

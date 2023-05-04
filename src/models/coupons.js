@@ -18,8 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     discount: DataTypes.INTEGER,
     coupon_start: DataTypes.DATE,
     coupon_end: DataTypes.DATE,
-    quota: DataTypes.INTEGER,
-    minimum_price: DataTypes.INTEGER
+    quota: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'coupons',
