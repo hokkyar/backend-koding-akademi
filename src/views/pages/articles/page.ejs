@@ -31,7 +31,24 @@
                   <td>
                     <%= data[i].createdAt.toLocaleDateString('id-ID') %>
                   </td>
-                  <td><a href="/admin/articles/show/<%= data[i].id %>">Show</a></td>
+                  <td>
+
+                    <div class="d-flex gap-2">
+                      <a style="cursor: pointer;" class="text-primary" href="/admin/articles/show/<%= data[i].id %>"
+                        data-bs-toggle="tooltip" data-bs-title="Show">
+                        <i class="bi bi-info-circle-fill fs-5"></i>
+                      </a>
+                      <a href="/admin/articles/edit/<%= data[i].id %>" style="cursor: pointer;"
+                        class="text-warning editBtn" data-bs-toggle="tooltip" data-bs-title="Update">
+                        <i data-bs-toggle="modal" data-bs-target="#updateModal" class="bi bi-pencil-fill fs-5"></i>
+                      </a>
+                      <a style="cursor: pointer;" class="text-danger deleteBtn" data-bs-toggle="tooltip"
+                        data-bs-title="Delete" data-article="<%= JSON.stringify(data[i]) %>">
+                        <i class="bi bi-trash-fill fs-5"></i>
+                      </a>
+                    </div>
+
+                  </td>
                 </tr>
                 <% } %>
             </tbody>
@@ -41,3 +58,41 @@
     </div>
   </div>
 </section>
+
+<script>
+  $('.deleteBtn').on('click', function () {
+    const data = $(this).data('article')
+    swal({
+      title: "Are you sure?",
+      text: `${data.title} will be deleted`,
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((confirm) => {
+        if (confirm) {
+          $.ajax({
+            url: `http://localhost:3000/admin/articles/delete/${data.id}`,
+            type: 'DELETE',
+            success: function (result) {
+              swal({
+                title: 'Success!',
+                text: 'Article Deleted',
+                icon: 'success',
+              }).then((result) => {
+                window.location.href = '/admin/articles'
+              })
+            },
+            error: function (err) {
+              swal({
+                title: 'Error!',
+                text: 'An error occured',
+                icon: 'error'
+              })
+            }
+          })
+        }
+      })
+
+  })
+</script>
