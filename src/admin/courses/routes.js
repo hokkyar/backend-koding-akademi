@@ -90,7 +90,13 @@ router.get('/edit/:id', async (req, res) => {
         attributes: ['name']
       }
     ],
-    where: { id: req.params.id }
+    // where: { id: req.params.id }
+    where: {
+      [Op.and]: [
+        { id: req.params.id },
+        { id: { [Op.like]: '%course%' } }
+      ]
+    }
   })
   if (!course) res.render('index', { ...params, sub_page: 'not-found' })
   res.render('index', { ...params, sub_page: 'edit', detail: req.params.id, data: course })
