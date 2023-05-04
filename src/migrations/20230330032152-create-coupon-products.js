@@ -2,20 +2,20 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('coupon_categories', {
+    await queryInterface.createTable('coupon_products', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER.UNSIGNED
       },
-      category_id: {
+      product_id: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.UUID
       },
       coupon_id: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.UUID
       },
       createdAt: {
         allowNull: false,
@@ -28,6 +28,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('coupon_categories');
+    await queryInterface.dropTable('coupon_products');
   }
 };

@@ -28,10 +28,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER.UNSIGNED
       },
-      minimum_price: {
-        allowNull: false,
-        type: Sequelize.DOUBLE(10, 2)
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
