@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
 // edit user service
 router.put('/edit/:id', async (req, res) => {
   const verified = req.body.verified ? true : false
-  await User.update({ full_name: req.body.full_name, verified }, { where: { id: req.params.id } })
+  await User.update({ full_name: req.body.full_name, email: req.body.email, phone_number: req.body.phone_number, verified }, { where: { id: req.params.id } })
   res.json({ message: 'success' })
 })
 

@@ -57,6 +57,15 @@
               <input name="full_name" type="text" class="form-control" placeholder="Name" autocomplete="off" required>
               <label>Full Name</label>
             </div>
+            <div class="form-floating mb-3">
+              <input type="email" name="email" class="form-control" placeholder="contoh@example.com" autocomplete="off"
+                required>
+              <label>Email</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" name="phone_number" class="form-control" placeholder="081" autocomplete="off">
+              <label>Phone Number</label>
+            </div>
             <div class="form-check form-check-inline mb-3">
               <input id="checkVerified" name="verified" class="form-check-input" type="checkbox">
               <label class="form-check-label" for="checkVerified">Verified?</label>
@@ -200,6 +209,8 @@
     const data = $(this).data('user')
 
     $('.formEdit input[name="full_name"]').val(data.full_name)
+    $('.formEdit input[name="email"]').val(data.email)
+    $('.formEdit input[name="phone_number"]').val(data.phone_number)
     if (data.verified) {
       $('.formEdit input[name="verified"]').prop('checked', true)
     }
