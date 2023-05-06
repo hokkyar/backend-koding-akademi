@@ -56,7 +56,24 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/edit/:id', async (req, res) => {
-  console.log(JSON.parse(req.body.products))
+  const { coupon_code, start_date, end_date, quota, discount_update: discount } = req.body
+  const productsFromBody = JSON.parse(req.body.products)
+  try {
+    await sequelize.transaction(async t => {
+      await Coupon.update({ coupon_code, quota, discount, coupon_start: start_date, coupon_end: end_date }, { where: { id: req.params.id }, transaction: t })
+      await CouponProduct.destroy({ where: { coupon_id: req.params.id }, transaction: t })
+
+      const products = productsFromBody.map(item => (
+        {
+          product_id: item.id,
+          coupon_id: req.params.id
+        }
+      ))
+      await CouponProduct.bulkCreate(products, { transaction: t })
+    })
+  } catch (error) {
+    console.log('Error occured during transaction', error)
+  }
   res.sendStatus(200)
 })
 
