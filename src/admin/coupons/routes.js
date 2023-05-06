@@ -21,7 +21,15 @@ router.get('/', async (req, res) => {
 router.get('/show/:id', async (req, res) => {
   const coupon = await Coupon.findOne({ where: { id: req.params.id } })
   if (!coupon) res.render('index', { ...params, sub_page: 'not-found' })
-  res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: coupon })
+  const products = await CouponProduct.findAll({
+    include: [
+      {
+        model: Product
+      }
+    ],
+    where: { coupon_id: req.params.id }
+  })
+  res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: { coupon, products } })
 })
 
 router.post('/', async (req, res) => {

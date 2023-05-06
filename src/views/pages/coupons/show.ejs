@@ -1,3 +1,14 @@
+<style>
+  .coupon-product {
+    color: inherit;
+    text-decoration: none;
+    transition: .3s;
+  }
+
+  .coupon-product:hover {
+    opacity: .8;
+  }
+</style>
 <section>
   <div class="bg-white rounded shadow-sm p-4 my-3">
     <div class="d-flex gap-3 align-items-center">
@@ -8,20 +19,45 @@
       </div>
     </div>
 
-    <div class="px-4">
+    <div class="my-2">
       <h5>
-        Coupon Code: <%= data.coupon_code %>
+        Code: <span class="text-primary fw-bold">
+          <%= data.coupon.coupon_code %>
+        </span>
       </h5>
       <% const options={weekday: 'long' , day: 'numeric' , month: 'long' , year: 'numeric' } %>
-        <h6>
-          Expired:
-          <span class="text-success">
-            <%= data.coupon_end.toLocaleDateString('id-ID', options) %>
+        <h5>
+          Expired Date:
+          <span class="<%= (new Date() > new Date(data.coupon.coupon_end)) ? 'text-danger' : 'text-success' %>">
+            <%= data.coupon.coupon_end.toLocaleDateString('id-ID', options) %>
           </span>
-        </h6>
-        <h6>
-          Discount: <%= data.discount %>
-        </h6>
+        </h5>
+        <h5>
+          Discount: Rp <%= new Intl.NumberFormat('id-ID').format(data.coupon.discount) %>
+        </h5>
+        <h5>
+          Quota: <%= data.coupon.quota %> %>
+        </h5>
+    </div>
+
+    <div class="my-3">
+      <h5 class="py-2 fw-bold text-center border">Products</h5>
+      <% const length=data.products.length%>
+        <div class="my-3 d-flex gap-2 flex-wrap <%= (length < 3) ? '' : 'justify-content-evenly' %> ">
+          <% for( let i=0; i < length; i++ ) { %>
+            <a target="_blank" class="coupon-product" href="/admin/courses/show/<%= data.products[i].Product.id %>">
+              <div class="card" style="width: 18rem;">
+                <img src="<%= data.products[i].Product.img_url %>" class="card-img-top" alt="Product">
+                <div class="card-body">
+                  <h5 class="card-title text-center">
+                    <%= data.products[i].Product.name %>
+                  </h5>
+                </div>
+              </div>
+            </a>
+            <% } %>
+        </div>
+
     </div>
 
   </div>

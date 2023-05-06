@@ -1,7 +1,5 @@
 <style>
   #search-result div {
-    position: relative;
-    z-index: 99;
     cursor: pointer;
     transition: .3s;
     padding: 8px;
@@ -203,7 +201,8 @@
   list.push({
     id: "<%= data.products[i].id %>",
     name: "<%= data.products[i].name %>",
-    img_url: "<%= data.products[i].img_url %>"
+    img_url: "<%= data.products[i].img_url %>",
+    price: "<%= (data.products[i].discount_price) ? data.products[i].discount_price : data.products[i].price %>"
   })
   "<% } %>"
 
@@ -213,11 +212,12 @@
 
   function searchProduct(value) {
     $('#search-result').html('')
-    const result = fuse.search(value).map(({ id, name, img_url }) => {
+    const result = fuse.search(value).map(({ id, name, img_url, price }) => {
       return {
         id,
         name: name.replace('&amp;', '&'),
-        img_url
+        img_url,
+        price
       }
     })
 
@@ -225,7 +225,7 @@
       if (!selectedList.some(item => item.id === r.id)) {
         $('#search-result').append(
           `
-          <div onclick=addProductList(this)>
+          <div onclick=addProductList(this) data-bs-toggle="tooltip" data-bs-title="Rp ${Intl.NumberFormat('id-ID').format(r.price)}">
             <img class="mx-2" src="${r.img_url}" width="50" height="50">
             <span>${(r.name.length > 40) ? r.name.substring(0, 40) + "..." : r.name}</span>
             <input class="productId" type="hidden" value="${r.id}">
@@ -234,6 +234,7 @@
         `)
       }
     })
+    $('[data-bs-toggle="tooltip"]').tooltip()
   }
 
   function addProductList(div) {

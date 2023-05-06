@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   coupon_products.init({
-    category_id: DataTypes.STRING,
+    product_id: DataTypes.STRING,
     coupon_id: DataTypes.STRING
   }, {
     sequelize,
