@@ -1,12 +1,12 @@
 <style>
-  #search-result div {
+  .search-result-container div {
     cursor: pointer;
     transition: .3s;
     padding: 8px;
     border: #dddbdb;
   }
 
-  #search-result .d-flex:hover {
+  .search-result-container .d-flex:hover {
     background-color: #dddbdb;
   }
 
@@ -36,7 +36,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <form class="formEdit" action="/admin/coupons">
+        <form class="formEdit" action="/admin/coupons/edit/">
           <div class="modal-body">
             <div class="form-floating mb-3">
               <input type="text" name="coupon_code" class="form-control" placeholder="John Doe" autocomplete="off"
@@ -64,12 +64,21 @@
                 class="form-control" placeholder="John Doe" autocomplete="off" required>
               <label>Discount Price</label>
             </div>
+            <div>
+              <p class="mb-2 mx-2">Products:</p>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                <input id="search-input-update" onkeyup=searchProductUpdate(this.value) type="text" class="form-control"
+                  placeholder="Search product..." aria-label="search" aria-describedby="basic-addon1">
+              </div>
+              <div id="search-result-update" class="my-3 search-result-container"></div>
+              <ul id="product-list-update" class="list-group mb-3"></ul>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-md btn-success">Update</button>
           </div>
         </form>
-
       </div>
     </div>
   </div>
@@ -81,7 +90,7 @@
         <div class="card-body">
           <h5 class="card-title">Manage Coupons</h5>
           <button class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addModal">
-            <i class="bi bi-file-earmark-text"></i>
+            <i class="bi bi-device-ssd"></i>
             Add Coupon
           </button>
 
@@ -114,7 +123,9 @@
                         <i class="bi bi-info-circle-fill fs-5"></i>
                       </a>
                       <a style="cursor: pointer;" class="text-warning editBtn" data-bs-toggle="tooltip"
-                        data-bs-title="Update" data-coupon="<%= JSON.stringify(data.coupons[i]) %>">
+                        data-bs-title="Update" data-coupon="<%= JSON.stringify(data.coupons[i]) %>"
+                        data-coupon_product="<%= JSON.stringify(data.coupon_product) %>"
+                        data-products="<%= JSON.stringify(data.products) %>">
                         <i data-bs-toggle="modal" data-bs-target="#updateModal" class="bi bi-pencil-fill fs-5"></i>
                       </a>
                       <a style="cursor: pointer;" class="text-danger deleteBtn" data-bs-toggle="tooltip"
@@ -178,7 +189,7 @@
                 <input id="search-input" onkeyup=searchProduct(this.value) type="text" class="form-control"
                   placeholder="Search product..." aria-label="search" aria-describedby="basic-addon1">
               </div>
-              <div id="search-result" class="my-3"></div>
+              <div id="search-result" class="my-3 search-result-container"></div>
               <ul id="product-list" class="list-group mb-3"></ul>
             </div>
             <div class="modal-footer">
@@ -280,44 +291,6 @@
     $('#discount_update').val($('#discountDisplayUpdate').val().replace(/\./g, ''))
   }
 
-  $('.editBtn').on('click', function () {
-    $('.formEdit').off('submit')
-    const data = $(this).data('coupon')
-
-    $('.formEdit input[name="coupon_code"]').val(data.coupon_code)
-    $('.formEdit input[name="quota"]').val(data.quota)
-    $('.formEdit input[name="start_date"]').val(new Date(data.coupon_start).toISOString().substr(0, 10))
-    $('.formEdit input[name="end_date"]').val(new Date(data.coupon_end).toISOString().substr(0, 10))
-    $('#discountDisplayUpdate').val(new Intl.NumberFormat('id-ID').format(data.discount))
-    $('#discount_update').val(data.discount)
-
-    $('.formEdit').on('submit', function (e) {
-      e.preventDefault()
-
-      $.ajax({
-        url: $(this).attr('action') + `${data.id}`,
-        type: 'PUT',
-        data: $(this).serialize(),
-        success: function (result) {
-          swal({
-            title: 'Success!',
-            text: 'Coupon Updated',
-            icon: 'success',
-          }).then((result) => {
-            window.location.href = '/admin/coupons'
-          })
-        },
-        error: function (err) {
-          swal({
-            title: 'Error!',
-            text: 'An error occured',
-            icon: 'error'
-          })
-        }
-      })
-    })
-  })
-
   $('#formAdd').submit(function (e) {
     e.preventDefault()
     $('button[type="submit"]').prop('disabled', true)
@@ -381,5 +354,118 @@
       }
     })
   })
+
+  let resultUpdate
+  $('.editBtn').on('click', function () {
+    $('.formEdit').off('submit')
+    const data = $(this).data('coupon')
+
+    $('.formEdit input[name="coupon_code"]').val(data.coupon_code)
+    $('.formEdit input[name="quota"]').val(data.quota)
+    $('.formEdit input[name="start_date"]').val(new Date(data.coupon_start).toISOString().substr(0, 10))
+    $('.formEdit input[name="end_date"]').val(new Date(data.coupon_end).toISOString().substr(0, 10))
+    $('#discountDisplayUpdate').val(new Intl.NumberFormat('id-ID').format(data.discount))
+    $('#discount_update').val(data.discount)
+
+    const data_coupon = $(this).data('coupon_product').filter((d) => d.coupon_id == data.id)
+    const data_product = $(this).data('products')
+    resultUpdate = data_product.filter(product => {
+      return data_coupon.some(coupon => coupon.product_id === product.id);
+    })
+
+    $('#product-list-update').html('')
+    resultUpdate.map((r) => {
+      $('#product-list-update').append(`
+        <li class="list-group-item">
+          <input type="hidden" value="${r.id}">
+          <img src="${r.img_url}" width="50" height="50">
+          <span class="mx-2">${(r.name.length > 40) ? r.name.substring(0, 40) + "..." : r.name}</span>
+          <span onclick=deleteItemUpdate() class="close-btn"><i class="bi bi-x-circle-fill fs-5"></i></span>
+        </li>
+      `)
+    })
+
+    $('.formEdit').on('submit', function (e) {
+      e.preventDefault()
+      $.ajax({
+        url: $(this).attr('action') + `${data.id}`,
+        type: 'PUT',
+        data: $(this).serialize() + `&products=${JSON.stringify(resultUpdate)}`,
+        success: function (result) {
+          swal({
+            title: 'Success!',
+            text: 'Coupon Updated',
+            icon: 'success',
+          }).then((result) => {
+            window.location.href = '/admin/coupons'
+          })
+        },
+        error: function (err) {
+          swal({
+            title: 'Error!',
+            text: 'An error occured',
+            icon: 'error'
+          })
+        }
+      })
+    })
+  })
+
+
+  function deleteItemUpdate() {
+    const deletedItem = $(event.target).closest('.list-group-item').find('input').val()
+    $(event.target).closest('.list-group-item').remove()
+    resultUpdate = resultUpdate.filter((r) => r.id !== deletedItem)
+  }
+
+  function searchProductUpdate(value) {
+    $('#search-result-update').html('')
+    const result = fuse.search(value).map(({ id, name, img_url, price }) => {
+      return {
+        id,
+        name: name.replace('&amp;', '&'),
+        img_url,
+        price
+      }
+    })
+    result.map((r) => {
+      if (!resultUpdate.some(item => item.id === r.id)) {
+        $('#search-result-update').append(
+          `<div onclick=addProductListUpdate(this) class="d-flex align-items-center">
+            <img class="mx-2 border" src="${r.img_url}" width="60" height="60">
+            <div>
+              <span>${(r.name.length > 40) ? r.name.substring(0, 40) + "..." : r.name}</span>
+              <p>Rp ${Intl.NumberFormat('id-ID').format(r.price)}</p>
+              <input class="productId" type="hidden" value="${r.id}">
+              <input class="productName" type="hidden" value="${r.name}">
+            </div>
+          </div>`
+        )
+      }
+    })
+  }
+
+  function addProductListUpdate(div) {
+    $('#search-result-update').html('')
+    $('#search-input-update').val('')
+
+    const productId = $(div).find('.productId').val()
+    const productName = $(div).find('.productName').val()
+    const productImg = $(div).find('img').attr('src')
+
+    resultUpdate.push({
+      id: productId,
+      name: productName
+    })
+
+    $('#product-list-update').append(`
+      <li class="list-group-item">
+        <input type="hidden" value="${productId}">
+        <img src="${productImg}" width="50" height="50">
+        <span class="mx-2">${(productName.length > 40) ? productName.substring(0, 40) + "..." : productName}</span>
+        <span onclick=deleteItemUpdate() class="close-btn"><i class="bi bi-x-circle-fill fs-5"></i></span>
+      </li>
+    `)
+  }
 
 </script>

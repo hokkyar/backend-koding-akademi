@@ -15,7 +15,8 @@ const params = {
 router.get('/', async (req, res) => {
   const coupons = await Coupon.findAll()
   const products = await Product.findAll()
-  res.render('index', { ...params, data: { coupons, products } })
+  const coupon_product = await CouponProduct.findAll()
+  res.render('index', { ...params, data: { coupons, products, coupon_product } })
 })
 
 router.get('/show/:id', async (req, res) => {
@@ -54,8 +55,9 @@ router.post('/', async (req, res) => {
   res.sendStatus(201)
 })
 
-router.put('/', async (req, res) => {
-
+router.put('/edit/:id', async (req, res) => {
+  console.log(JSON.parse(req.body.products))
+  res.sendStatus(200)
 })
 
 router.delete('/delete/:id', async (req, res) => {
