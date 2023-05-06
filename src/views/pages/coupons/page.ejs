@@ -61,9 +61,9 @@
               <label>Quota</label>
             </div>
             <div class="form-floating mb-3">
-              <input type="hidden" id="discount" name="discount">
-              <input name="discount_display" type="text" onkeyup="formatDiscount(this.value)" class="form-control"
-                placeholder="John Doe" autocomplete="off" required>
+              <input type="hidden" name="discount_update" id="discount_update">
+              <input id="discountDisplayUpdate" type="text" onkeyup="formatDiscountUpdate(this.value)"
+                class="form-control" placeholder="John Doe" autocomplete="off" required>
               <label>Discount Price</label>
             </div>
           </div>
@@ -168,7 +168,7 @@
               <label>Quota</label>
             </div>
             <div class="form-floating mb-3">
-              <input type="hidden" id="discount" name="discount">
+              <input id="discount" name="discount" type="hidden">
               <input id="discountDisplay" type="text" onkeyup="formatDiscount(this.value)" class="form-control"
                 placeholder="John Doe" autocomplete="off" required>
               <label>Discount Price</label>
@@ -193,18 +193,18 @@
   </div>
   <!-- End Add Modal -->
 
-
 </section>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.6/fuse.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
 
 <script>
   const list = []
   let selectedList = []
 
   "<% for(let i = 0; i < data.products.length; i++){ %>"
-  list.push({ name: "<%= data.products[i].name %>", img_url: "<%= data.products[i].img_url %>" })
+  list.push({
+    id: "<%= data.products[i].id %>",
+    name: "<%= data.products[i].name %>",
+    img_url: "<%= data.products[i].img_url %>"
+  })
   "<% } %>"
 
   const fuse = new Fuse(list, {
@@ -213,15 +213,23 @@
 
   function searchProduct(value) {
     $('#search-result').html('')
-    const result = fuse.search(value)
+    const result = fuse.search(value).map(({ id, name, img_url }) => {
+      return {
+        id,
+        name: name.replace('&amp;', '&'),
+        img_url
+      }
+    })
+
     result.map((r) => {
-      if (!selectedList.includes(r.name.replace('&amp;', '&'))) {
+      if (!selectedList.some(item => item.id === r.id)) {
         $('#search-result').append(
           `
           <div onclick=addProductList(this)>
             <img class="mx-2" src="${r.img_url}" width="50" height="50">
             <span>${(r.name.length > 40) ? r.name.substring(0, 40) + "..." : r.name}</span>
-            <input type="hidden" value="${r.name}">
+            <input class="productId" type="hidden" value="${r.id}">
+            <input class="productName" type="hidden" value="${r.name}">
           </div>
         `)
       }
@@ -231,14 +239,19 @@
   function addProductList(div) {
     $('#search-result').html('')
     $('#search-input').val('')
-    const productName = $(div).find('input').val()
+
+    const productId = $(div).find('.productId').val()
+    const productName = $(div).find('.productName').val()
     const productImg = $(div).find('img').attr('src')
 
-    selectedList.push(productName)
+    selectedList.push({
+      id: productId,
+      name: productName
+    })
 
     $('#product-list').append(`
       <li class="list-group-item">
-        <input type="hidden" value="${productName}">
+        <input type="hidden" value="${productId}">
         <img src="${productImg}" width="50" height="50">
         <span>${(productName.length > 40) ? productName.substring(0, 40) + "..." : productName}</span>
         <span onclick=deleteItem() class="close-btn"><i class="bi bi-x-circle-fill fs-5"></i></span>
@@ -248,7 +261,7 @@
 
   function deleteItem() {
     const deletedItem = $(event.target).closest('.list-group-item').find('input').val()
-    selectedList = selectedList.filter((s) => s !== deletedItem)
+    selectedList = selectedList.filter((s) => s.id !== deletedItem)
     $(event.target).closest('.list-group-item').remove()
   }
 
@@ -259,16 +272,23 @@
     $('#discount').val($('#discountDisplay').val().replace(/\./g, ''))
   }
 
+  function formatDiscountUpdate(discount) {
+    const number = discount.replace(/\D/g, '')
+    const formattedNumber = new Intl.NumberFormat('id-ID').format(number)
+    $('#discountDisplayUpdate').val(formattedNumber)
+    $('#discount_update').val($('#discountDisplayUpdate').val().replace(/\./g, ''))
+  }
+
   $('.editBtn').on('click', function () {
     $('.formEdit').off('submit')
     const data = $(this).data('coupon')
 
     $('.formEdit input[name="coupon_code"]').val(data.coupon_code)
-    $('.formEdit input[name="discount"]').val(data.discount)
     $('.formEdit input[name="quota"]').val(data.quota)
     $('.formEdit input[name="start_date"]').val(new Date(data.coupon_start).toISOString().substr(0, 10))
     $('.formEdit input[name="end_date"]').val(new Date(data.coupon_end).toISOString().substr(0, 10))
-    $('.formEdit input[name="discount_display"]').val(new Intl.NumberFormat('id-ID').format(data.discount))
+    $('#discountDisplayUpdate').val(new Intl.NumberFormat('id-ID').format(data.discount))
+    $('#discount_update').val(data.discount)
 
     $('.formEdit').on('submit', function (e) {
       e.preventDefault()
@@ -300,10 +320,15 @@
   $('#formAdd').submit(function (e) {
     e.preventDefault()
     $('button[type="submit"]').prop('disabled', true)
+
+    const products = selectedList.map(({ id, name }) => {
+      return { id, name: encodeURIComponent(name) }
+    })
+
     $.ajax({
       url: $(this).attr('action'),
       type: $(this).attr('method'),
-      data: $(this).serialize(),
+      data: $(this).serialize() + `&products=${JSON.stringify(products)}`,
       success: function (response) {
         swal({
           title: 'Success!',
@@ -321,6 +346,7 @@
         })
       }
     })
+
     $('button[type="submit"]').prop('disabled', false)
   })
 

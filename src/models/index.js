@@ -145,4 +145,18 @@ UserProduct.belongsTo(Product, {
   foreignKey: 'product_id'
 })
 
+Coupon.hasMany(CouponProduct, {
+  foreignKey: 'coupon_id'
+})
+CouponProduct.belongsTo(Coupon, {
+  foreignKey: 'coupon_id'
+})
+
+Product.hasMany(CouponProduct, {
+  foreignKey: 'product_id'
+})
+CouponProduct.belongsTo(Product, {
+  foreignKey: 'product_id'
+})
+
 module.exports = db;
