@@ -6,7 +6,7 @@
     border: #dddbdb;
   }
 
-  #search-result div:hover {
+  #search-result .d-flex:hover {
     background-color: #dddbdb;
   }
 
@@ -220,21 +220,21 @@
         price
       }
     })
-
     result.map((r) => {
       if (!selectedList.some(item => item.id === r.id)) {
         $('#search-result').append(
-          `
-          <div onclick=addProductList(this) data-bs-toggle="tooltip" data-bs-title="Rp ${Intl.NumberFormat('id-ID').format(r.price)}">
-            <img class="mx-2" src="${r.img_url}" width="50" height="50">
-            <span>${(r.name.length > 40) ? r.name.substring(0, 40) + "..." : r.name}</span>
-            <input class="productId" type="hidden" value="${r.id}">
-            <input class="productName" type="hidden" value="${r.name}">
-          </div>
-        `)
+          `<div onclick=addProductList(this) class="d-flex align-items-center">
+            <img class="mx-2 border" src="${r.img_url}" width="60" height="60">
+            <div>
+              <span>${(r.name.length > 40) ? r.name.substring(0, 40) + "..." : r.name}</span>
+              <p>Rp ${Intl.NumberFormat('id-ID').format(r.price)}</p>
+              <input class="productId" type="hidden" value="${r.id}">
+              <input class="productName" type="hidden" value="${r.name}">
+            </div>
+          </div>`
+        )
       }
     })
-    $('[data-bs-toggle="tooltip"]').tooltip()
   }
 
   function addProductList(div) {
@@ -254,7 +254,7 @@
       <li class="list-group-item">
         <input type="hidden" value="${productId}">
         <img src="${productImg}" width="50" height="50">
-        <span>${(productName.length > 40) ? productName.substring(0, 40) + "..." : productName}</span>
+        <span class="mx-2">${(productName.length > 40) ? productName.substring(0, 40) + "..." : productName}</span>
         <span onclick=deleteItem() class="close-btn"><i class="bi bi-x-circle-fill fs-5"></i></span>
       </li>
     `)

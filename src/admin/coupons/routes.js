@@ -54,7 +54,9 @@ router.post('/', async (req, res) => {
   res.sendStatus(201)
 })
 
-router.put('/', async (req, res) => { })
+router.put('/', async (req, res) => {
+
+})
 
 router.delete('/delete/:id', async (req, res) => {
   await Coupon.destroy({ where: { id: req.params.id } })
