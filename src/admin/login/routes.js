@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { Admin } = require('../../models/index')
+const { User } = require('../../models/index')
 const bcrypt = require('bcrypt')
 
 router.get('/', (req, res) => {
@@ -11,17 +11,17 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  const { username, password } = req.body
-  const adminAccount = await Admin.findOne({ where: { username } })
+  const { email, password } = req.body
+  const adminAccount = await User.findOne({ where: { email, role: 'admin' } })
 
-  if (!adminAccount) return res.render('pages/login/page', { message: 'Invalid username or password' })
+  if (!adminAccount) return res.render('pages/login/page', { message: 'Invalid email or password' })
 
   const hashedPassword = adminAccount.password
   const isPasswordMatched = await bcrypt.compare(password, hashedPassword)
 
-  if (!isPasswordMatched) return res.render('pages/login/page', { message: 'Invalid username or password' })
+  if (!isPasswordMatched) return res.render('pages/login/page', { message: 'Invalid email or password' })
 
-  req.session.user = { username }
+  req.session.user = { email }
   return res.redirect('/admin/dashboard')
 })
 

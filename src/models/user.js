@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     full_name: DataTypes.STRING,
     verified: DataTypes.BOOLEAN,
-    qr_code: DataTypes.STRING
+    qr_code: DataTypes.STRING,
+    role: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'User',

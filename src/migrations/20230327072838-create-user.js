@@ -8,6 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.UUID
       },
+      role: {
+        allowNull: false,
+        type: Sequelize.ENUM('admin', 'user')
+      },
       email: {
         allowNull: false,
         type: Sequelize.STRING
@@ -25,7 +29,6 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       qr_code: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {

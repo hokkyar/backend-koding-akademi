@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { User, UserProduct, Product } = require('../../models/index')
+const { User, Student, UserProduct, Product, sequelize } = require('../../models/index')
 const { nanoid } = require('nanoid')
 const bcrypt = require('bcrypt')
 
@@ -14,14 +14,35 @@ const params = {
 
 // get all users
 router.get('/', async (req, res) => {
-  const users = await User.findAll()
+  const students = await Student.findAll({
+    attributes: ['phone_number', 'address', 'birth_date'],
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'email', 'full_name', 'qr_code', 'verified'],
+        where: { role: 'user' }
+      }
+    ]
+  })
+
+  const users = students.map(student => ({
+    id: student.User.id,
+    email: student.User.email,
+    full_name: student.User.full_name,
+    qr_code: student.User.qr_code,
+    verified: student.User.verified,
+    phone_number: student.phone_number,
+    address: student.address,
+    birth_date: student.birth_date
+  }))
+
   res.render('index', { ...params, data: users })
 })
 
 // get detail user
 router.get('/show/:id', async (req, res) => {
-  const user = await User.findOne({
-    where: { id: req.params.id }
+  let user = await User.findOne({
+    where: { id: req.params.id, role: 'user' }
   })
   if (!user) res.render('index', { ...params, sub_page: 'not-found' })
 
@@ -34,6 +55,9 @@ router.get('/show/:id', async (req, res) => {
     where: { user_id: req.params.id }
   })
 
+  const student = await Student.findOne({ where: { user_id: user.id } })
+  user = { ...user.toJSON(), phone_number: student.phone_number, address: student.address, birth_date: student.birth_date }
+
   res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: { user, user_products } })
 })
 
@@ -41,19 +65,36 @@ router.get('/show/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   const { full_name, email, password } = req.body
   const phone_number = (req.body.phone_number === '') ? null : req.body.phone_number
+  const address = (req.body.address === '') ? null : req.body.address
+  const birth_date = (req.body.birth_date === '') ? null : req.body.birth_date
   const verified = (!req.body.verified) ? false : true
 
-  const id = 'user-' + nanoid(16)
-  const hashedPassword = await bcrypt.hash(password, 10)
-  await User.create({ id, full_name, email, password: hashedPassword, phone_number, verified })
-  res.json({ message: 'success' })
+  try {
+    await sequelize.transaction(async (t) => {
+      const id = 'user-' + nanoid(16)
+      const hashedPassword = await bcrypt.hash(password, 10)
+      await User.create({ id, full_name, email, password: hashedPassword, verified, role: 'user', qr_code: null }, { transaction: t })
+      await Student.create({ user_id: id, phone_number, address, birth_date }, { transaction: t })
+    })
+  } catch (error) {
+    console.log('Error occurred during transaction:', error)
+  }
+  res.sendStatus(201)
 })
 
 // edit user service
 router.put('/edit/:id', async (req, res) => {
   const verified = req.body.verified ? true : false
-  await User.update({ full_name: req.body.full_name, email: req.body.email, phone_number: req.body.phone_number, verified }, { where: { id: req.params.id } })
-  res.json({ message: 'success' })
+  const { full_name, email, phone_number, address, birth_date } = req.body
+  try {
+    await sequelize.transaction(async (t) => {
+      await User.update({ full_name, email, verified }, { where: { id: req.params.id }, transaction: t })
+      await Student.update({ phone_number, address, birth_date }, { where: { user_id: req.params.id }, transaction: t })
+    })
+  } catch (error) {
+    console.log('Error occurred during transaction:', error)
+  }
+  res.sendStatus(200)
 })
 
 // delete user service
@@ -61,7 +102,7 @@ router.delete('/delete/:id', async (req, res) => {
   await User.destroy({
     where: { id: req.params.id }
   })
-  res.json({ message: 'success' })
+  res.sendStatus(200)
 })
 
 module.exports = router
