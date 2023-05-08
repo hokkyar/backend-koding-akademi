@@ -100,6 +100,8 @@
                 <th>#</th>
                 <th>Coupon Code</th>
                 <th>Quota</th>
+                <th>Discount</th>
+                <th>Expired</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -114,6 +116,13 @@
                   </td>
                   <td>
                     <%= data.coupons[i].quota %>
+                  </td>
+                  <td>
+                    Rp <%= new Intl.NumberFormat('id-ID').format(data.coupons[i].discount) %>
+                  </td>
+                  <td
+                    class="<%= (new Date() > new Date(data.coupons[i].coupon_end)) ? 'text-danger' : 'text-success' %>">
+                    <%= new Date(data.coupons[i].coupon_end).toISOString().substr(0, 10) %>
                   </td>
                   <td>
                     <div class="d-flex gap-2">
