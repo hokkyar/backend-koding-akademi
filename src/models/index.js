@@ -54,9 +54,6 @@ db.Category = CategoryModel(sequelize, Sequelize)
 const ArticleModel = require('./articles')
 db.Article = ArticleModel(sequelize, Sequelize)
 
-const AdminModel = require('./admin')
-db.Admin = AdminModel(sequelize, Sequelize)
-
 const AuthTokenModel = require('./auth_tokens')
 db.AuthToken = AuthTokenModel(sequelize, Sequelize)
 
@@ -90,8 +87,11 @@ db.Transaction = TransactionModel(sequelize, Sequelize)
 const UserProductModel = require('./user_products')
 db.UserProduct = UserProductModel(sequelize, Sequelize)
 
+const StudentModel = require('./student')
+db.Student = StudentModel(sequelize, Sequelize)
+
 // relations
-const { Category, Product, User, Cart, CartItem, Order, OrderItem, EventDate, Coupon, CouponProduct, UserCoupon, UserProduct } = db
+const { Category, Product, User, CartItem, Order, OrderItem, EventDate, Coupon, CouponProduct, UserCoupon, UserProduct, Student } = db
 
 Category.hasMany(Product, {
   foreignKey: 'category_id',
@@ -157,6 +157,13 @@ Product.hasMany(CouponProduct, {
 })
 CouponProduct.belongsTo(Product, {
   foreignKey: 'product_id'
+})
+
+User.hasMany(Student, {
+  foreignKey: 'user_id'
+})
+Student.belongsTo(User, {
+  foreignKey: 'user_id'
 })
 
 module.exports = db;

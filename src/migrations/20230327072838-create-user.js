@@ -24,7 +24,8 @@ module.exports = {
         allowNull: false,
         type: Sequelize.BOOLEAN
       },
-      phone_number: {
+      qr_code: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {
