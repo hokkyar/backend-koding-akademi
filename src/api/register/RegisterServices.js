@@ -1,4 +1,4 @@
-const { User, AuthToken, Cart } = require('../../models/index')
+const { User, AuthToken, Cart, Student, sequelize } = require('../../models/index')
 const sendEmailVerification = require('../../utils/sendEmailVerification')
 const { nanoid } = require('nanoid')
 const bcrypt = require('bcrypt')
@@ -15,16 +15,22 @@ exports.registerService = async ({ email, password, full_name, phone_number }) =
 
   const user_id = `user-${nanoid(16)}`
   const hashedPassword = await bcrypt.hash(password, 10)
-  await User.create({
-    id: user_id, email, password: hashedPassword, verified: false, full_name, phone_number
-  })
-
   const email_token = `verify-${nanoid(8)}`
-  await AuthToken.create({ token: email_token })
-  await sendEmailVerification(email, user_id, email_token)
-
   const cartId = `cart-${nanoid(16)}`
-  await Cart.create({ id: cartId, user_id })
+
+  try {
+    await sequelize.transaction(async (t) => {
+      await User.create({
+        id: user_id, role: 'user', qr_code: null, email, password: hashedPassword, verified: false, full_name, phone_number
+      }, { transaction: t })
+      await AuthToken.create({ token: email_token }, { transaction: t })
+      await sendEmailVerification(email, user_id, email_token)
+      await Cart.create({ id: cartId, user_id }, { transaction: t })
+      await Student.create({ user_id, phone_number, address: null, birth_date: null }, { transaction: t })
+    })
+  } catch (error) {
+    console.log('An error occured: ', error);
+  }
 
   return { user_id, email_token }
 }
