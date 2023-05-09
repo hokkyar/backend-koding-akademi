@@ -1,4 +1,4 @@
-const { User, AuthToken } = require('../../models/index')
+const { User, Student, AuthToken } = require('../../models/index')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const NotFoundError = require('../../exceptions/NotFoundError')
@@ -11,21 +11,32 @@ exports.userLoginService = async ({ email, password }) => {
   })
   if (!user) throw new NotFoundError('User not found')
 
-  const isPasswordMatch = await bcrypt.compare(password, user.dataValues.password)
+  const isPasswordMatch = await bcrypt.compare(password, user.password)
   if (!isPasswordMatch) throw new InvariantError('Wrong password')
 
-  if (!user.dataValues.verified) throw new AuthenticationError(`Check your email inbox: (${email})`)
+  if (!user.verified) throw new AuthenticationError(`Check your email inbox: (${email})`)
 
-  const userId = user.dataValues.id
-  const phone_number = user.dataValues.phone_number
-  const full_name = user.dataValues.full_name
+  const student = await Student.findOne({
+    where: { user_id: user.id }
+  })
 
-  const accessToken = jwt.sign({ id: userId, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
-  const refreshToken = jwt.sign({ id: userId, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
+  const accessToken = jwt.sign({ id: user.id, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
+  const refreshToken = jwt.sign({ id: user.id, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
 
   await AuthToken.create({
     token: refreshToken
   })
 
-  return { full_name, phone_number, email, accessToken, refreshToken }
+  const response = {
+    full_name: user.full_name,
+    phone_number: student.phone_number,
+    email,
+    qr_code: user.qr_code,
+    address: student.address,
+    birth_date: student.birth_date,
+    accessToken,
+    refreshToken
+  }
+
+  return response
 }

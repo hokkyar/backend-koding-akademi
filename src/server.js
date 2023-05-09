@@ -29,7 +29,7 @@ app.use(api)
 const admin = require('./admin/index')
 app.use('/admin', admin)
 
-app.use('/scan-qr-code', (req, res) => {
+app.use('/scan-qr', (req, res) => {
   return res.render('qr-scan-public/page')
 })
 
