@@ -1,8 +1,8 @@
 const { Article } = require('../../../models/index')
 const NotFoundError = require('../../../exceptions/NotFoundError')
 
-exports.getArticleService = async () => {
-  const articles = await Article.findAll()
+exports.getArticleService = async (limit) => {
+  const articles = await Article.findAll({ limit })
   return articles
 }
 

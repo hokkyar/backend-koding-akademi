@@ -1,7 +1,8 @@
 const { getArticleService, getDetailArticleService } = require('./ArticlesServices')
 
 exports.getArticle = async (req, res) => {
-  const articles = await getArticleService()
+  const limit = parseInt(req.query.limit) || 10
+  const articles = await getArticleService(limit)
   return res.json({
     message: 'Get all article',
     articles
