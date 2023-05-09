@@ -5,15 +5,15 @@ const NotFoundError = require('../../../exceptions/NotFoundError')
 const InvariantError = require('../../../exceptions/InvariantError')
 const createPayment = require('../../../utils/createPayment')
 
-exports.checkoutProductsService = async (productLists, userId) => {
+exports.checkoutProductsService = async (productList, userId) => {
   const cartId = await getUserCartId(userId)
 
   await isCartEmptyCheck(cartId)
-  await isProductAndUserCartItemExist(cartId, productLists)
-  await deleteCartItem(cartId, productLists)
+  await isProductAndUserCartItemExist(cartId, productList)
+  await deleteCartItem(cartId, productList)
 
-  const zeroPriceProducts = await getZeroPriceProducts(productLists, userId)
-  const productToOrder = productLists.filter((product) => !zeroPriceProducts.includes(product))
+  const zeroPriceProducts = await getZeroPriceProducts(productList, userId)
+  const productToOrder = productList.filter((product) => !zeroPriceProducts.includes(product))
 
   if (productToOrder.length !== 0) {
     const orderId = `order-${nanoid(16)}`
@@ -46,35 +46,35 @@ async function isCartEmptyCheck(cartId) {
   if (!cartItems) throw new NotFoundError('Cart is empty')
 }
 
-async function isProductAndUserCartItemExist(cartId, productLists) {
+async function isProductAndUserCartItemExist(cartId, productList) {
   // cek apakah product tersebut ada
   const products = await Product.findAll({
     where: {
-      id: { [Op.in]: productLists }
+      id: { [Op.in]: productList }
     }
   })
-  if (products.length !== productLists.length) throw new NotFoundError('Product not found')
+  if (products.length !== productList.length) throw new NotFoundError('Product not found')
 
   // cek apakah yang di checkout itu ada di cart usernya
   const items = await CartItem.findAll({
-    where: { cart_id: cartId, product_id: productLists }
+    where: { cart_id: cartId, product_id: productList }
   })
-  if (items.length !== productLists.length) throw new NotFoundError('Product is not available in your cart')
+  if (items.length !== productList.length) throw new NotFoundError('Product is not available in your cart')
 }
 
-async function deleteCartItem(cartId, productLists) {
+async function deleteCartItem(cartId, productList) {
   await CartItem.destroy({
     where: {
       cart_id: cartId,
       product_id: {
-        [Op.in]: productLists
+        [Op.in]: productList
       }
     }
   })
 }
 
-async function addProductsToOrderItem(orderId, productLists) {
-  const orderItems = productLists.map((productId) => ({
+async function addProductsToOrderItem(orderId, productList) {
+  const orderItems = productList.map((productId) => ({
     id: `orderitem-${nanoid(16)}`,
     order_id: orderId,
     product_id: productId
@@ -82,14 +82,14 @@ async function addProductsToOrderItem(orderId, productLists) {
   await OrderItem.bulkCreate(orderItems)
 }
 
-async function getTotalAmount(productLists) {
+async function getTotalAmount(productList) {
   const products = await Product.findAll({
     attributes: [
       'name',
       [Sequelize.literal('IFNULL(discount_price, price)'), 'total_price']
     ],
     where: {
-      id: { [Op.in]: productLists }
+      id: { [Op.in]: productList }
     }
   })
   const amount = products.reduce((acc, curr) => acc + curr.getDataValue('total_price'), 0)
@@ -105,11 +105,11 @@ async function getUserEmail(userId) {
   return email
 }
 
-async function getZeroPriceProducts(productLists, userId) {
+async function getZeroPriceProducts(productList, userId) {
   const zeroProductId = []
   const products = await Product.findAll({
     where: {
-      id: productLists,
+      id: productList,
       price: 0
     }
   })
