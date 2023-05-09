@@ -1,7 +1,7 @@
 const { Product, EventDate } = require('../../../models/index')
 const NotFoundError = require('../../../exceptions/NotFoundError')
 
-exports.getEventsService = async () => {
+exports.getEventsService = async (limit) => {
   const events = await Product.findAll({
     attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'quota'],
     include: [
@@ -12,7 +12,8 @@ exports.getEventsService = async () => {
     ],
     where: {
       category_id: 'cat-event-1'
-    }
+    },
+    limit
   })
   return events
 }
