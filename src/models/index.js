@@ -145,6 +145,13 @@ UserProduct.belongsTo(Product, {
   foreignKey: 'product_id'
 })
 
+User.hasMany(UserProduct, {
+  foreignKey: 'user_id'
+})
+UserProduct.belongsTo(User, {
+  foreignKey: 'user_id'
+})
+
 Coupon.hasMany(CouponProduct, {
   foreignKey: 'coupon_id'
 })

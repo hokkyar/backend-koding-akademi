@@ -1,25 +1,86 @@
-<section class="section">
-  <div class="row">
-    <div class="col">
-      <div class="row">
-        <video id="webCam" width="640" height="480"></video>
-        <!-- <video id="webCam" width="600" height="400"></video> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scan QR Code</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+</head>
+
+<style>
+  body {
+    background-color: #F9AD0A;
+  }
+
+  .spinner {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    border: 4.5px solid #0000;
+    border-radius: 50%;
+    border-color: #dbdcef #0000;
+    animation: spinner-e04l1k 1s infinite linear;
+  }
+
+  .spinner::before,
+  .spinner::after {
+    content: "";
+    grid-area: 1/1;
+    margin: 2.2px;
+    border: inherit;
+    border-radius: 50%;
+  }
+
+  .spinner::before {
+    border-color: #474bff #0000;
+    animation: inherit;
+    animation-duration: 0.5s;
+    animation-direction: reverse;
+  }
+
+  .spinner::after {
+    margin: 8.9px;
+  }
+
+  @keyframes spinner-e04l1k {
+    100% {
+      transform: rotate(1turn);
+    }
+  }
+</style>
+
+<body>
+  <section class="section">
+    <div class="row" style="width: 100%;">
+      <div class="col-12 text-center px-3 mx-3 my-3">
+        <img src="https://www.kodingakademi.id/wp-content/uploads/2020/11/logo-kodak-scaled-1.jpg" alt="profile"
+          width="230" class="rounded">
       </div>
-    </div>
-  </div>
-</section>
+      <div class="col-6 px-3 mx-3">
+        <video id="webcam" style="width: 100%; height: 100%;"></video>
+        <canvas id="canvas"></canvas>
+      </div>
+      <div id="content-data" class="col p-4 m-3 bg-white rounded">
+        <div class="d-flex justify-content-center align-items-center" style="height: 480px;">
+          <div id="loader" style="display: none;" class="spinner"></div>
+        </div>
+      </div>
+  </section>
+</body>
 
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"
+  integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-
 <script>
-  const scanner = new Instascan.Scanner({ video: document.getElementById('webCam') })
-
-  scanner.addListener('scan', (content) => {
-    // window.location.href = '/admin/user-handler/'
-    alert('ID_USER : ' + content)
-    window.location.href = '/admin/user-handler/show/iduser'
-  })
-
+  const scanner = new Instascan.Scanner({ video: document.getElementById('webcam') })
   Instascan.Camera.getCameras().then((cameras) => {
     if (cameras.length > 0) {
       scanner.start(cameras[0])
@@ -27,4 +88,50 @@
       alert('No cameras found.')
     }
   }).catch((e) => console.error(e))
+
+  scanner.addListener('scan', (url) => {
+    const searchParams = new URLSearchParams(new URL(url).search)
+    const id = searchParams.get('id')
+    $('#loader').show()
+    setTimeout(() => {
+      $.ajax({
+        type: 'GET',
+        url: `/scan-qr/${id}`,
+        success: function (response) {
+          $('#content-data').html(`
+            <h5 class="text-primary">STUDENT DATA</h5>
+            <div class="my-4 d-flex gap-3">
+              <img src="https://www.kindpng.com/picc/m/451-4517876_default-profile-hd-png-download.png" alt="profile"
+                width="150" class="rounded">
+              <div class="">
+                <h5>ID : ${id}</h5>
+                <h5>Name: ${response.data.name}</h5>
+                <h5>Email: ${response.data.email}</h5>
+              </div>
+            </div>
+            <h5 class="my-3 text-primary">ACTIVE COURSE</h5>
+            <div class="d-flex gap-2 flex-wrap">
+              ${response.data.product_active.map(course => `
+                <div class="card" style="width: 12rem;">
+                  <img src="${course.img_url}" class="card-img-top"
+                    alt="course">
+                  <div class="card-body">
+                    <h5 class="card-title">${course.product_name}</h5>
+                    <h6 class="card-subtitle mb-2">Expired: <span class="text-success">${new Date(course.expired_date).toLocaleDateString('id-ID')}</span></h6>
+                  </div>
+                </div>
+              `)}
+            </div>
+          </div>
+      `)
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          alert('Terjadi kesalahan:', textStatus, errorThrown);
+        }
+      })
+      $('#loader').hide()
+    }, 3000);
+
+  })
+
 </script>

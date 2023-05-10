@@ -29,9 +29,8 @@ app.use(api)
 const admin = require('./admin/index')
 app.use('/admin', admin)
 
-app.use('/scan-qr', (req, res) => {
-  return res.render('qr-scan-public/page')
-})
+const scanQR = require('./scan-qr/index')
+app.use('/scan-qr', scanQR)
 
 app.use((req, res, next) => res.status(404).send({ message: 'API endpoint not found' }))
 
