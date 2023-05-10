@@ -1,7 +1,6 @@
-const { Coupon, CouponCategory } = require('../../../models/index')
-const NotFoundError = require('../../../exceptions/NotFoundError')
+const { Coupon } = require('../../../models/index')
 
-exports.getCouponService = async (userId) => {
+exports.getCouponService = async () => {
   const coupons = await Coupon.findAll()
   return coupons
 }
