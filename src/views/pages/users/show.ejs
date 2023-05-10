@@ -32,26 +32,63 @@
 
     <div class="my-2">
       <h5 class="py-2 fw-bold text-center border">Products</h5>
+      <% const lengthActive=data.user_products.active.length%>
 
-      <% const length=data.user_products.length%>
-        <div class="my-3 d-flex gap-2 flex-wrap <%= (length < 3) ? '' : 'justify-content-evenly' %> ">
-          <% if (length===0) { %>
-            <p class="text-center w-100">No products yet</p>
-            <% } %>
-              <% for( let i=0; i < length; i++ ) { %>
-                <div class="card" style="width: 18rem;">
-                  <img src="<%= data.user_products[i].Product.img_url%>" class="card-img-top" alt="...">
-                  <div class="card-body">
-                    <h5 class="card-title">
-                      <%= data.user_products[i].Product.name %>
-                    </h5>
-                    <p
-                      class="card-text <%= (data.user_products[i].status === 'active') ? 'text-success' : 'text-danger' %>">
-                      Expired: <%= data.user_products[i].expired_date.toLocaleDateString('id-ID') %>
-                    </p>
-                  </div>
-                </div>
+        <ul class="nav nav-tabs nav-tabs-bordered">
+          <li class="nav-item"> <button class="nav-link active" data-bs-toggle="tab"
+              data-bs-target="#active">Active</button></li>
+          <li class="nav-item"> <button class="nav-link" data-bs-toggle="tab" data-bs-target="#expired">Expired</button>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+
+          <div class="tab-pane fade profile-overview show active" id="active">
+            <div class="my-3 d-flex gap-2 flex-wrap <%= (lengthActive < 3) ? '' : 'justify-content-evenly' %> ">
+              <% if (lengthActive===0) { %>
+                <p class="text-center w-100">No product active yet</p>
                 <% } %>
+                  <% for( let i=0; i < lengthActive; i++ ) { %>
+                    <div class="card" style="width: 18rem;">
+                      <img src="<%= data.user_products.active[i].Product.img_url%>" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <%= data.user_products.active[i].Product.name %>
+                        </h5>
+                        <p class="card-text">
+                          Expired: <span class="text-success">
+                            <%= data.user_products.active[i].expired_date.toLocaleDateString('id-ID') %>
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <% } %>
+            </div>
+          </div>
+
+          <% const lengthFinished=data.user_products.finished.length%>
+            <div class="tab-pane fade profile-edit" id="expired">
+              <div class="my-3 d-flex gap-2 flex-wrap <%= (lengthFinished < 3) ? '' : 'justify-content-evenly' %> ">
+                <% if (lengthFinished===0) { %>
+                  <p class="text-center w-100">No expired product yet</p>
+                  <% } %>
+                    <% for( let i=0; i < lengthFinished; i++ ) { %>
+                      <div class="card" style="width: 18rem;">
+                        <img src="<%= data.user_products.finished[i].Product.img_url%>" class="card-img-top" alt="...">
+                        <div class="card-body">
+                          <h5 class="card-title">
+                            <%= data.user_products.finished[i].Product.name %>
+                          </h5>
+                          <p class="card-text">
+                            Expired: <span class="text-danger">
+                              <%= data.user_products.finished[i].expired_date.toLocaleDateString('id-ID') %>
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                      <% } %>
+              </div>
+            </div>
         </div>
 
     </div>

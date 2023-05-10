@@ -46,17 +46,37 @@ router.get('/show/:id', async (req, res) => {
   })
   if (!user) res.render('index', { ...params, sub_page: 'not-found' })
 
-  const user_products = await UserProduct.findAll({
+  // let user_products = await UserProduct.findAll({
+  //   include: [
+  //     {
+  //       model: Product
+  //     }
+  //   ],
+  //   where: { user_id: req.params.id }
+  // })
+
+  const activeProduct = await UserProduct.findAll({
     include: [
       {
         model: Product
       }
     ],
-    where: { user_id: req.params.id }
+    where: { user_id: req.params.id, status: 'active' }
+  })
+
+  const finishedProduct = await UserProduct.findAll({
+    include: [
+      {
+        model: Product
+      }
+    ],
+    where: { user_id: req.params.id, status: 'finished' }
   })
 
   const student = await Student.findOne({ where: { user_id: user.id } })
   user = { ...user.toJSON(), phone_number: student.phone_number, address: student.address, birth_date: student.birth_date }
+
+  const user_products = { active: activeProduct, finished: finishedProduct }
 
   res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: { user, user_products } })
 })
