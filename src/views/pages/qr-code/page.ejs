@@ -15,9 +15,9 @@
   const scanner = new Instascan.Scanner({ video: document.getElementById('webCam') })
 
   scanner.addListener('scan', (content) => {
-    // window.location.href = '/admin/user-handler/'
-    alert('ID_USER : ' + content)
-    window.location.href = '/admin/user-handler/show/iduser'
+    const searchParams = new URLSearchParams(new URL(content).search)
+    const id = searchParams.get('id')
+    window.location.href = `/admin/users/show/${id}`
   })
 
   Instascan.Camera.getCameras().then((cameras) => {
@@ -26,5 +26,8 @@
     } else {
       alert('No cameras found.')
     }
-  }).catch((e) => console.error(e))
+  }).catch((e) => {
+    console.error(e)
+    window.location.reload()
+  })
 </script>
