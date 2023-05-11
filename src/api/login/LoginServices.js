@@ -7,7 +7,7 @@ const AuthenticationError = require('../../exceptions/AuthenticationError')
 
 exports.userLoginService = async ({ email, password }) => {
   const user = await User.findOne({
-    where: { email }
+    where: { email, role: 'user' }
   })
   if (!user) throw new NotFoundError('User not found')
 
