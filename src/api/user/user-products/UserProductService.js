@@ -1,9 +1,62 @@
-const { UserProduct } = require('../../../models/index')
-const NotFoundError = require('../../../exceptions/NotFoundError')
+const { UserProduct, Product, EventDate } = require('../../../models/index')
+const { Op } = require('sequelize')
 
 exports.getUserProductService = async (userId) => {
-  const products = await UserProduct.findAll({
+  const user_products = await UserProduct.findAll({
+    attributes: ['status', 'expired_date'],
+    include: [
+      {
+        model: Product
+      }
+    ],
     where: { user_id: userId }
   })
+
+  const products = user_products.map((product) => ({
+    id: product.Product.id,
+    name: product.Product.name,
+    img_url: product.Product.img_url,
+    description: product.Product.description,
+    status: product.status,
+    expired_date: product.expired_date
+  }))
+
+  return products
+}
+
+exports.getUserEventsService = async (userId) => {
+  const user_products = await UserProduct.findAll({
+    attributes: ['status', 'expired_date'],
+    include: [
+      {
+        model: Product,
+        include: [
+          {
+            attributes: ['date'],
+            model: EventDate
+          }
+        ]
+      }
+    ],
+    where: {
+      user_id: userId,
+      product_id: {
+        [Op.like]: '%event%'
+      }
+    }
+  })
+
+  const products = user_products.map((product) => ({
+    id: product.Product.id,
+    name: product.Product.name,
+    img_url: product.Product.img_url,
+    description: product.Product.description,
+    quota: product.Product.quota,
+    participants: product.Product.participants,
+    event_dates: product.Product.event_dates,
+    status: product.status,
+    end_date: product.expired_date
+  }))
+
   return products
 }
