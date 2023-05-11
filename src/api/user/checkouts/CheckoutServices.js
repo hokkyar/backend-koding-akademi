@@ -10,7 +10,6 @@ exports.checkoutProductsService = async (productList, userId, couponId) => {
 
   await isCartEmptyCheck(cartId)
   await isProductAndUserCartItemExist(cartId, productList)
-  await deleteCartItem(cartId, productList)
 
   const zeroPriceProducts = await getZeroPriceProducts(productList, userId)
   const productToOrder = productList.filter((product) => !zeroPriceProducts.includes(product))
@@ -47,9 +46,11 @@ exports.checkoutProductsService = async (productList, userId, couponId) => {
     const email = await getUserEmail(userId)
     const description = generateDescription(productNames)
     const xenditResponse = await createPayment(orderId, amount, email, description)
+    await deleteCartItem(cartId, productList)
     return xenditResponse
   }
 
+  await deleteCartItem(cartId, productList)
   return 'Event registered'
 }
 

@@ -10,7 +10,7 @@ exports.getOrdersService = async (userId, orderStatus) => {
   if (orderStatus === 'all') {
     condition = {
       user_id: userId,
-      [Op.or]: [{ order_status: 'success' }, { order_status: 'canceled' }]
+      [Op.or]: [{ order_status: 'success' }, { order_status: 'canceled' }, { order_status: 'pending' }]
     }
   }
 
