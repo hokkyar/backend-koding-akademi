@@ -394,12 +394,16 @@
       `)
     })
 
+    const productsUpdate = resultUpdate.map((r) => ({
+      id: r.id
+    }))
+
     $('.formEdit').on('submit', function (e) {
       e.preventDefault()
       $.ajax({
         url: $(this).attr('action') + `${data.id}`,
         type: 'PUT',
-        data: $(this).serialize() + `&products=${JSON.stringify(resultUpdate)}`,
+        data: $(this).serialize() + `&products=${JSON.stringify(productsUpdate)}`,
         success: function (result) {
           swal({
             title: 'Success!',

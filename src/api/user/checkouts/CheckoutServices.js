@@ -10,7 +10,7 @@ exports.checkoutProductsService = async (productList, userId, couponId) => {
 
   await isCartEmptyCheck(cartId)
   await isProductAndUserCartItemExist(cartId, productList)
-  // await deleteCartItem(cartId, productList)
+  await deleteCartItem(cartId, productList)
 
   const zeroPriceProducts = await getZeroPriceProducts(productList, userId)
   const productToOrder = productList.filter((product) => !zeroPriceProducts.includes(product))
