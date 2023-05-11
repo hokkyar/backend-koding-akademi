@@ -112,11 +112,17 @@ async function isProductActive(userId, productId) {
 
   // status user_products check (active, finished)
   const userProduct = await UserProduct.findOne({
+    include: [
+      {
+        model: Product
+      }
+    ],
     where: { product_id: productId, status: 'active' }
   })
 
   if (userProduct) {
-    if (orderStatus === 'success' && userProduct.dataValues.status) throw new ConflictError('Kamu sudah mengikuti course ini')
+    if (userProduct.Product.price === 0) throw new ConflictError('Kamu sudah mengikuti event ini')
+    if (orderStatus === 'success' && userProduct.status) throw new ConflictError('Kamu sudah mengikuti course ini')
   }
 
 }

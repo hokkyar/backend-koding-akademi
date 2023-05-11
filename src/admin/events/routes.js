@@ -68,7 +68,7 @@ router.post('/', uploadImage.single('img'), async (req, res) => {
   try {
     const id = 'event-' + nanoid(16)
     await sequelize.transaction(async (t) => {
-      await Product.create({ id, img_url, name, price, discount_price, quota, category_id, duration, description }, { transaction: t })
+      await Product.create({ id, img_url, name, price, discount_price, quota, participants: 0, category_id, duration, description }, { transaction: t })
 
       const eventDates = dateObj.map(date => (
         {

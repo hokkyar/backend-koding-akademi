@@ -2,7 +2,6 @@ const { User, Order, OrderItem, Product, Cart, CartItem, UserProduct, Sequelize 
 const { Op } = require('sequelize')
 const { nanoid } = require('nanoid')
 const NotFoundError = require('../../../exceptions/NotFoundError')
-const InvariantError = require('../../../exceptions/InvariantError')
 const ConflictError = require('../../../exceptions/ConflictError')
 const createPayment = require('../../../utils/createPayment')
 
@@ -22,11 +21,16 @@ exports.checkoutProductsService = async (productList, userId) => {
       id: orderId, user_id: userId, order_status: 'pending'
     })
     await addProductsToOrderItem(orderId, productToOrder)
-    const { amount, productNames } = await getTotalAmount(productToOrder)
-    const email = await getUserEmail(userId)
-    const description = generateDescription(productNames)
-    const xenditResponse = await createPayment(orderId, amount, email, description)
-    return xenditResponse
+
+    // START DEVELOPMENT TESTING CHECKOUT COURSE ONLY
+    return 'BERHASIL KE XENDIT'
+    // END DEVELOPMENT TESTING CHECKOUT COURSE ONLY
+
+    // const { amount, productNames } = await getTotalAmount(productToOrder)
+    // const email = await getUserEmail(userId)
+    // const description = generateDescription(productNames)
+    // const xenditResponse = await createPayment(orderId, amount, email, description)
+    // return xenditResponse
   }
 
   return 'Event registered'
@@ -125,7 +129,7 @@ async function getZeroPriceProducts(productList, userId) {
     const eventItems = products.map((event) => ({
       user_id: userId,
       product_id: event.id,
-      status: 'upcoming'
+      status: 'active'
     }))
 
     await UserProduct.bulkCreate(eventItems)

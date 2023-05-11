@@ -13,6 +13,7 @@ module.exports = {
         category_id: 'cat-event-1',
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2022/03/kodak-ig-feed-newArtboard-1-copy-5.png',
         quota: 30,
+        participants: 0,
         duration: null,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -26,6 +27,7 @@ module.exports = {
         category_id: 'cat-event-1',
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2023/01/kodingakademi.jr_301544776_822847112172530_7325218279128733305_n-1024x1024.jpeg',
         quota: 40,
+        participants: 0,
         duration: null,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -39,6 +41,7 @@ module.exports = {
         category_id: 'cat-event-1',
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2022/07/Coding-Workshop-Challanges.jpg',
         quota: 80,
+        participants: 0,
         duration: null,
         createdAt: new Date(),
         updatedAt: new Date()

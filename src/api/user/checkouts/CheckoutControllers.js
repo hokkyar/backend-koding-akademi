@@ -4,8 +4,10 @@ const { validateCheckoutBody } = require('../../../validator/checkouts')
 exports.checkoutProducts = async (req, res) => {
   validateCheckoutBody(req.body)
   const userId = req.user.id
-  const { productList } = req.body // productList dalam bentuk array of product id
-  const response = await checkoutProductsService(productList, userId)
+  const { productList } = req.body
+  const couponId = req.query.couponId ? req.query.couponId : ''
+  console.log(couponId)
+  const response = await checkoutProductsService(productList, userId, couponId)
 
   if (response.invoice_url) {
     res.status(201).json({
