@@ -1,16 +1,16 @@
-const { User, Order, OrderItem, Product, Cart, CartItem, UserProduct, Sequelize } = require('../../../models/index')
+const { User, Order, OrderItem, Product, Cart, CartItem, UserProduct, Coupon, UserCoupon, Sequelize } = require('../../../models/index')
 const { Op } = require('sequelize')
 const { nanoid } = require('nanoid')
 const NotFoundError = require('../../../exceptions/NotFoundError')
 const ConflictError = require('../../../exceptions/ConflictError')
 const createPayment = require('../../../utils/createPayment')
 
-exports.checkoutProductsService = async (productList, userId) => {
+exports.checkoutProductsService = async (productList, userId, couponId) => {
   const cartId = await getUserCartId(userId)
 
   await isCartEmptyCheck(cartId)
   await isProductAndUserCartItemExist(cartId, productList)
-  await deleteCartItem(cartId, productList)
+  // await deleteCartItem(cartId, productList)
 
   const zeroPriceProducts = await getZeroPriceProducts(productList, userId)
   const productToOrder = productList.filter((product) => !zeroPriceProducts.includes(product))
@@ -20,17 +20,34 @@ exports.checkoutProductsService = async (productList, userId) => {
     await Order.create({
       id: orderId, user_id: userId, order_status: 'pending'
     })
+
     await addProductsToOrderItem(orderId, productToOrder)
+    let { amount, productNames } = await getTotalAmount(productToOrder)
 
-    // START DEVELOPMENT TESTING CHECKOUT COURSE ONLY
-    return 'BERHASIL KE XENDIT'
-    // END DEVELOPMENT TESTING CHECKOUT COURSE ONLY
+    if (couponId) {
+      const coupon = await Coupon.findOne({
+        where: { id: couponId }
+      })
 
-    // const { amount, productNames } = await getTotalAmount(productToOrder)
-    // const email = await getUserEmail(userId)
-    // const description = generateDescription(productNames)
-    // const xenditResponse = await createPayment(orderId, amount, email, description)
-    // return xenditResponse
+      if (!coupon) throw new NotFoundError('Coupon not found')
+      if (coupon.quota === 0) throw new ConflictError('Coupon quota is full')
+
+      const userCoupon = await UserCoupon.findOne({
+        where: {
+          user_id: userId,
+          coupon_id: coupon.id
+        }
+      })
+      if (userCoupon) throw new ConflictError('Coupon has been used')
+
+      await UserCoupon.create({ user_id: userId, coupon_id: coupon.id, use_date: new Date })
+      amount = amount - coupon.discount
+      await Coupon.decrement('quota', { where: { id: couponId } })
+    }
+    const email = await getUserEmail(userId)
+    const description = generateDescription(productNames)
+    const xenditResponse = await createPayment(orderId, amount, email, description)
+    return xenditResponse
   }
 
   return 'Event registered'

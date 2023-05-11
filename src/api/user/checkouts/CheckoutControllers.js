@@ -5,7 +5,7 @@ exports.checkoutProducts = async (req, res) => {
   validateCheckoutBody(req.body)
   const userId = req.user.id
   const { productList } = req.body
-  const couponId = req.query.couponId ? req.query.couponId : ''
+  const couponId = req.query.couponId ? req.query.couponId : null
   console.log(couponId)
   const response = await checkoutProductsService(productList, userId, couponId)
 
