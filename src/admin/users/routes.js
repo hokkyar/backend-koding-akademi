@@ -46,15 +46,6 @@ router.get('/show/:id', async (req, res) => {
   })
   if (!user) res.render('index', { ...params, sub_page: 'not-found' })
 
-  // let user_products = await UserProduct.findAll({
-  //   include: [
-  //     {
-  //       model: Product
-  //     }
-  //   ],
-  //   where: { user_id: req.params.id }
-  // })
-
   const activeProduct = await UserProduct.findAll({
     include: [
       {

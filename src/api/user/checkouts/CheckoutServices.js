@@ -3,6 +3,7 @@ const { Op } = require('sequelize')
 const { nanoid } = require('nanoid')
 const NotFoundError = require('../../../exceptions/NotFoundError')
 const InvariantError = require('../../../exceptions/InvariantError')
+const ConflictError = require('../../../exceptions/ConflictError')
 const createPayment = require('../../../utils/createPayment')
 
 exports.checkoutProductsService = async (productList, userId) => {
@@ -28,7 +29,7 @@ exports.checkoutProductsService = async (productList, userId) => {
     return xenditResponse
   }
 
-  return 'event order success'
+  return 'Event registered'
 }
 
 async function getUserCartId(userId) {
@@ -116,7 +117,7 @@ async function getZeroPriceProducts(productList, userId) {
 
   if (products) {
     for (let i = 0; i < products.length; i++) {
-      if (products[i].participants >= products[i].quota) throw new InvariantError("Quota is full")
+      if (products[i].participants >= products[i].quota) throw new ConflictError("Quota is full")
       zeroProductId.push(products[i].id)
       await Product.increment('participants', { where: { id: products[i].id } })
     }
@@ -124,8 +125,9 @@ async function getZeroPriceProducts(productList, userId) {
     const eventItems = products.map((event) => ({
       user_id: userId,
       product_id: event.id,
-      status: 'active'
+      status: 'upcoming'
     }))
+
     await UserProduct.bulkCreate(eventItems)
   }
 
