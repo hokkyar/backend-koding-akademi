@@ -7,6 +7,7 @@ router.use('/email-verification', require('./email-verification/EmailVerificatio
 router.use('/authentications', require('./authentications/AuthenticationRoutes'))
 router.use('/forgot-password', require('./forgot-password/ForgotPasswordRoutes'))
 router.use('/xendit-callback', require('./xendit-callback/XenditCallbackRoutes'))
+router.use('/google/auth', require('./google/GoogleLoginRoutes'))
 
 router.use('/user', verifyToken, require('./user/index'))
 
