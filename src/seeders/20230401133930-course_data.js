@@ -6,7 +6,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     queryInterface.bulkInsert('products', [
       {
-        id: `course-${nanoid(16)}`,
+        id: `course-UJaUxuow1BMfRjEc`,
         name: 'Basic C++ Programming',
         price: 3300000,
         discount_price: 3000000,
@@ -19,7 +19,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: `course-${nanoid(16)}`,
+        id: `course-NjelVee7XHAFmhhD`,
         name: 'Arduino Intermediet',
         price: 600000,
         discount_price: null,
@@ -32,7 +32,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: `course-${nanoid(16)}`,
+        id: `course-VWmmMJP8_BITRCBm`,
         name: 'Arduino Beginner 1.0',
         price: 3000000,
         discount_price: 2400000,
@@ -45,7 +45,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: `course-${nanoid(16)}`,
+        id: `course-880Aqxm_IqHdPMP4`,
         name: 'Python Bootcamp',
         price: 4000000,
         discount_price: 3500000,
@@ -58,7 +58,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: `course-${nanoid(16)}`,
+        id: `course-4egdKgpEgvLMbQHs`,
         name: 'CODING EXPLORER ASA 2.0',
         price: 570000,
         discount_price: null,
@@ -71,7 +71,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: `course-${nanoid(16)}`,
+        id: `course-YXARbSKPkXouVM_Z`,
         name: 'Basic Coding Test',
         price: 705000,
         discount_price: null,

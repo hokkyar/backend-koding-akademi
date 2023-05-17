@@ -12,7 +12,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: `cart-${nanoid(16)}`,
+        id: `cart-D1MKOcFQY_EvIsVo`,
         user_id: 'user-BOeEA2rrUV',
         createdAt: new Date(),
         updatedAt: new Date()
