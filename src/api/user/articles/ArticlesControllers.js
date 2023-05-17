@@ -5,7 +5,7 @@ exports.getArticle = async (req, res) => {
   const articles = await getArticleService(limit)
   return res.json({
     message: 'Get all article',
-    articles
+    data: articles
   })
 }
 
@@ -14,6 +14,6 @@ exports.getDetailArticle = async (req, res) => {
   const article = await getDetailArticleService(id)
   return res.json({
     message: 'Get detail article',
-    article
+    data: article
   })
 }
