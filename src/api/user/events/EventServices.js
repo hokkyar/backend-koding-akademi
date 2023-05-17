@@ -3,7 +3,7 @@ const NotFoundError = require('../../../exceptions/NotFoundError')
 
 exports.getEventsService = async (limit) => {
   const events = await Product.findAll({
-    attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'quota'],
+    attributes: ['id', 'name', 'price', 'participants', 'discount_price', 'description', 'img_url', 'quota'],
     include: [
       {
         model: EventDate,
@@ -20,7 +20,7 @@ exports.getEventsService = async (limit) => {
 
 exports.getDetailEventService = async (id) => {
   const event = await Product.findOne({
-    attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'quota'],
+    attributes: ['id', 'name', 'price', 'participants', 'discount_price', 'description', 'img_url', 'quota'],
     include: [
       {
         model: EventDate,
