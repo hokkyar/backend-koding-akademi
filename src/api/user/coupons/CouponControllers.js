@@ -7,6 +7,6 @@ exports.getCoupons = async (req, res) => {
   const coupons = await getCouponService(products)
   return res.json({
     message: 'Get all coupons',
-    coupons
+    data: coupons
   })
 }
