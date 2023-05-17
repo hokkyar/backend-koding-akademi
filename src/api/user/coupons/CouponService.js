@@ -22,6 +22,7 @@ exports.getCouponService = async (products) => {
     quota: coupon.quota
   }))
 
+  const currentDate = new Date()
   const filteredCoupon = coupons.filter((coupon, index, self) => {
     // return index === self.findIndex((c) => (c.id === coupon.id))
     const couponStart = new Date(coupon.coupon_start);
