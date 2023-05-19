@@ -2,7 +2,8 @@ const { getUserProductService, getUserEventsService } = require('./UserProductSe
 
 exports.getUserProducts = async (req, res) => {
   const userId = req.user.id
-  const products = await getUserProductService(userId)
+  const limit = parseInt(req.query.limit) || 10
+  const products = await getUserProductService(userId, limit)
   return res.json({
     message: 'Get all user products',
     data: products
@@ -11,7 +12,9 @@ exports.getUserProducts = async (req, res) => {
 
 exports.getUserEvents = async (req, res) => {
   const userId = req.user.id
-  const products = await getUserEventsService(userId)
+  const limit = parseInt(req.query.limit) || 10
+  console.log(limit)
+  const products = await getUserEventsService(userId, limit)
   return res.json({
     message: 'Get all user events',
     data: products

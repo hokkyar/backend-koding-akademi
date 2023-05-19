@@ -1,7 +1,7 @@
 const { UserProduct, Product, EventDate } = require('../../../models/index')
 const { Op } = require('sequelize')
 
-exports.getUserProductService = async (userId) => {
+exports.getUserProductService = async (userId, limit) => {
   const user_products = await UserProduct.findAll({
     attributes: ['status', 'expired_date'],
     include: [
@@ -9,7 +9,8 @@ exports.getUserProductService = async (userId) => {
         model: Product
       }
     ],
-    where: { user_id: userId }
+    where: { user_id: userId },
+    limit
   })
 
   const products = user_products.map((product) => ({
@@ -24,7 +25,7 @@ exports.getUserProductService = async (userId) => {
   return products
 }
 
-exports.getUserEventsService = async (userId) => {
+exports.getUserEventsService = async (userId, limit) => {
   const user_products = await UserProduct.findAll({
     attributes: ['status', 'expired_date'],
     include: [
@@ -43,7 +44,8 @@ exports.getUserEventsService = async (userId) => {
       product_id: {
         [Op.like]: '%event%'
       }
-    }
+    },
+    limit
   })
 
   const products = user_products.map((product) => ({
