@@ -48,6 +48,7 @@ exports.xenditCallbackService = async ({ external_id, payment_method, status, am
         }
       })
       await UserProduct.bulkCreate(userProducts, { transaction: t })
+      await User.update({ qr_code: `id=${userId}&tr=${external_id}` }, { where: { id: userId }, transaction: t })
     })
   } catch (error) {
     console.log('An error occured: ', error)
