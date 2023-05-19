@@ -21,7 +21,7 @@ exports.registerService = async ({ email, password, full_name, phone_number }) =
   try {
     await sequelize.transaction(async (t) => {
       await User.create({
-        id: user_id, role: 'user', qr_code: `id=${user_id}&pc=0`, email, password: hashedPassword, verified: false, full_name, phone_number
+        id: user_id, role: 'user', qr_code: `id=${user_id}&tr=null`, email, password: hashedPassword, verified: false, full_name, phone_number
       }, { transaction: t })
       await AuthToken.create({ token: email_token }, { transaction: t })
       await sendEmailVerification(email, user_id, email_token)
