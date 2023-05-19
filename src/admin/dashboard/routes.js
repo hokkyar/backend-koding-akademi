@@ -5,7 +5,7 @@ const params = {
   page: 'dashboard',
   sub_page: 'page',
   title: 'Dashboard',
-  sub: null,
+  sub: '',
   detail: null,
   data: null
 }

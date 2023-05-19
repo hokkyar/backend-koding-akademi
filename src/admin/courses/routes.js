@@ -78,6 +78,8 @@ router.post('/', uploadImage.single('img'), async (req, res) => {
   const id = 'course-' + nanoid(16)
   await Product.create({ id, img_url, name, price, discount_price, quota, category_id, duration, description })
   res.json({ message: 'success' })
+
+  // if (discount_price)
 })
 
 // edit course page
@@ -132,6 +134,8 @@ router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
   }, {
     where: { id: req.params.id }
   })
+
+  // if (discount_price)
 
   res.json({ message: 'success' })
 })
