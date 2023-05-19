@@ -1,6 +1,7 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 const bcrypt = require('bcrypt')
+const { encryptData } = require('../utils/encryptData')
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -12,14 +13,13 @@ module.exports = {
         password: bcrypt.hashSync('123abc@@@', 10),
         full_name: 'Koding Akademi',
         verified: 1,
-        qr_code: null,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         id: 'user-YbKLaWaZBK',
         role: 'user',
-        qr_code: 'id=user-YbKLaWaZBK&pc=0',
+        qr_code: encryptData('id=user-YbKLaWaZBK&tr=null'),
         email: 'hokky@gmail.com',
         password: bcrypt.hashSync('123', 10),
         full_name: 'Hokky Aryasta',
@@ -30,7 +30,7 @@ module.exports = {
       {
         id: 'user-BOeEA2rrUV',
         role: 'user',
-        qr_code: 'id=user-BOeEA2rrUV&pc=0',
+        qr_code: encryptData('id=user-BOeEA2rrUV&tr=inv-asd123'),
         email: 'agung@gmail.com',
         password: bcrypt.hashSync('123', 10),
         full_name: 'Agung Pernata',

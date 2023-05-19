@@ -85,12 +85,7 @@
     }
   }).catch((e) => console.error(e))
 
-  scanner.addListener('scan', (url) => {
-    // id=user-BOeEA2rrUV&pcount=2
-    const params = new URLSearchParams(url)
-    const id = params.get('id')
-    const pc = params.get('pc')
-
+  scanner.addListener('scan', (qr) => {
     $('#content-data').html(`
     <div class="d-flex justify-content-center align-items-center" style="height: 480px;">
       <div id="loader" style="display: none;" class="spinner"></div>
@@ -101,7 +96,7 @@
     setTimeout(() => {
       $.ajax({
         type: 'GET',
-        url: `/scan-qr/${id}`,
+        url: `/scan-qr/${qr}`,
         success: function (response) {
           $('#content-data').html(`
             <h5 class="text-primary m-2">STUDENT DATA</h5>
@@ -109,7 +104,7 @@
               <img src="https://www.kindpng.com/picc/m/451-4517876_default-profile-hd-png-download.png" alt="profile"
                 width="150" class="rounded">
               <div>
-                <h5>ID : ${id}</h5>
+                <h5>ID : ${response.data.id}</h5>
                 <h5>Name: ${response.data.name}</h5>
                 <h5>Email: ${response.data.email}</h5>
               </div>

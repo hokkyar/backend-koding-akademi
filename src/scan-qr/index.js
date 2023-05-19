@@ -1,12 +1,20 @@
 const router = require('express').Router()
+const { decryptData } = require('../utils/encryptData')
 const { UserProduct, Product, User } = require('../models/index')
 
 router.get('/', (req, res) => {
   return res.render('qr-scan-public/page')
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:qr', async (req, res) => {
   try {
+    const qr_decrypted = decryptData(req.params.qr)
+    const id = new URLSearchParams(qr_decrypted).get('id')
+    const user = await User.findOne({
+      where: { id }
+    })
+    if (user.qr_code != req.params.qr) throw 'Invalid QR Code'
+
     const user_products = await UserProduct.findAll({
       include: [
         {
@@ -17,7 +25,7 @@ router.get('/:id', async (req, res) => {
         },
       ],
       where: {
-        user_id: req.params.id,
+        user_id: id,
         status: 'active'
       }
     })
@@ -39,8 +47,8 @@ router.get('/:id', async (req, res) => {
     })
 
   } catch (err) {
-    return res.status(400).json({
-      message: 'Bad payload'
+    return res.status(404).json({
+      message: err
     })
   }
 })

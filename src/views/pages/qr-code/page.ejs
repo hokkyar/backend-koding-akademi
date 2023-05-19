@@ -13,11 +13,17 @@
 
 <script>
   const scanner = new Instascan.Scanner({ video: document.getElementById('webCam') })
-
-  scanner.addListener('scan', (content) => {
-    const searchParams = new URLSearchParams(content)
-    const id = searchParams.get('id')
-    window.location.href = `/admin/users/show/${id}`
+  scanner.addListener('scan', (qr) => {
+    $.ajax({
+      type: 'GET',
+      url: `/admin/qr-code/${qr}`,
+      success: function (response) {
+        window.location.href = `/admin/users/show/${response.id}`
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        alert('Invalid QR Code')
+      }
+    })
   })
 
   Instascan.Camera.getCameras().then((cameras) => {
