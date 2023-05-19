@@ -21,7 +21,7 @@ exports.registerService = async ({ email, password, full_name, phone_number }) =
   try {
     await sequelize.transaction(async (t) => {
       await User.create({
-        id: user_id, role: 'user', qr_code: null, email, password: hashedPassword, verified: false, full_name, phone_number
+        id: user_id, role: 'user', qr_code: `id=${user_id}&pc=0`, email, password: hashedPassword, verified: false, full_name, phone_number
       }, { transaction: t })
       await AuthToken.create({ token: email_token }, { transaction: t })
       await sendEmailVerification(email, user_id, email_token)
@@ -29,7 +29,7 @@ exports.registerService = async ({ email, password, full_name, phone_number }) =
       await Student.create({ user_id, phone_number, address: null, birth_date: null }, { transaction: t })
     })
   } catch (error) {
-    console.log('An error occured: ', error);
+    console.log('An error occured: ', error)
   }
 
   return { user_id, email_token }
