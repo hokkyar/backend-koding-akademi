@@ -10,5 +10,6 @@ router.use(require('./cart/CartRoutes'))
 router.use(require('./reset-password/ResetPasswordRoutes'))
 router.use(require('./user-products/UserProductRoutes'))
 router.use(require('./coupons/CouponRoutes'))
+router.use(require('./profile/ProfileRoutes'))
 
 module.exports = router
