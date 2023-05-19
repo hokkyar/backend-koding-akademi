@@ -15,7 +15,7 @@
   const scanner = new Instascan.Scanner({ video: document.getElementById('webCam') })
 
   scanner.addListener('scan', (content) => {
-    const searchParams = new URLSearchParams(new URL(content).search)
+    const searchParams = new URLSearchParams(content)
     const id = searchParams.get('id')
     window.location.href = `/admin/users/show/${id}`
   })

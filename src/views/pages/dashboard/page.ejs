@@ -2,20 +2,8 @@
   <div class="row">
     <div class="col-lg-8">
       <div class="row">
-
         <div class="col-xxl-4 col-md-6">
           <div class="card info-card sales-card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
             <div class="card-body">
               <h5 class="card-title">Sales</h5>
               <div class="d-flex align-items-center">
@@ -33,17 +21,6 @@
 
         <div class="col-xxl-4 col-md-6">
           <div class="card info-card revenue-card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
             <div class="card-body">
               <h5 class="card-title">Revenue</h5>
               <div class="d-flex align-items-center">
@@ -61,24 +38,15 @@
 
         <div class="col-xxl-4 col-xl-12">
           <div class="card info-card customers-card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
             <div class="card-body">
               <h5 class="card-title">Registered Users</h5>
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center"> <i
                     class="bi bi-people"></i></div>
                 <div class="ps-3">
-                  <h6>102</h6>
+                  <h6>
+                    <%= data.registered_user %>
+                  </h6>
                   <span class="text-success small pt-1 fw-bold">5%</span> <span
                     class="text-muted small pt-2 ps-1">increase</span>
                 </div>
@@ -89,17 +57,6 @@
 
         <div class="col-12">
           <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
             <div class="card-body">
               <h5 class="card-title">Chart</h5>
               <div id="dummyReport"></div>
@@ -163,19 +120,8 @@
 
     <div class="col-lg-4">
       <div class="card">
-        <div class="filter">
-          <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-            <li class="dropdown-header text-start">
-              <h6>Filter</h6>
-            </li>
-            <li><a class="dropdown-item" href="#">Today</a></li>
-            <li><a class="dropdown-item" href="#">This Month</a></li>
-            <li><a class="dropdown-item" href="#">This Year</a></li>
-          </ul>
-        </div>
         <div class="card-body pb-0">
-          <h5 class="card-title">Course</h5>
+          <h5 class="card-title">Total Product</h5>
           <div id="courseChart" style="min-height: 400px;" class="echart"></div>
           <script>document.addEventListener("DOMContentLoaded", () => {
               echarts.init(document.querySelector("#courseChart")).setOption({
@@ -205,22 +151,31 @@
                   labelLine: {
                     show: false
                   },
-                  data: [{
-                    value: 1048,
-                    name: 'Programming'
-                  },
-                  {
-                    value: 735,
-                    name: 'Robotics'
-                  },
-                  {
-                    value: 580,
-                    name: 'Coding'
-                  },
-                  {
-                    value: 484,
-                    name: 'Bootcamp'
-                  }
+                  data: [
+                    {
+                      value: '<%= parseInt(data.product_count.programming) %>',
+                      name: 'Programming'
+                    },
+                    {
+                      value: '<%= parseInt(data.product_count.engineering) %>',
+                      name: 'Engineering'
+                    },
+                    {
+                      value: '<%= parseInt(data.product_count.robotic) %>',
+                      name: 'Robotics'
+                    },
+                    {
+                      value: '<%= parseInt(data.product_count.coding) %>',
+                      name: 'Coding'
+                    },
+                    {
+                      value: '<%= parseInt(data.product_count.bootcamp) %>',
+                      name: 'Bootcamp'
+                    },
+                    {
+                      value: '<%= parseInt(data.product_count.event) %>',
+                      name: 'Event'
+                    }
                   ]
                 }]
               });
