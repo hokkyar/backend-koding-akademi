@@ -1,4 +1,4 @@
-const { Order, OrderItem, Product } = require('../../../models/index')
+const { Order, OrderItem, Product, Transaction } = require('../../../models/index')
 const { Op } = require('sequelize')
 
 exports.getOrdersService = async (userId, orderStatus) => {
@@ -28,6 +28,11 @@ exports.getOrdersService = async (userId, orderStatus) => {
           }
         ]
       },
+      {
+        model: Transaction,
+        as: 'transaction',
+        attributes: ['payment_method', 'payment_status', 'amount', 'date', 'bank_name']
+      }
     ],
     where: condition
   })

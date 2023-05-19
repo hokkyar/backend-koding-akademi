@@ -91,7 +91,7 @@ const StudentModel = require('./student')
 db.Student = StudentModel(sequelize, Sequelize)
 
 // relations
-const { Category, Product, User, CartItem, Order, OrderItem, EventDate, Coupon, CouponProduct, UserCoupon, UserProduct, Student } = db
+const { Category, Product, User, CartItem, Order, OrderItem, EventDate, Coupon, CouponProduct, UserCoupon, UserProduct, Student, Transaction } = db
 
 Category.hasMany(Product, {
   foreignKey: 'category_id',
@@ -171,6 +171,15 @@ User.hasMany(Student, {
 })
 Student.belongsTo(User, {
   foreignKey: 'user_id'
+})
+
+Order.hasMany(Transaction, {
+  foreignKey: 'order_id',
+  as: 'transaction'
+})
+Transaction.belongsTo(Order, {
+  foreignKey: 'order_id',
+  as: 'transaction'
 })
 
 module.exports = db;

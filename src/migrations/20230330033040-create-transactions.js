@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER.UNSIGNED
       },
       order_id: {
-        type: Sequelize.STRING
+        type: Sequelize.UUID
       },
       payment_method: {
         type: Sequelize.STRING
