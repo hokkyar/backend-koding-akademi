@@ -10,14 +10,14 @@ exports.checkoutProducts = async (req, res) => {
   const response = await checkoutProductsService(productList, userId, couponId)
 
   if (response.invoice_url) {
-    res.status(201).json({
+    return res.status(201).json({
       status: 'success',
       message: 'Checkout success',
       invoice_url: response.invoice_url
     })
   }
 
-  res.status(201).json({
+  return res.status(201).json({
     status: 'success',
     message: response
   })
