@@ -19,7 +19,7 @@ module.exports = {
       {
         id: 'user-YbKLaWaZBK',
         role: 'user',
-        qr_code: null,
+        qr_code: 'id=user-YbKLaWaZBK&pc=0',
         email: 'hokky@gmail.com',
         password: bcrypt.hashSync('123', 10),
         full_name: 'Hokky Aryasta',
@@ -30,7 +30,7 @@ module.exports = {
       {
         id: 'user-BOeEA2rrUV',
         role: 'user',
-        qr_code: null,
+        qr_code: 'id=user-BOeEA2rrUV&pc=0',
         email: 'agung@gmail.com',
         password: bcrypt.hashSync('123', 10),
         full_name: 'Agung Pernata',
