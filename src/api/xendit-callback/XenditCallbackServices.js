@@ -1,5 +1,6 @@
 const { Order, OrderItem, Transaction, Product, User, UserProduct, sequelize } = require('../../models/index')
 const moment = require('moment')
+const { encryptData } = require('../../utils/encryptData')
 
 exports.xenditCallbackService = async ({ external_id, payment_method, status, amount, paid_at, bank_code }) => {
   try {
@@ -48,7 +49,7 @@ exports.xenditCallbackService = async ({ external_id, payment_method, status, am
         }
       })
       await UserProduct.bulkCreate(userProducts, { transaction: t })
-      await User.update({ qr_code: `id=${userId}&tr=${external_id}` }, { where: { id: userId }, transaction: t })
+      await User.update({ qr_code: encryptData(`id=${userId}&tr=${external_id}`) }, { where: { id: userId }, transaction: t })
     })
   } catch (error) {
     console.log('An error occured: ', error)
