@@ -1,4 +1,4 @@
-const { User, Student } = require('../../../models/index')
+const { User, Student, sequelize } = require('../../../models/index')
 
 exports.getUserDataService = async (userId) => {
   const user = await User.findOne({
@@ -21,4 +21,15 @@ exports.getUserDataService = async (userId) => {
   }
 
   return data
+}
+
+exports.editUserDataService = async ({ full_name, phone_number, address, birth_date }, userId) => {
+  try {
+    await sequelize.transaction(async (t) => {
+      await User.update({ full_name }, { where: { id: userId }, transaction: t })
+      await Student.update({ phone_number, address, birth_date }, { where: { user_id: userId }, transaction: t })
+    })
+  } catch (error) {
+    console.log('An error occured: ', error)
+  }
 }

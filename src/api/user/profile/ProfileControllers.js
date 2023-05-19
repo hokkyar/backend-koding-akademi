@@ -1,4 +1,5 @@
-const { getUserDataService } = require('./ProfileServices')
+const { getUserDataService, editUserDataService } = require('./ProfileServices')
+const { validateProfileBody } = require('../../../validator/profile')
 
 exports.getUserData = async (req, res) => {
   const id = req.user.id
@@ -11,5 +12,11 @@ exports.getUserData = async (req, res) => {
 }
 
 exports.editUserData = async (req, res) => {
-
+  const id = req.user.id
+  validateProfileBody(req.body)
+  await editUserDataService(req.body, id)
+  return res.json({
+    status: 'success',
+    message: 'Edit user data'
+  })
 }
