@@ -1,7 +1,7 @@
 require('dotenv').config()
 const crypto = require('crypto')
 
-const key = crypto.scryptSync(process.env.ENCRYPT_KEY, 'salt', 32)
+const key = crypto.scryptSync(process.env.ENCRYPT_KEY, process.env.ENCRYPT_SALT, 32)
 
 function encryptData(input) {
   const cipher = crypto.createCipheriv(process.env.ENCRYPT_ALGORITHM, key, process.env.ENCRYPT_IV)
