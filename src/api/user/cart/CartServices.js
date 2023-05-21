@@ -31,8 +31,7 @@ exports.postCartItemService = async (userId, productId) => {
   await isProductAlreadyAddedInCart(cartId, productId)
 
   // cek apakah product sudah di order berdasarkan status dan cek di user_product berdasarkan status
-  // await isProductAlreadyOrdered(userId, productId)
-  await isProductActive(userId, productId)
+  await orderStatusCheck(userId, productId)
 
   // tambahkan cart item ke tabel order_item
   await CartItem.create({ cart_id: cartId, product_id: productId })
@@ -67,26 +66,7 @@ async function isProductExist(productId) {
   if (!product) throw new NotFoundError('Product not found')
 }
 
-// async function isProductAlreadyOrdered(userId, productId) {
-//   const item = await OrderItem.findOne({
-//     where: {
-//       [Op.and]: [
-//         { product_id: productId },
-//         { '$order.user_id$': userId }
-//       ]
-//     },
-//     include: [
-//       {
-//         model: Order,
-//         as: 'order',
-//         attributes: ['user_id', 'order_status']
-//       }
-//     ]
-//   })
-//   if (item) throw new ConflictError('Product already ordered')
-// }
-
-async function isProductActive(userId, productId) {
+async function orderStatusCheck(userId, productId) {
   // status order check (success, pending, canceled)
   const order = await OrderItem.findOne({
     where: {
