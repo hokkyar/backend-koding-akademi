@@ -9,6 +9,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+  <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 </head>
 
 <style>
@@ -54,6 +55,15 @@
 </style>
 
 <body>
+
+  <div class="g-captcha-container d-flex justify-content-center w-100 align-items-baseline flex-column"
+    style="height: 100vh">
+    <div class="mx-auto">
+      <div class="my-2" id="google-captcha"></div>
+      <button id="submit-recaptcha" class="btn p-1 px-3" style="background-color: white; border: none;">Submit</button>
+    </div>
+  </div>
+
   <section class="section">
     <div class="row" style="width: 100%;">
       <div class="col-12 text-center px-3 mx-3 my-3">
@@ -69,36 +79,51 @@
 
 </html>
 
+<script>
+  var onloadCallback = function () {
+    $('.section').addClass('d-none')
+    grecaptcha.render('google-captcha', {
+      'sitekey': '6LcxIicmAAAAAHA9z94-kibKynGvHivJBV_tFeqO'
+    })
+  }
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"
   integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
 <script>
-  const scanner = new Instascan.Scanner({ video: document.getElementById('webcam') })
 
-  Instascan.Camera.getCameras().then((cameras) => {
-    if (cameras.length > 0) {
-      scanner.start(cameras[0])
+  $('#submit-recaptcha').on('click', () => {
+    if (grecaptcha.getResponse().length === 0) {
+      alert('Invalid response')
     } else {
-      alert('No cameras found.')
-    }
-  }).catch((e) => console.error(e))
+      $('.g-captcha-container').addClass('d-none')
+      $('.section').removeClass('d-none')
+      const scanner = new Instascan.Scanner({ video: document.getElementById('webcam') })
+      Instascan.Camera.getCameras().then((cameras) => {
+        if (cameras.length > 0) {
+          scanner.start(cameras[0])
+        } else {
+          alert('No cameras found.')
+        }
+      }).catch((e) => console.error(e))
 
-  scanner.addListener('scan', (qr) => {
-    $('#content-data').html(`
+      scanner.addListener('scan', (qr) => {
+        $('#content-data').html(`
     <div class="d-flex justify-content-center align-items-center" style="height: 480px;">
       <div id="loader" style="display: none;" class="spinner"></div>
     </div>
     `)
-    $('#loader').show()
+        $('#loader').show()
 
-    setTimeout(() => {
-      $.ajax({
-        type: 'GET',
-        url: `/scan-qr/${qr}`,
-        success: function (response) {
-          $('#content-data').html(`
+        setTimeout(() => {
+          $.ajax({
+            type: 'GET',
+            url: `/scan-qr/${qr}`,
+            success: function (response) {
+              $('#content-data').html(`
             <h5 class="text-primary m-2">STUDENT DATA</h5>
             <div class="my-4 d-flex gap-3 px-4">
               <img src="https://www.kindpng.com/picc/m/451-4517876_default-profile-hd-png-download.png" alt="profile"
@@ -124,18 +149,19 @@
             </div>
           </div>
       `)
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-          $('#content-data').html(`
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              $('#content-data').html(`
           <div class="d-flex justify-content-center align-items-center" style="height: 480px;">
             <span class="text-danger fs-4">QR CODE TIDAK VALID</span>
           </div>
           `)
-        }
+            }
+          })
+          $('#loader').hide()
+        }, 2000)
       })
-      $('#loader').hide()
-    }, 2000)
-
+    }
   })
 
 </script>
