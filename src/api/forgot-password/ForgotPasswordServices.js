@@ -2,7 +2,7 @@ const { nanoid } = require('nanoid')
 const { User, AuthToken } = require('../../models/index')
 const NotFoundError = require('../../exceptions/NotFoundError')
 const sendEmailForgotPassword = require('../../utils/sendEmailForgotPassword')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 exports.forgotPasswordService = async ({ email }) => {
   const user = await User.findOne({

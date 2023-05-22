@@ -1,7 +1,7 @@
 const passport = require('passport')
 const { User, Cart, Student, sequelize } = require('../../models/index')
 const { nanoid } = require('nanoid')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 let userProfile

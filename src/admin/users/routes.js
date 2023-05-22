@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const { User, Student, UserProduct, Product, sequelize } = require('../../models/index')
 const { nanoid } = require('nanoid')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 const params = {
   page: 'users',

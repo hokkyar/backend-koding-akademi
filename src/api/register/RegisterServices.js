@@ -1,7 +1,7 @@
 const { User, AuthToken, Cart, Student, sequelize } = require('../../models/index')
 const sendEmailVerification = require('../../utils/sendEmailVerification')
 const { nanoid } = require('nanoid')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const ConflictError = require('../../exceptions/ConflictError')
 
 exports.registerService = async ({ email, password, full_name, phone_number }) => {

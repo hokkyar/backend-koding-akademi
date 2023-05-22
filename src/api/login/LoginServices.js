@@ -1,5 +1,5 @@
 const { User, Student, AuthToken } = require('../../models/index')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const NotFoundError = require('../../exceptions/NotFoundError')
 const InvariantError = require('../../exceptions/InvariantError')
