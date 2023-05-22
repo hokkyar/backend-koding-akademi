@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'event_dates',
+    underscoredAll: true
   });
   return event_dates;
 };

@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'auth_tokens',
+    underscoredAll: true
   });
   return auth_tokens;
 };
