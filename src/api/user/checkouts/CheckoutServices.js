@@ -15,12 +15,7 @@ exports.checkoutProductsService = async (productList, userId, couponId) => {
   const productToOrder = productList.filter((product) => !zeroPriceProducts.includes(product))
 
   if (productToOrder.length !== 0) {
-    const orderId = `order-${nanoid(16)}`
-    await Order.create({
-      id: orderId, user_id: userId, order_status: 'pending'
-    })
 
-    await addProductsToOrderItem(orderId, productToOrder)
     let { amount, productNames } = await getTotalAmount(productToOrder)
 
     if (couponId) {
@@ -43,6 +38,13 @@ exports.checkoutProductsService = async (productList, userId, couponId) => {
       amount = amount - coupon.discount
       await Coupon.decrement('quota', { where: { id: couponId } })
     }
+
+    const orderId = `order-${nanoid(16)}`
+    await Order.create({
+      id: orderId, user_id: userId, order_status: 'pending'
+    })
+    // tambahin total ?
+    await addProductsToOrderItem(orderId, productToOrder)
     const email = await getUserEmail(userId)
     const description = generateDescription(productNames)
     const xenditResponse = await createPayment(orderId, amount, email, description)

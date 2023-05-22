@@ -1,4 +1,24 @@
-// const cron = require('node-cron') BELUM 
+const cron = require('node-cron')
+
+// */3 * * * * * every 3 sec
+// */3 * * * * every 3 min
+// 0 * * * * every hour
+// * * * * * every min
+
+function updateUserProduct() { }
+
+function updatePendingOrder() { }
+
+const task = cron.schedule('*/1 * * * * *', async () => {
+  try {
+    const currentDate = new Date()
+    console.log(currentDate)
+  } catch (error) {
+    console.error('An error occured: ', error)
+  }
+})
+
+module.exports = task
 
 // cron.schedule('* * * * *', async () => {
 //   try {
@@ -15,7 +35,6 @@
 //         },
 //       }
 //     )
-
 //     console.log(`${affectedRows} row(s) updated successfully.`)
 //   } catch (error) {
 //     console.error('Terjadi kesalahan:', error)

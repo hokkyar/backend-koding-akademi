@@ -2,6 +2,9 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 
+// const schedule = require('./src/utils/cronSchedule')
+// schedule.start()
+
 const session = require('express-session')
 app.use(session({
   secret: process.env.SESSION_SECRET_KEY,
