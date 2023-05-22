@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "koding_akademi",
+    "username": "refi3083_kodingapp",
+    "password": "4yA7xN&R3pF;",
+    "database": "refi3083_kodingapp",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
@@ -11,8 +11,7 @@
     "password": null,
     "database": "database_test",
     "host": "127.0.0.1",
-    "dialect": "mysql",
-    "use_env_variable": "DB_CONNECT"
+    "dialect": "mysql"
   },
   "production": {
     "username": "root",
