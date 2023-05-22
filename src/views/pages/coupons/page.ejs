@@ -341,7 +341,7 @@
     }).then((confirm) => {
       if (confirm) {
         $.ajax({
-          url: `http://localhost:3000/admin/coupons/delete/${data.id}`,
+          url: `https://kodingapp.refillaja.id/admin/coupons/delete/${data.id}`,
           type: 'DELETE',
           success: function (result) {
             swal({

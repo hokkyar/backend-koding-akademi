@@ -84,7 +84,7 @@
       .then((confirm) => {
         if (confirm) {
           $.ajax({
-            url: `http://localhost:3000/admin/events/delete/${data.id}`,
+            url: `https://kodingapp.refillaja.id/admin/events/delete/${data.id}`,
             type: 'DELETE',
             success: function (result) {
               swal({
