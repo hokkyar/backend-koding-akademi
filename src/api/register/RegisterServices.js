@@ -24,10 +24,10 @@ exports.registerService = async ({ email, password, full_name, phone_number }) =
       await User.create({
         id: user_id, role: 'user', qr_code: encryptData(`id=${user_id}&tr=null`), email, password: hashedPassword, verified: false, full_name, phone_number
       }, { transaction: t })
-      await AuthToken.create({ token: email_token }, { transaction: t })
-      await sendEmailVerification(email, user_id, email_token)
       await Cart.create({ id: cartId, user_id }, { transaction: t })
       await Student.create({ user_id, phone_number, address: null, birth_date: null }, { transaction: t })
+      await AuthToken.create({ token: email_token }, { transaction: t })
+      await sendEmailVerification(email, user_id, email_token)
     })
   } catch (error) {
     console.log('An error occured: ', error)

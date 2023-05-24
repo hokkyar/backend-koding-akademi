@@ -3,6 +3,7 @@ const { User, Cart, Student, sequelize } = require('../../models/index')
 const { nanoid } = require('nanoid')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const { encryptData } = require('../../utils/encryptData')
 
 let userProfile
 const GoogleStrategy = require('passport-google-oauth20').Strategy
@@ -30,7 +31,7 @@ exports.getGoogleAccount = async () => {
           password: bcrypt.hashSync(process.env.DEFAULT_PASSWORD_GOOGLE, 10),
           verified: true,
           role: 'user',
-          qr_code: `id=user-${userProfile.id}&tr=null`
+          qr_code: encryptData(`id=user-${userProfile.id}&tr=null`)
         },
         transaction: t
       })
