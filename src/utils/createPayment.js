@@ -12,8 +12,8 @@ const createPayment = async (orderId, amount, payerEmail, description) => {
     externalID: orderId,
     amount,
     payerEmail,
-    description
-    // shouldSendEmail: true,
+    description,
+    shouldSendEmail: true
   })
   return data
 }

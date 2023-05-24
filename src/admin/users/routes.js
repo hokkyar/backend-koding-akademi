@@ -1,7 +1,8 @@
 const router = require('express').Router()
-const { User, Student, UserProduct, Product, sequelize } = require('../../models/index')
+const { User, Student, Cart, UserProduct, Product, sequelize } = require('../../models/index')
 const { nanoid } = require('nanoid')
 const bcrypt = require('bcryptjs')
+const { encryptData } = require('../../utils/encryptData')
 
 const params = {
   page: 'users',
@@ -83,8 +84,10 @@ router.post('/', async (req, res) => {
   try {
     await sequelize.transaction(async (t) => {
       const id = 'user-' + nanoid(16)
+      const cartId = `cart-${nanoid(16)}`
       const hashedPassword = await bcrypt.hash(password, 10)
-      await User.create({ id, full_name, email, password: hashedPassword, verified, role: 'user', qr_code: null }, { transaction: t })
+      await User.create({ id, qr_code: encryptData(`id=${id}&tr=null`), full_name, email, password: hashedPassword, verified, role: 'user', qr_code: null }, { transaction: t })
+      await Cart.create({ id: cartId, user_id: id }, { transaction: t })
       await Student.create({ user_id: id, phone_number, address, birth_date }, { transaction: t })
     })
   } catch (error) {

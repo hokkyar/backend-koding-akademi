@@ -3,6 +3,7 @@ const sendEmailVerification = require('../../utils/sendEmailVerification')
 const { nanoid } = require('nanoid')
 const bcrypt = require('bcryptjs')
 const ConflictError = require('../../exceptions/ConflictError')
+const { encryptData } = require('../../utils/encryptData')
 
 exports.registerService = async ({ email, password, full_name, phone_number }) => {
   const user = await User.findOne({
@@ -21,7 +22,7 @@ exports.registerService = async ({ email, password, full_name, phone_number }) =
   try {
     await sequelize.transaction(async (t) => {
       await User.create({
-        id: user_id, role: 'user', qr_code: `id=${user_id}&tr=null`, email, password: hashedPassword, verified: false, full_name, phone_number
+        id: user_id, role: 'user', qr_code: encryptData(`id=${user_id}&tr=null`), email, password: hashedPassword, verified: false, full_name, phone_number
       }, { transaction: t })
       await AuthToken.create({ token: email_token }, { transaction: t })
       await sendEmailVerification(email, user_id, email_token)

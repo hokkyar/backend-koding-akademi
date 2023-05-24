@@ -30,7 +30,7 @@ exports.getGoogleAccount = async () => {
           password: bcrypt.hashSync(process.env.DEFAULT_PASSWORD_GOOGLE, 10),
           verified: true,
           role: 'user',
-          qr_code: `id=user-${userProfile.id}&pc=0`
+          qr_code: `id=user-${userProfile.id}&tr=null`
         },
         transaction: t
       })

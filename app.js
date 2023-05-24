@@ -43,5 +43,4 @@ app.use((error, req, res, next) => {
   return (error instanceof ClientError) ? res.status(error.statusCode).send({ message: error.message }) : res.sendStatus(500)
 })
 
-const PORT = 3000
-app.listen(PORT, () => console.log(`Server Running at http://localhost:${PORT}`))
+app.listen(3000, () => console.log('Listening on localhost:3000'))

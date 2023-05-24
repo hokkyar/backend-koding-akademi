@@ -9,7 +9,12 @@ exports.getUserProductService = async (userId, limit) => {
         model: Product
       }
     ],
-    where: { user_id: userId },
+    where: {
+      user_id: userId,
+      product_id: {
+        [Op.like]: '%course%'
+      }
+    },
     limit
   })
 
