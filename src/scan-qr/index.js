@@ -30,6 +30,17 @@ router.get('/:qr', async (req, res) => {
       }
     })
 
+    if (user_products.length === 0) {
+      return res.json({
+        message: 'success',
+        data: {
+          id,
+          name: user.full_name,
+          email: user.email
+        }
+      })
+    }
+
     const product_active = user_products.map((item) => ({
       product_name: item.Product.name,
       img_url: item.Product.img_url,

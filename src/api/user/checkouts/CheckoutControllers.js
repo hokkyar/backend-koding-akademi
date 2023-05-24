@@ -6,7 +6,6 @@ exports.checkoutProducts = async (req, res) => {
   const userId = req.user.id
   const { productList } = req.body
   const couponId = req.query.couponId ? req.query.couponId : null
-  console.log(couponId)
   const response = await checkoutProductsService(productList, userId, couponId)
 
   if (response.invoice_url) {
