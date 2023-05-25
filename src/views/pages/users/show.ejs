@@ -57,7 +57,7 @@
                         </h5>
                         <p class="card-text">
                           Expired: <span class="text-success">
-                            <%= data.user_products.active[i].expired_date.toLocaleDateString('id-ID') %>
+                            <%= data.user_products.active[i].expired_date.toLocaleDateString('id-ID', options) %>
                           </span>
                         </p>
                       </div>
@@ -81,7 +81,7 @@
                           </h5>
                           <p class="card-text">
                             Expired: <span class="text-danger">
-                              <%= data.user_products.finished[i].expired_date.toLocaleDateString('id-ID') %>
+                              <%= data.user_products.finished[i].expired_date.toLocaleDateString('id-ID', options) %>
                             </span>
                           </p>
                         </div>

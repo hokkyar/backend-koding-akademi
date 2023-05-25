@@ -55,26 +55,27 @@
 </style>
 
 <body>
-
-  <div class="g-captcha-container d-flex justify-content-center w-100 align-items-baseline flex-column"
-    style="height: 100vh">
-    <div class="mx-auto">
-      <div class="my-2" id="google-captcha"></div>
-      <button id="submit-recaptcha" class="btn p-1 px-3" style="background-color: white; border: none;">Submit</button>
+  <% const options={day: 'numeric' , month: 'long' , year: 'numeric' } %>
+    <div class="g-captcha-container d-flex justify-content-center w-100 align-items-baseline flex-column"
+      style="height: 100vh">
+      <div class="mx-auto">
+        <div class="my-2" id="google-captcha"></div>
+        <button id="submit-recaptcha" class="btn p-1 px-3"
+          style="background-color: white; border: none;">Submit</button>
+      </div>
     </div>
-  </div>
 
-  <section class="section" style="display: none;">
-    <div class="row" style="width: 100%;">
-      <div class="col-12 text-center px-3 mx-3 my-3">
-        <img src="https://www.kodingakademi.id/wp-content/uploads/2020/11/logo-kodak-scaled-1.jpg" alt="profile"
-          width="230" class="rounded">
-      </div>
-      <div class="col-5 px-3 mx-3">
-        <video id="webcam" style="width: 100%; height: 100%;"></video>
-      </div>
-      <div id="content-data" class="col px-2 py-3 m-3 bg-white rounded"></div>
-  </section>
+    <section class="section" style="display: none;">
+      <div class="row" style="width: 100%;">
+        <div class="col-12 text-center px-3 mx-3 my-3">
+          <img src="https://www.kodingakademi.id/wp-content/uploads/2020/11/logo-kodak-scaled-1.jpg" alt="profile"
+            width="230" class="rounded">
+        </div>
+        <div class="col-5 px-3 mx-3">
+          <video id="webcam" style="width: 100%; height: 100%;"></video>
+        </div>
+        <div id="content-data" class="col px-2 py-3 m-3 bg-white rounded"></div>
+    </section>
 
 </body>
 
@@ -141,7 +142,7 @@
                         alt="course">
                       <div class="card-body">
                         <h5 class="card-title">${course.product_name}</h5>
-                        <h6 class="card-subtitle mb-2">Expired: <span class="text-success">${new Date(course.expired_date).toLocaleDateString('id-ID')}</span></h6>
+                        <h6 class="card-subtitle mb-2">Expired: <span class="text-success">${new Date(course.expired_date).toLocaleDateString('id-ID', options)}</span></h6>
                       </div>
                     </div>
                   `) : `<span class="text-secondary">Belum mengikuti course atau event</span>`}
