@@ -44,10 +44,11 @@ exports.xenditCallbackService = async ({ external_id, payment_method, status, am
           where: { id: external_id },
           transaction: t
         })
-        const userId = user.User.id
 
+        const userId = user.User.id
         const purchase_date = moment(paid_at)
-        const userProducts = orderItems.map((orderItem) => {
+
+        let orderedProducts = orderItems.map((orderItem) => {
           if (orderItem.selected_date) {
             return {
               user_id: userId,
@@ -67,7 +68,35 @@ exports.xenditCallbackService = async ({ external_id, payment_method, status, am
           }
         })
 
-        await UserProduct.bulkCreate(userProducts, { transaction: t })
+        const productList = orderedProducts.map((item) => item.product_id)
+
+        const finishedProduct = await UserProduct.findAll({
+          where: {
+            status: 'finished',
+            user_id: userId,
+            product_id: productList
+          }
+        })
+
+        let neverBoughtProduct = orderedProducts
+        if (finishedProduct.length !== 0) {
+          const finishedProductId = finishedProduct.map((item) => item.product_id)
+          const extendProduct = orderedProducts.filter((item) => item.product_id.includes(finishedProductId))
+          neverBoughtProduct = orderedProducts.filter((item) => !extendProduct.includes(item))
+
+          for (let i = 0; i < extendProduct.length; i++) {
+            await UserProduct.update({ status: 'active', expired_date: extendProduct[i].expired_date },
+              {
+                where: {
+                  user_id: userId,
+                  product_id: extendProduct[i].product_id
+                },
+                transaction: t
+              })
+          }
+
+        }
+        await UserProduct.bulkCreate(neverBoughtProduct, { transaction: t })
         await User.update({ qr_code: encryptData(`id=${userId}&tr=${external_id}`) }, { where: { id: userId }, transaction: t })
       })
     } catch (error) {
