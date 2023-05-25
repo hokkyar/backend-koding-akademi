@@ -11,11 +11,10 @@ exports.checkoutProductsService = async (productList, userId, couponId) => {
   await isCartEmptyCheck(cartId)
   await isProductAndUserCartItemExist(cartId, productList)
 
-  const zeroPriceProducts = await getZeroPriceProducts(productList, userId)
+  const zeroPriceProducts = await getZeroPriceProducts(cartId, productList, userId)
   const productToOrder = productList.filter((product) => !zeroPriceProducts.includes(product))
 
   if (productToOrder.length !== 0) {
-
     let { amount, productNames } = await getTotalAmount(productToOrder)
 
     if (couponId) {
@@ -40,16 +39,15 @@ exports.checkoutProductsService = async (productList, userId, couponId) => {
     }
 
     const orderId = `order-${nanoid(16)}`
-    await Order.create({
-      id: orderId, user_id: userId, order_status: 'pending'
-    })
-    // tambahin total ?
-    await addProductsToOrderItem(orderId, productToOrder)
     const email = await getUserEmail(userId)
     const description = generateDescription(productNames)
-    const xenditResponse = await createPayment(orderId, amount, email, description)
+    const xenditInvoice = await createPayment(orderId, amount, email, description)
+    await Order.create({
+      id: orderId, user_id: userId, order_status: 'pending', total: amount, invoice_id: xenditInvoice.id
+    })
+    await addProductsToOrderItem(cartId, orderId, productToOrder)
     await deleteCartItem(cartId, productList)
-    return xenditResponse
+    return xenditInvoice
   }
 
   await deleteCartItem(cartId, productList)
@@ -98,13 +96,61 @@ async function deleteCartItem(cartId, productList) {
   })
 }
 
-async function addProductsToOrderItem(orderId, productList) {
-  const orderItems = productList.map((productId) => ({
-    id: `orderitem-${nanoid(16)}`,
-    order_id: orderId,
-    product_id: productId
-  }))
-  await OrderItem.bulkCreate(orderItems)
+async function addProductsToOrderItem(cartId, orderId, productList) {
+  const cart_items_event = await CartItem.findAll({
+    attributes: ['selected_date'],
+    where: {
+      cart_id: cartId,
+      product_id: productList
+    },
+    include: [
+      {
+        model: Product,
+        as: 'product',
+        where: {
+          category_id: 'cat-event-1'
+        }
+      }
+    ]
+  })
+
+  const cart_items_course = await CartItem.findAll({
+    attributes: ['selected_date'],
+    where: {
+      cart_id: cartId,
+      product_id: productList
+    },
+    include: [
+      {
+        model: Product,
+        as: 'product',
+        where: {
+          category_id: {
+            [Op.like]: '%course%'
+          }
+        }
+      }
+    ]
+  })
+
+  if (cart_items_event.length !== 0) {
+    const events = cart_items_event.map((item) => ({
+      id: `orderitem-${nanoid(16)}`,
+      order_id: orderId,
+      product_id: item.product.id,
+      selected_date: item.selected_date
+    }))
+    await OrderItem.bulkCreate(events)
+  }
+
+  if (cart_items_course.length !== 0) {
+    const courses = cart_items_course.map((item) => ({
+      id: `orderitem-${nanoid(16)}`,
+      order_id: orderId,
+      product_id: item.product.id
+    }))
+    await OrderItem.bulkCreate(courses)
+  }
 }
 
 async function getTotalAmount(productList) {
@@ -130,28 +176,38 @@ async function getUserEmail(userId) {
   return email
 }
 
-async function getZeroPriceProducts(productList, userId) {
+async function getZeroPriceProducts(cartId, productList, userId) {
   const zeroProductId = []
-  const products = await Product.findAll({
+  const cart_items = await CartItem.findAll({
+    attributes: ['selected_date'],
     where: {
-      id: productList,
-      price: 0
-    }
+      cart_id: cartId,
+      product_id: productList
+    },
+    include: [
+      {
+        model: Product,
+        as: 'product',
+        where: {
+          price: 0
+        }
+      }
+    ]
   })
 
-  if (products) {
-    for (let i = 0; i < products.length; i++) {
-      if (products[i].participants >= products[i].quota) throw new ConflictError("Quota is full")
-      zeroProductId.push(products[i].id)
-      await Product.increment('participants', { where: { id: products[i].id } })
+  if (cart_items.length !== 0) {
+    for (let i = 0; i < cart_items.length; i++) {
+      if (cart_items[i].product.participants >= cart_items[i].product.quota) throw new ConflictError("Quota is full")
+      zeroProductId.push(cart_items[i].product.id)
+      await Product.increment('participants', { where: { id: cart_items[i].product.id } })
     }
 
-    const eventItems = products.map((event) => ({
+    const eventItems = cart_items.map((item) => ({
       user_id: userId,
-      product_id: event.id,
-      status: 'active'
+      product_id: item.product.id,
+      status: 'active',
+      expired_date: item.selected_date
     }))
-
     await UserProduct.bulkCreate(eventItems)
   }
 

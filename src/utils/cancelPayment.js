@@ -7,9 +7,12 @@ const x = new Xendit({
 const { Invoice } = x
 const i = new Invoice({})
 
-const getPayment = async (invoiceID) => {
-  const data = await i.getInvoice({ invoiceID })
-  return data
+const cancelPayment = async (invoiceID) => {
+  try {
+    await i.expireInvoice({ invoiceID })
+  } catch (error) {
+    console.log(error)
+  }
 }
 
-module.exports = getPayment
+module.exports = cancelPayment

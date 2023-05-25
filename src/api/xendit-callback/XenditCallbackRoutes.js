@@ -6,11 +6,15 @@ const { xenditCallbackController } = require('./XenditCallbackControllers')
 router.post('/', asyncHandler(xenditCallbackController))
 
 const getPayment = require('../../utils/getPayment')
-router.get('/getAllInvoices', async (req, res) => {
-  const data = await getPayment()
-  res.json({
-    data
-  })
+router.get('/get/:invoiceID', async (req, res) => {
+  const { invoice_url } = await getPayment(req.params.invoiceID)
+  res.json({ invoice_url })
+})
+
+const cancelPayment = require('../../utils/cancelPayment')
+router.delete('/cancel', async (req, res) => {
+  await cancelPayment(req.body.invoiceID)
+  res.json({ status: 'success' })
 })
 
 module.exports = router

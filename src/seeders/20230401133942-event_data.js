@@ -7,7 +7,7 @@ module.exports = {
       {
         id: 'event-d7ZlY_p8lcKNhs6d',
         name: 'Holiday Camp Junior',
-        price: 0,
+        price: 400000,
         discount_price: null,
         description: 'A workshop to help you build your first mobile app from scratch - no coding experience required!',
         category_id: 'cat-event-1',

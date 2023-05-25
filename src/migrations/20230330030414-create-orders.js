@@ -13,6 +13,12 @@ module.exports = {
         type: Sequelize.UUID
       },
       order_status: {
+        type: Sequelize.ENUM('success', 'pending', 'canceled')
+      },
+      total: {
+        type: Sequelize.INTEGER.UNSIGNED
+      },
+      invoice_id: {
         type: Sequelize.STRING
       },
       createdAt: {

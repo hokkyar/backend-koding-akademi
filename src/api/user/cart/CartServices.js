@@ -6,7 +6,7 @@ const ConflictError = require('../../../exceptions/ConflictError')
 exports.getCartItemsService = async (userId) => {
   const cartId = await getUserCartId(userId)
   const cart_items = await CartItem.findAll({
-    attributes: [],
+    attributes: ['selected_date'],
     include: [
       {
         model: Product,
@@ -17,11 +17,15 @@ exports.getCartItemsService = async (userId) => {
     where: { cart_id: cartId }
   })
 
-  const cart_item_responses = cart_items.map((cart_item) => cart_item.product.toJSON())
+  const cart_item_responses = cart_items.map((cart_item) => {
+    const product = cart_item.product.toJSON()
+    product.selected_date = cart_item.selected_date
+    return product
+  })
   return { cartId, cart_items: cart_item_responses }
 }
 
-exports.postCartItemService = async (userId, productId) => {
+exports.postCartItemService = async (userId, productId, selectedDate) => {
   const cartId = await getUserCartId(userId)
 
   // cek apakah product tersebut ada
@@ -34,7 +38,7 @@ exports.postCartItemService = async (userId, productId) => {
   await orderStatusCheck(userId, productId)
 
   // tambahkan cart item ke tabel order_item
-  await CartItem.create({ cart_id: cartId, product_id: productId })
+  await CartItem.create({ cart_id: cartId, product_id: productId, selected_date: selectedDate })
 }
 
 exports.deleteCartItemService = async (userId, productLists) => {

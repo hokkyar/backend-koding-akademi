@@ -22,11 +22,13 @@ module.exports = {
       },
       {
         cart_id: 'cart-D1MKOcFQY_EvIsVo',
-        product_id: 'event-d7ZlY_p8lcKNhs6d'
+        product_id: 'event-d7ZlY_p8lcKNhs6d',
+        selected_date: '2023-03-10'
       },
       {
         cart_id: 'cart-D1MKOcFQY_EvIsVo',
-        product_id: 'event-a1VgY_le4fMAbx2m'
+        product_id: 'event-a1VgY_le4fMAbx2m',
+        selected_date: '2023-03-12'
       },
     ])
   },
