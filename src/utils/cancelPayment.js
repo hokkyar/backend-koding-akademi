@@ -8,11 +8,7 @@ const { Invoice } = x
 const i = new Invoice({})
 
 const cancelPayment = async (invoiceID) => {
-  try {
-    await i.expireInvoice({ invoiceID })
-  } catch (error) {
-    console.log(error)
-  }
+  await i.expireInvoice({ invoiceID })
 }
 
 module.exports = cancelPayment
