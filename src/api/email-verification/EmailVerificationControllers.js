@@ -4,8 +4,5 @@ const { validateEmailVerification } = require('../../validator/email-verificatio
 exports.emailVerification = async (req, res) => {
   validateEmailVerification(req.query)
   await emailVerificationService(req.query)
-  res.json({
-    status: 'success',
-    message: 'Account verified success'
-  })
+  res.render('email-verification-success/page')
 } 
