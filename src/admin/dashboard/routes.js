@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { User, Product } = require('../../models/index')
+const { User, Product, Article, Order, OrderItem, Transaction } = require('../../models/index')
 
 const params = {
   page: 'dashboard',
@@ -11,8 +11,12 @@ const params = {
 }
 
 router.get('/', async (req, res) => {
+  console.log({ SALES: await getSales() })
   const data = {
     registered_user: await getRegisteredUser(),
+    sales: await getSales(),
+    articles: await getTotalArticles(),
+    revenue: await getRevenue(),
     product_count: {
       coding: await getProductCountByCategory('cat-course-1'),
       programming: await getProductCountByCategory('cat-course-2'),
@@ -39,7 +43,47 @@ async function getProductCountByCategory(category_id) {
   return totalProduct
 }
 
-// async function getSales(){}
-// async function getRevenue(){}
+async function getTotalArticles() {
+  const totalArticle = await Article.count()
+  return totalArticle
+}
+
+async function getSales() {
+  const sales = OrderItem.count({
+    include: [
+      {
+        model: Order,
+        as: 'order',
+        where: {
+          order_status: 'success'
+        }
+      }
+    ]
+  })
+  return sales
+}
+
+async function getRevenue() {
+  const revenue = await Transaction.sum('amount')
+  return formatToCurrency(revenue)
+}
+
+function formatToCurrency(value) {
+  let newValue = value
+  let suffix = ''
+
+  if (value >= 1000000000) {
+    newValue = value / 1000000000
+    suffix = 'B'
+  } else if (value >= 1000000) {
+    newValue = value / 1000000
+    suffix = 'M'
+  } else if (value >= 1000) {
+    newValue = value / 1000
+    suffix = 'K'
+  }
+
+  return newValue.toFixed(1) + suffix
+}
 
 module.exports = router
