@@ -15,7 +15,7 @@ exports.getOrdersService = async (userId, orderStatus) => {
   }
 
   const orders = await Order.findAll({
-    attributes: ['id', 'order_status', 'total', 'invoice_id'],
+    attributes: ['id', 'order_status', 'total', 'invoice_id', 'createdAt', 'updatedAt'],
     include: [
       {
         model: OrderItem,
