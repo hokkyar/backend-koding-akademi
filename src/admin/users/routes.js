@@ -1,8 +1,10 @@
 const router = require('express').Router()
+const asyncHandler = require('express-async-handler')
 const { User, Student, Cart, UserProduct, Product, sequelize } = require('../../models/index')
 const { nanoid } = require('nanoid')
 const bcrypt = require('bcryptjs')
 const { encryptData } = require('../../utils/encryptData')
+const ConflictError = require('../../exceptions/ConflictError')
 
 const params = {
   page: 'users',
@@ -74,8 +76,12 @@ router.get('/show/:id', async (req, res) => {
 })
 
 // create user service
-router.post('/', async (req, res) => {
+router.post('/', asyncHandler(async (req, res) => {
   const { full_name, email, password } = req.body
+
+  const isExistingUser = await User.findOne({ where: { email } })
+  if (isExistingUser) throw new ConflictError('Email already registered')
+
   const phone_number = (req.body.phone_number === '') ? null : req.body.phone_number
   const address = (req.body.address === '') ? null : req.body.address
   const birth_date = (req.body.birth_date === '') ? null : req.body.birth_date
@@ -94,12 +100,19 @@ router.post('/', async (req, res) => {
     console.log('Error occurred during transaction:', error)
   }
   res.sendStatus(201)
-})
+}))
 
 // edit user service
-router.put('/edit/:id', async (req, res) => {
+router.put('/edit/:id', asyncHandler(async (req, res) => {
   const verified = req.body.verified ? true : false
   const { full_name, email, phone_number, address, birth_date } = req.body
+
+  const user = await User.findOne({ where: { id: req.params.id } })
+  if (user.email !== email) {
+    const isExistingUser = await User.findOne({ where: { email } })
+    if (isExistingUser) throw new ConflictError('Email already registered')
+  }
+
   try {
     await sequelize.transaction(async (t) => {
       await User.update({ full_name, email, verified }, { where: { id: req.params.id }, transaction: t })
@@ -109,7 +122,7 @@ router.put('/edit/:id', async (req, res) => {
     console.log('Error occurred during transaction:', error)
   }
   res.sendStatus(200)
-})
+}))
 
 // delete user service
 router.delete('/delete/:id', async (req, res) => {

@@ -183,7 +183,7 @@
       error: function (err) {
         swal({
           title: 'Error!',
-          text: 'An error occured',
+          text: err.responseJSON.message,
           icon: 'error'
         })
       }
@@ -260,7 +260,7 @@
         error: function (err) {
           swal({
             title: 'Error!',
-            text: 'An error occured',
+            text: err.responseJSON.message,
             icon: 'error'
           })
         }
