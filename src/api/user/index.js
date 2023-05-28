@@ -8,6 +8,7 @@ router.use(require('./orders/OrderRoutes'))
 router.use(require('./cart/CartRoutes'))
 router.use(require('./reset-password/ResetPasswordRoutes'))
 router.use(require('./user-products/UserProductRoutes'))
+router.use(require('./user-coupons/UserCouponRoutes'))
 router.use(require('./coupons/CouponRoutes'))
 router.use(require('./profile/ProfileRoutes'))
 

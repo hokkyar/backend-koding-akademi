@@ -1,4 +1,5 @@
-const { Order, OrderItem, Transaction, Product, User, UserProduct, sequelize } = require('../../models/index')
+const { Order, OrderItem, Transaction, Product, User, UserProduct, sequelize, Sequelize } = require('../../models/index')
+const { Op } = require('sequelize')
 const moment = require('moment')
 const { encryptData } = require('../../utils/encryptData')
 
@@ -69,6 +70,11 @@ exports.xenditCallbackService = async ({ external_id, payment_method, status, am
         })
 
         const productList = orderedProducts.map((item) => item.product_id)
+
+        await Product.update(
+          { participants: Sequelize.literal('participants + 1') },
+          { where: { id: { [Op.in]: productList }, category_id: 'cat-event-1' }, transaction: t }
+        )
 
         const finishedProduct = await UserProduct.findAll({
           where: {

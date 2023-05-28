@@ -1,5 +1,6 @@
 const { Order, OrderItem, Product, Transaction } = require('../../../models/index')
 const { Op } = require('sequelize')
+const NotFoundError = require('../../../exceptions/NotFoundError')
 
 exports.getOrdersService = async (userId, orderStatus) => {
   let condition = {
@@ -37,4 +38,34 @@ exports.getOrdersService = async (userId, orderStatus) => {
     where: condition
   })
   return orders
+}
+
+exports.getDetailOrderService = async (userId, orderId) => {
+  const order = await Order.findOne({
+    attributes: ['id', 'order_status', 'total', 'invoice_id', 'createdAt', 'updatedAt'],
+    include: [
+      {
+        model: OrderItem,
+        attributes: ['product_id'],
+        as: 'order',
+        include: [
+          {
+            model: Product,
+            attributes: ['name', 'price', 'discount_price', 'description', 'img_url', 'quota']
+          }
+        ]
+      },
+      {
+        model: Transaction,
+        as: 'transaction',
+        attributes: ['payment_method', 'payment_status', 'amount', 'date', 'bank_name']
+      }
+    ],
+    where: {
+      id: orderId,
+      user_id: userId
+    }
+  })
+  if (!order) throw new NotFoundError('Order not found')
+  return order
 }

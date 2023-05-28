@@ -1,4 +1,4 @@
-const { getOrdersService } = require('./OrderServices')
+const { getOrdersService, getDetailOrderService } = require('./OrderServices')
 
 exports.getOrders = async (req, res) => {
   const { status } = req.query
@@ -9,5 +9,15 @@ exports.getOrders = async (req, res) => {
     status: 'success',
     message: `Get ${orderStatus === 'all' ? 'all' : 'all ' + orderStatus} orders`,
     data: orders
+  })
+}
+
+exports.getDetailOrder = async (req, res) => {
+  const userId = req.user.id
+  const order = await getDetailOrderService(userId, req.params.id)
+  res.json({
+    status: 'success',
+    message: 'Get detail order',
+    data: order
   })
 }
