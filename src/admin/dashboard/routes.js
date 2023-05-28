@@ -65,6 +65,7 @@ async function getSales() {
 
 async function getRevenue() {
   const revenue = await Transaction.sum('amount')
+  if (!revenue) return '0.00'
   return formatToCurrency(revenue)
 }
 

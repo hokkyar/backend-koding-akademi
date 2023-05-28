@@ -136,7 +136,7 @@
                 <div class="d-flex gap-2 justify-content-evenly flex-wrap p-4">
                   ${response.data.product_active ? response.data.product_active.map(course => `
                     <div class="card" style="width: 12rem;">
-                      <img src="${course.img_url}" class="card-img-top" alt="course">
+                      <img src="${course.img_url}" class="card-img-top" alt="course" style="height: 190px;">
                       <div class="card-body">
                         <h5 class="card-title">${course.product_name}</h5>
                         <h6 class="card-subtitle mb-2">Expired: <span class="text-success">${new Date(course.expired_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span></h6>
