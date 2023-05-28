@@ -19,7 +19,7 @@ module.exports = {
         allowNull: false
       },
       status: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM('active', 'finished'),
         allowNull: false
       },
       expired_date: {

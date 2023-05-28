@@ -16,7 +16,7 @@ exports.checkoutProductsService = async (productList, userId, couponId) => {
 
   if (productToOrder.length !== 0) {
     let { amount, productNames } = await getTotalAmount(productToOrder)
-
+    let discount = null
     if (couponId) {
       const coupon = await Coupon.findOne({
         where: { id: couponId }
@@ -34,7 +34,8 @@ exports.checkoutProductsService = async (productList, userId, couponId) => {
       if (userCoupon) throw new ConflictError('Coupon has been used')
 
       await UserCoupon.create({ user_id: userId, coupon_id: coupon.id, use_date: new Date })
-      amount = amount - coupon.discount
+      discount = coupon.discount
+      amount = amount - discount
       await Coupon.decrement('quota', { where: { id: couponId } })
     }
 
@@ -43,7 +44,7 @@ exports.checkoutProductsService = async (productList, userId, couponId) => {
     const description = generateDescription(productNames)
     const xenditInvoice = await createPayment(orderId, amount, email, description)
     await Order.create({
-      id: orderId, user_id: userId, order_status: 'pending', total: amount, invoice_id: xenditInvoice.id
+      id: orderId, user_id: userId, order_status: 'pending', total: amount, invoice_id: xenditInvoice.id, discount
     })
     await addProductsToOrderItem(cartId, orderId, productToOrder)
     await deleteCartItem(cartId, productList)

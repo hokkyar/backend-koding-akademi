@@ -21,6 +21,9 @@ module.exports = {
       invoice_id: {
         type: Sequelize.STRING
       },
+      discount: {
+        type: Sequelize.INTEGER.UNSIGNED
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

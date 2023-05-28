@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
   user_coupons.init({
     user_id: DataTypes.STRING,
     coupon_id: DataTypes.STRING,
-    status: DataTypes.STRING,
     use_date: DataTypes.DATE
   }, {
     sequelize,

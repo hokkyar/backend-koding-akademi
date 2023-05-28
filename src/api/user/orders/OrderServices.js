@@ -42,7 +42,7 @@ exports.getOrdersService = async (userId, orderStatus) => {
 
 exports.getDetailOrderService = async (userId, orderId) => {
   const order = await Order.findOne({
-    attributes: ['id', 'order_status', 'total', 'invoice_id', 'createdAt', 'updatedAt'],
+    attributes: ['id', 'order_status', 'total', 'discount', 'invoice_id', 'createdAt', 'updatedAt'],
     include: [
       {
         model: OrderItem,
