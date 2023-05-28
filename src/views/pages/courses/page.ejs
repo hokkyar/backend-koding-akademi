@@ -15,7 +15,7 @@
                 <th>#</th>
                 <th>Course Name</th>
                 <th>Price</th>
-                <th>Quota</th>
+                <th>Duration</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -29,20 +29,16 @@
                     <%= data[i].name %>
                   </td>
                   <% if (data[i].discount_price) { %>
-                    <td>
+                    <td style="min-width: 170px;">
                       Rp <%= new Intl.NumberFormat('id-ID').format(data[i].discount_price) %>
                     </td>
                     <% }else{ %>
-                      <td>
+                      <td style="min-width: 170px;">
                         Rp <%= new Intl.NumberFormat('id-ID').format(data[i].price) %>
                       </td>
                       <% } %>
                         <td>
-                          <span class="text-danger">
-                            <%= (data[i].participants) ? data[i].participants : 0 %>
-                          </span>/<span class="text-success">
-                            <%= data[i].quota %>
-                          </span>
+                          <%= data[i].duration %> Month
                         </td>
                         <td>
                           <div class="d-flex gap-2">

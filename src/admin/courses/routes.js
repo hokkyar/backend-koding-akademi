@@ -17,7 +17,7 @@ const params = {
 // get all courses
 router.get('/', async (req, res) => {
   const courses = await Product.findAll({
-    attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'quota'],
+    attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'duration'],
     include: [
       {
         model: Category,
@@ -64,7 +64,7 @@ router.get('/add', async (req, res) => {
 // add course service
 const uploadImage = require('../../middleware/uploadImage')
 router.post('/', uploadImage.single('img'), async (req, res) => {
-  const { name, price, quota, category_id, duration } = req.body
+  const { name, price, category_id, duration } = req.body
 
   let img_url = 'https://th.bing.com/th/id/OIP.kzI1EUFN1_qi7eISbXDekgHaHK?pid=ImgDet&rs=1'
   if (req.file) {
@@ -76,10 +76,8 @@ router.post('/', uploadImage.single('img'), async (req, res) => {
   const description = (req.body.description === '') ? null : req.body.description
 
   const id = 'course-' + nanoid(16)
-  await Product.create({ id, img_url, name, price, discount_price, quota, category_id, duration, description })
+  await Product.create({ id, img_url, name, price, discount_price, category_id, duration, description })
   res.json({ message: 'success' })
-
-  // if (discount_price)
 })
 
 // edit course page
@@ -92,7 +90,6 @@ router.get('/edit/:id', async (req, res) => {
         attributes: ['name']
       }
     ],
-    // where: { id: req.params.id }
     where: {
       [Op.and]: [
         { id: req.params.id },
@@ -106,7 +103,7 @@ router.get('/edit/:id', async (req, res) => {
 
 // edit course service
 router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
-  const { name, price, quota, category_id, duration, current_img } = req.body
+  const { name, price, category_id, duration, current_img } = req.body
 
   let img_url = current_img
   if (req.file) { // if user upload new image
@@ -130,18 +127,17 @@ router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
   const description = (req.body.description === '') ? null : req.body.description
 
   await Product.update({
-    name, img_url, price, quota, category_id, duration, discount_price, description
+    name, img_url, price, category_id, duration, discount_price, description
   }, {
     where: { id: req.params.id }
   })
-
-  // if (discount_price)
 
   res.json({ message: 'success' })
 })
 
 // delete course service
 router.delete('/delete/:id', async (req, res) => {
+  console.log('MASOKKKK')
   const course = await Product.findOne({
     where: { id: req.params.id }
   })

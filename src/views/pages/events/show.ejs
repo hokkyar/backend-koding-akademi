@@ -53,19 +53,10 @@
     <h5><span class="fw-bold">Price:</span>
       Rp <%= new Intl.NumberFormat('id-ID').format(data.price) %>
     </h5>
-    <% if (data.discount_price) { %>
-      <h5><span class="fw-bold">Discount Price:</span>
-        Rp <%= new Intl.NumberFormat('id-ID').format(data.discount_price) %>
-      </h5>
-      <% }else{ %>
-        <h5><span class="fw-bold">Discount Price:</span>
-          None
-        </h5>
-        <% } %>
-          <h5 class="fw-bold">Description: </h5>
-          <div>
-            <%- data.description %>
-          </div>
+    <h5 class="fw-bold">Description: </h5>
+    <div>
+      <%- data.description %>
+    </div>
   </div>
 
 </section>

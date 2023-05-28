@@ -64,17 +64,11 @@
           <label>Price (Rp)</label>
         </div>
         <!-- QUOTA -->
-        <div class="form-floating mb-3 col-4">
+        <div class="form-floating mb-3 col">
           <input type="number" value="100" name="quota" class="form-control" placeholder="1" required>
           <label>Quota</label>
         </div>
       </div>
-
-      <div class="form-check form-check-inline mb-3">
-        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-        <label class="form-check-label" for="inlineCheckbox1">Promo?</label>
-      </div>
-
       <!-- DISCOUNT PRICE -->
       <div class="form-floating mb-3 promo" style="display: none;">
         <input id="discount" type="hidden" name="discount_price">
@@ -101,18 +95,6 @@
 
 <script>
   const editor = Jodit.make('#editor')
-
-
-  $('#inlineCheckbox1').on('change', function () {
-    if ($('#inlineCheckbox1').prop('checked')) {
-      $('.promo').show()
-      $('#discountDisplay').prop('required', true)
-    } else {
-      $('.promo').hide()
-      $('#discount').val(null)
-      $('#discountDisplay').prop('required', false)
-    }
-  })
 
   $('#form').submit(function (e) {
     e.preventDefault()

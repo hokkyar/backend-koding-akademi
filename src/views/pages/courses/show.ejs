@@ -29,16 +29,6 @@
     <h5><span class="fw-bold">Category:</span>
       <%= data.category.name %>
     </h5>
-    <h5 class="fw-bold">Quota: <span class="text-danger">
-        <% if (data.participants) { %>
-          <%= data.participants %>
-            <% }else{ %>
-              0
-              <% } %>
-      </span> / <span class="text-success">
-        <%= data.quota %>
-      </span>
-    </h5>
     <h5><span class="fw-bold">Price:</span>
       Rp <%= new Intl.NumberFormat('id-ID').format(data.price) %>
     </h5>

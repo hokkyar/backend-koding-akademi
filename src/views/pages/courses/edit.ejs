@@ -25,7 +25,7 @@
 
       <div class="d-flex">
         <!-- CATEGORY -->
-        <div class="form-floating col-4">
+        <div class="form-floating col">
           <select name="category_id" class="form-select" id="floatingSelectDisabled"
             aria-label="Floating label disabled select example">
             <% const categories=['Coding', 'App Programming' , 'Engineering' , 'Coding Bootcamp' , 'Robotic' ] %>
@@ -43,13 +43,8 @@
           </select>
           <label for="floatingSelectDisabled">Category</label>
         </div>
-        <!-- QUOTA -->
-        <div class="form-floating mb-3 col-4">
-          <input type="number" value="<%= data.quota  %>" name="quota" class="form-control" placeholder="1" required>
-          <label>Quota</label>
-        </div>
         <!-- DURATION -->
-        <div class="form-floating mb-3 col-4">
+        <div class="form-floating mb-3 col">
           <input type="number" value="<%= data.duration  %>" name="duration" class="form-control" placeholder="1"
             required>
           <label>Duration (Month)</label>

@@ -28,39 +28,32 @@
                   <td>
                     <%= data[i].name %>
                   </td>
-                  <% if (data[i].discount_price) { %>
-                    <td>
-                      Rp <%= new Intl.NumberFormat('id-ID').format(data[i].discount_price) %>
-                    </td>
-                    <% }else{ %>
-                      <td>
-                        Rp <%= new Intl.NumberFormat('id-ID').format(data[i].price) %>
-                      </td>
-                      <% } %>
-                        <td>
-                          <span class="text-danger">
-                            <%= (data[i].participants) ? data[i].participants : 0 %>
-                          </span>/<span class="text-success">
-                            <%= data[i].quota %>
-                          </span>
-                        </td>
-                        <td>
-                          <div class="d-flex gap-2">
-                            <a style="cursor: pointer;" class="text-primary" href="/admin/events/show/<%= data[i].id %>"
-                              data-bs-toggle="tooltip" data-bs-title="Show">
-                              <i class="bi bi-info-circle-fill fs-5"></i>
-                            </a>
-                            <a href="/admin/events/edit/<%= data[i].id %>" style="cursor: pointer;"
-                              class="text-warning editBtn" data-bs-toggle="tooltip" data-bs-title="Update">
-                              <i data-bs-toggle="modal" data-bs-target="#updateModal"
-                                class="bi bi-pencil-fill fs-5"></i>
-                            </a>
-                            <a style="cursor: pointer;" class="text-danger deleteEvent" data-bs-toggle="tooltip"
-                              data-bs-title="Delete" data-event="<%= JSON.stringify(data[i]) %>">
-                              <i class="bi bi-trash-fill fs-5"></i>
-                            </a>
-                          </div>
-                        </td>
+                  <td style="min-width: 150px;">
+                    Rp <%= new Intl.NumberFormat('id-ID').format(data[i].price) %>
+                  </td>
+                  <td>
+                    <span class="text-primary">
+                      <%= (data[i].participants) ? data[i].participants : 0 %>
+                    </span>/<span class="text-success">
+                      <%= data[i].quota %>
+                    </span>
+                  </td>
+                  <td>
+                    <div class="d-flex gap-2">
+                      <a style="cursor: pointer;" class="text-primary" href="/admin/events/show/<%= data[i].id %>"
+                        data-bs-toggle="tooltip" data-bs-title="Show">
+                        <i class="bi bi-info-circle-fill fs-5"></i>
+                      </a>
+                      <a href="/admin/events/edit/<%= data[i].id %>" style="cursor: pointer;"
+                        class="text-warning editBtn" data-bs-toggle="tooltip" data-bs-title="Update">
+                        <i data-bs-toggle="modal" data-bs-target="#updateModal" class="bi bi-pencil-fill fs-5"></i>
+                      </a>
+                      <a style="cursor: pointer;" class="text-danger deleteEvent" data-bs-toggle="tooltip"
+                        data-bs-title="Delete" data-event="<%= JSON.stringify(data[i]) %>">
+                        <i class="bi bi-trash-fill fs-5"></i>
+                      </a>
+                    </div>
+                  </td>
                 </tr>
                 <% } %>
             </tbody>
