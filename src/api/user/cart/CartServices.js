@@ -28,26 +28,20 @@ exports.getCartItemsService = async (userId) => {
 exports.postCartItemService = async (userId, productId, selectedDate) => {
   const cartId = await getUserCartId(userId)
 
-  // cek apakah product tersebut ada
   await isProductExist(productId)
 
-  // cek apakah ada product yang double di cart usernya
   await isProductAlreadyAddedInCart(cartId, productId)
 
-  // cek apakah product sudah di order berdasarkan status dan cek di user_product berdasarkan status
   await orderStatusCheck(userId, productId)
 
-  // tambahkan cart item ke tabel order_item
   await CartItem.create({ cart_id: cartId, product_id: productId, selected_date: selectedDate })
 }
 
 exports.deleteCartItemService = async (userId, productLists) => {
   const cartId = await getUserCartId(userId)
 
-  // cek apakah itemnya ada di keranjang user
   await isCartItemExist(cartId, productLists)
 
-  // hapus item yang dipilih user
   await deleteCartItem(cartId, productLists)
 }
 
@@ -71,7 +65,6 @@ async function isProductExist(productId) {
 }
 
 async function orderStatusCheck(userId, productId) {
-  // status order check (success, pending, canceled)
   const order = await OrderItem.findOne({
     where: {
       [Op.and]: [
@@ -90,11 +83,10 @@ async function orderStatusCheck(userId, productId) {
 
   let orderStatus
   if (order) {
-    orderStatus = order.dataValues.order.order_status
-    if (orderStatus === 'pending') throw new ConflictError('Kamu sudah memesan item, namun belum melakukan pembayaran')
+    orderStatus = order.order.order_status
+    if (orderStatus === 'pending') throw new ConflictError(`This item has been ordered, but not yet paid`)
   }
 
-  // status user_products check (active, finished)
   const userProduct = await UserProduct.findOne({
     include: [
       {
@@ -105,8 +97,8 @@ async function orderStatusCheck(userId, productId) {
   })
 
   if (userProduct) {
-    if (userProduct.Product.price === 0) throw new ConflictError('Kamu sudah mengikuti event ini')
-    if (orderStatus === 'success' && userProduct.status) throw new ConflictError('Kamu sudah mengikuti course ini')
+    if (userProduct.Product.price === 0) throw new ConflictError('You have already attended this event')
+    if (userProduct.status === 'active') throw new ConflictError('You have already bought this course')
   }
 
 }

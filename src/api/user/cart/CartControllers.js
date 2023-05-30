@@ -28,7 +28,7 @@ exports.postCartItem = async (req, res) => {
 exports.deleteCartItem = async (req, res) => {
   const userId = req.user.id
   validateDeleteCartBody(req.body)
-  const { productLists } = req.body // productLists berupa array of productId
+  const { productLists } = req.body
   await deleteCartItemService(userId, productLists)
   res.json({
     status: 'success',
