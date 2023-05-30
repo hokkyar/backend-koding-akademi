@@ -65,7 +65,7 @@ async function isProductExist(productId) {
 }
 
 async function orderStatusCheck(userId, productId) {
-  const order = await OrderItem.findOne({
+  const ordered = await OrderItem.findOne({
     where: {
       [Op.and]: [
         { product_id: productId },
@@ -76,18 +76,14 @@ async function orderStatusCheck(userId, productId) {
       {
         model: Order,
         as: 'order',
-        attributes: ['order_status']
+        where: { order_status: 'pending' }
       }
     ]
   })
 
-  let orderStatus
-  if (order) {
-    orderStatus = order.order.order_status
-    if (orderStatus === 'pending') throw new ConflictError(`This item has been ordered, but not yet paid`)
-  }
+  if (ordered) throw new ConflictError(`This item has been ordered, but not yet paid`)
 
-  const userProduct = await UserProduct.findOne({
+  const productActive = await UserProduct.findOne({
     include: [
       {
         model: Product
@@ -96,8 +92,8 @@ async function orderStatusCheck(userId, productId) {
     where: { product_id: productId, status: 'active', user_id: userId }
   })
 
-  if (userProduct) {
-    if (userProduct.Product.price === 0) throw new ConflictError('You have already attended this event')
+  if (productActive) {
+    if (productActive.Product.price === 0) throw new ConflictError('You have already attended this event')
     throw new ConflictError('You have already bought this course')
   }
 
