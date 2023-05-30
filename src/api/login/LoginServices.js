@@ -14,7 +14,7 @@ exports.userLoginService = async ({ email, password }) => {
   const isPasswordMatch = await bcrypt.compare(password, user.password)
   if (!isPasswordMatch) throw new InvariantError('Wrong password')
 
-  if (!user.verified) throw new AuthenticationError(`Check your email inbox: (${email})`)
+  if (!user.verified) throw new AuthenticationError(`This account hasn't been verified. Check your inbox: (${email})`)
 
   const student = await Student.findOne({
     where: { user_id: user.id }
