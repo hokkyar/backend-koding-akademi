@@ -93,12 +93,12 @@ async function orderStatusCheck(userId, productId) {
         model: Product
       }
     ],
-    where: { product_id: productId, status: 'active' }
+    where: { product_id: productId, status: 'active', user_id: userId }
   })
 
   if (userProduct) {
     if (userProduct.Product.price === 0) throw new ConflictError('You have already attended this event')
-    if (userProduct.status === 'active') throw new ConflictError('You have already bought this course')
+    throw new ConflictError('You have already bought this course')
   }
 
 }
