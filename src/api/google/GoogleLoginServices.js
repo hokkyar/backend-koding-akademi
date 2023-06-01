@@ -1,5 +1,6 @@
 const passport = require('passport')
 const { User, Cart, Student, sequelize } = require('../../models/index')
+const { Op } = require('sequelize')
 const { nanoid } = require('nanoid')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
@@ -23,7 +24,7 @@ exports.getGoogleAccount = async () => {
   try {
     await sequelize.transaction(async (t) => {
       const [user, created] = await User.findOrCreate({
-        where: { id: `user-${userProfile.id}` },
+        where: { [Op.or]: [{ id: `user-${userProfile.id}` }, { email: userProfile.emails[0].value }] },
         defaults: {
           id: 'user-' + userProfile.id,
           full_name: userProfile.displayName,
