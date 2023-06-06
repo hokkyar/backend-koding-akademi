@@ -7,7 +7,7 @@ const process = require('process');
 const basename = path.basename(__filename);
 const env = 'development';
 const config = require(__dirname + '/../config/database.json')[env];
-config.timezone = '+07:00'
+config.timezone = '+08:00'
 const db = {};
 
 let sequelize;

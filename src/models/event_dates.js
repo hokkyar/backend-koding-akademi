@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       set(value) {
         const date = new Date(value)
-        date.setUTCHours(date.getUTCHours() - 7)
+        date.setUTCHours(date.getUTCHours() - 8)
         this.setDataValue('date', date)
       }
     }
