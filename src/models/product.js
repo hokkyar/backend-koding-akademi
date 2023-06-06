@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     img_url: DataTypes.STRING,
     quota: DataTypes.INTEGER,
     participants: DataTypes.INTEGER,
+    meetings: DataTypes.INTEGER,
     duration: DataTypes.INTEGER
   }, {
     sequelize,

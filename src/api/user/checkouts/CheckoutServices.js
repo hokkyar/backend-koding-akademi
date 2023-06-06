@@ -5,7 +5,7 @@ const NotFoundError = require('../../../exceptions/NotFoundError')
 const ConflictError = require('../../../exceptions/ConflictError')
 const createPayment = require('../../../utils/createPayment')
 
-exports.checkoutProductsService = async (productList, userId, couponId) => {
+exports.checkoutProductsService = async (productList, userId, couponId, custom_field_1, custom_field_2, custom_field_3) => {
   const cartId = await getUserCartId(userId)
 
   await isCartEmptyCheck(cartId)
@@ -44,7 +44,7 @@ exports.checkoutProductsService = async (productList, userId, couponId) => {
     const description = generateDescription(productNames)
     const xenditInvoice = await createPayment(orderId, amount, email, description)
     await Order.create({
-      id: orderId, user_id: userId, order_status: 'pending', total: amount, invoice_id: xenditInvoice.id, discount
+      id: orderId, user_id: userId, order_status: 'pending', total: amount, invoice_id: xenditInvoice.id, discount, custom_field_1, custom_field_2, custom_field_3
     })
     await addProductsToOrderItem(cartId, orderId, productToOrder)
     await deleteCartItem(cartId, productList)

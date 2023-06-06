@@ -28,7 +28,7 @@ exports.xenditCallbackService = async ({ external_id, payment_method, status, am
           include: [
             {
               model: Product,
-              attributes: ['id', 'duration']
+              attributes: ['id', 'duration', 'meetings']
             }
           ],
           where: { order_id: external_id },
@@ -55,16 +55,19 @@ exports.xenditCallbackService = async ({ external_id, payment_method, status, am
               user_id: userId,
               product_id: orderItem.Product.id,
               status: 'active',
-              expired_date: orderItem.selected_date
+              expired_date: orderItem.selected_date,
+              meeting_quota: 0
             }
           } else {
             const course_duration = orderItem.Product.duration
+            const course_meetings = orderItem.Product.meetings
             const expired_date = purchase_date.add(course_duration, 'months').format('YYYY-MM-DD')
             return {
               user_id: userId,
               product_id: orderItem.Product.id,
               status: 'active',
-              expired_date
+              expired_date,
+              meeting_quota: course_meetings
             }
           }
         })
@@ -91,7 +94,11 @@ exports.xenditCallbackService = async ({ external_id, payment_method, status, am
           neverBoughtProduct = orderedProducts.filter((item) => !extendProduct.includes(item))
 
           for (let i = 0; i < extendProduct.length; i++) {
-            await UserProduct.update({ status: 'active', expired_date: extendProduct[i].expired_date },
+            await UserProduct.update({
+              status: 'active',
+              expired_date: extendProduct[i].expired_date,
+              meeting_quota: Sequelize.literal(`meeting_quota + ${extendProduct[i].meeting_quota}`)
+            },
               {
                 where: {
                   user_id: userId,

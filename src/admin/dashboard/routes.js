@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
       event: await getProductCountByCategory('cat-event-1')
     },
   }
-  res.render('index', { ...params, data })
+  return res.render('index', { ...params, data })
 })
 
 async function getRegisteredUser() {

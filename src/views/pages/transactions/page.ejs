@@ -1,0 +1,50 @@
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Transactions</h5>
+          <table id="myTable" class="hover row-border cell-border">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Time</th>
+                <th>User</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let i=0; i < data.length; i++) { %>
+                <tr>
+                  <td>
+                    <%= i + 1 %>
+                  </td>
+                  <td>
+                    <%= data[i].createdAt.toLocaleString('id-ID').replace(/\./g, ":" ) %>
+                  </td>
+                  <td>
+                    <%= data[i].User.full_name %>
+                  </td>
+                  <td class="<%= data[i].order_status === 'success' ? 'text-success' : 'text-danger'  %>">
+                    <%= data[i].order_status %>
+                  </td>
+                  <td style="min-width: 150px;">
+                    Rp <%= new Intl.NumberFormat('id-ID').format(data[i].total) %>
+                  </td>
+                  <td class="text-center">
+                    <a style="cursor: pointer;" class="text-primary" href="/admin/transactions/show/<%= data[i].id %>"
+                      data-bs-toggle="tooltip" data-bs-title="Show">
+                      <i class="bi bi-info-circle-fill fs-4"></i>
+                    </a>
+                  </td>
+                </tr>
+                <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

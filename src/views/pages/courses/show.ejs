@@ -2,7 +2,7 @@
   <div class="d-flex gap-2 px-4 pt-4 pb-2">
     <div class="">
       <h4 class="fw-bold">
-        <%= data.name %>
+        <%= data.course.name %>
       </h4>
     </div>
     <div class="d-flex gap-2 ms-auto">
@@ -10,7 +10,7 @@
         <i class="bi bi-trash"></i>
         Delete
       </button>
-      <a href="/admin/courses/edit/<%= data.id %>" class="btn btn-warning btn-sm">
+      <a href="/admin/courses/edit/<%= data.course.id %>" class="btn btn-warning btn-sm">
         <div class="h-100 gap-1 d-flex align-items-center">
           <i class="bi bi-pencil-square"></i>
           Edit
@@ -21,30 +21,74 @@
 
   <div class="px-4 py-2 gap-2">
     <div class="d-flex gap-4">
-      <img src="<%= data.img_url %>" alt="picture" width="300">
+      <img src="<%= data.course.img_url %>" alt="picture" width="300">
     </div>
   </div>
 
   <div class="px-4 pb-4 mt-2">
     <h5><span class="fw-bold">Category:</span>
-      <%= data.category.name %>
+      <%= data.course.category.name %>
     </h5>
     <h5><span class="fw-bold">Price:</span>
-      Rp <%= new Intl.NumberFormat('id-ID').format(data.price) %>
+      Rp <%= new Intl.NumberFormat('id-ID').format(data.course.price) %>
     </h5>
-    <% if (data.discount_price || data.discount_price==0) { %>
+    <% if (data.course.discount_price || data.course.discount_price==0) { %>
       <h5><span class="fw-bold">Discount Price:</span>
-        Rp <%= new Intl.NumberFormat('id-ID').format(data.discount_price) %>
+        Rp <%= new Intl.NumberFormat('id-ID').format(data.course.discount_price) %>
       </h5>
       <% }else{ %>
         <h5><span class="fw-bold">Discount Price:</span>
           None
         </h5>
         <% } %>
+          <h5><span class="fw-bold">Duration:</span>
+            <%= data.course.duration %> Month
+          </h5>
+          <h5><span class="fw-bold">Meetings:</span>
+            <%= data.course.meetings %>x
+          </h5>
           <h5 class="fw-bold">Description: </h5>
           <div>
-            <%- data.description %>
+            <%- data.course.description %>
           </div>
+  </div>
+
+  <h5 class="py-2 fw-bold text-center border">
+    <%= data.user_products.length %> Participants
+  </h5>
+  <div class="px-4 pb-4 mt-2">
+    <table id="myTable" class="hover row-border cell-border">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Student</th>
+          <th>Status</th>
+          <th>Expired Date</th>
+          <th>Meeting Quota</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (let i=0; i < data.user_products.length; i++) { %>
+          <tr>
+            <td>
+              <%= i + 1 %>
+            </td>
+            <td>
+              <%= data.user_products[i].User.full_name %>
+            </td>
+            <td>
+              <%= data.user_products[i].status %>
+            </td>
+            <td>
+              <%= data.user_products[i].expired_date.toLocaleDateString() %>
+            </td>
+            <td>
+              <%= data.user_products[i].meeting_quota %>
+            </td>
+          </tr>
+          <% } %>
+      </tbody>
+    </table>
   </div>
 
 </section>

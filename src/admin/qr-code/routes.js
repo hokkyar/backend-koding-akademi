@@ -12,7 +12,7 @@ const params = {
 }
 
 router.get('/', (req, res) => {
-  res.render('index', params)
+  return res.render('index', params)
 })
 
 router.get('/:qr', async (req, res) => {

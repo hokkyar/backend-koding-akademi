@@ -26,6 +26,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
+      meeting_quota: {
+        type: Sequelize.INTEGER.UNSIGNED,
+        defaultValue: 0
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

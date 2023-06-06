@@ -7,13 +7,13 @@ module.exports = {
     queryInterface.bulkInsert('carts', [
       {
         id: `cart-${nanoid(16)}`,
-        user_id: 'user-YbKLaWaZBK',
+        user_id: 'user-YbKLgb8sfcaWaZBK',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         id: `cart-D1MKOcFQY_EvIsVo`,
-        user_id: 'user-BOeEA2rrUV',
+        user_id: 'user-BOeEA2b7ygfdrrUV',
         createdAt: new Date(),
         updatedAt: new Date()
       },

@@ -1,8 +1,9 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('students', {
+    await queryInterface.createTable('meetings', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,14 +14,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.UUID
       },
-      phone_number: {
-        type: Sequelize.STRING
+      product_id: {
+        allowNull: false,
+        type: Sequelize.UUID
       },
-      address: {
-        type: Sequelize.STRING
-      },
-      birth_date: {
-        type: Sequelize.DATE
+      date: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       createdAt: {
         allowNull: false,
@@ -33,6 +34,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Students');
+    await queryInterface.dropTable('meetings');
   }
 };

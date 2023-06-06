@@ -7,7 +7,7 @@ const process = require('process');
 const basename = path.basename(__filename);
 const env = 'development';
 const config = require(__dirname + '/../config/database.json')[env];
-// config.timezone = '+07:00'
+config.timezone = '+07:00'
 const db = {};
 
 let sequelize;
@@ -90,8 +90,11 @@ db.UserProduct = UserProductModel(sequelize, Sequelize)
 const StudentModel = require('./student')
 db.Student = StudentModel(sequelize, Sequelize)
 
+const MeetingModel = require('./meetings')
+db.Meeting = MeetingModel(sequelize, Sequelize)
+
 // relations
-const { Category, Product, User, CartItem, Order, OrderItem, EventDate, Coupon, CouponProduct, UserCoupon, UserProduct, Student, Transaction } = db
+const { Category, Product, User, CartItem, Order, OrderItem, EventDate, Coupon, CouponProduct, Meeting, UserProduct, Student, Transaction } = db
 
 Category.hasMany(Product, {
   foreignKey: 'category_id',
@@ -180,6 +183,22 @@ Order.hasMany(Transaction, {
 Transaction.belongsTo(Order, {
   foreignKey: 'order_id',
   as: 'transaction'
+})
+
+User.hasMany(Meeting, {
+  foreignKey: 'user_id'
+})
+Meeting.belongsTo(User, {
+  foreignKey: 'user_id'
+})
+
+Product.hasMany(Meeting, {
+  foreignKey: 'product_id',
+  as: 'meeting'
+})
+Meeting.belongsTo(Product, {
+  foreignKey: 'product_id',
+  as: 'meeting'
 })
 
 module.exports = db;

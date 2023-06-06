@@ -1,0 +1,47 @@
+<section class="bg-white rounded shadow-sm">
+
+  <div class="d-flex gap-2 px-4 pt-4 pb-2">
+    <div>
+      <h5>
+        Invoice ID : <span class="text-secondary">
+          <%= data.invoice_id %>
+        </span>
+      </h5>
+    </div>
+  </div>
+
+  <div class="p-4">
+    <h2>ORDER INFO</h2>
+    <% const options={weekday: 'long' , day: 'numeric' , month: 'long' , year: 'numeric' , hour: '2-digit' ,
+      minute: '2-digit' , second: '2-digit' } %>
+      <p>Ordered at: <%= data.createdAt.toLocaleDateString('id-ID', options) %>
+      </p>
+      <p>User: <%= data.User.full_name %>
+      </p>
+      <p>Status: <%= data.order_status %>
+      </p>
+      <p>Total: Rp <%= new Intl.NumberFormat('id-ID').format(data.total) %>
+      </p>
+      <p>Ordered products:
+      <ul>
+        <% for( let i=0; i < data.order.length; i++ ) { %>
+          <li>
+            <%= data.order[i].Product.name %>
+          </li>
+          <% } %>
+      </ul>
+      </p>
+
+      <% if (data.transaction[0]) { %>
+        <h2>TRANSACTION INFO</h2>
+        <p>Paid at: <%= data.transaction[0].date.toLocaleDateString('id-ID', options) %>
+        </p>
+        <p>Payment method: <%= data.transaction[0].payment_method %>
+        </p>
+        <p>Bank name: <%= data.transaction[0].bank_name %>
+        </p>
+        <% } %>
+
+  </div>
+
+</section>

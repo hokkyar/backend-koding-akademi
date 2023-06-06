@@ -3,7 +3,7 @@ const { Op } = require('sequelize')
 
 exports.getUserProductService = async (userId, limit) => {
   const user_products = await UserProduct.findAll({
-    attributes: ['status', 'expired_date'],
+    attributes: ['status', 'expired_date', 'meeting_quota'],
     include: [
       {
         model: Product
@@ -24,7 +24,8 @@ exports.getUserProductService = async (userId, limit) => {
     img_url: product.Product.img_url,
     description: product.Product.description,
     status: product.status,
-    expired_date: product.expired_date
+    expired_date: product.expired_date,
+    meeting_quota: product.meeting_quota
   }))
 
   return products

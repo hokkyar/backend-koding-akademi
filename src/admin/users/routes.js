@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const asyncHandler = require('express-async-handler')
-const { User, Student, Cart, UserProduct, Product, sequelize } = require('../../models/index')
+const { User, Student, Cart, UserProduct, Product, Meeting, sequelize } = require('../../models/index')
 const { nanoid } = require('nanoid')
 const bcrypt = require('bcryptjs')
 const { encryptData } = require('../../utils/encryptData')
@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
     birth_date: student.birth_date
   }))
 
-  res.render('index', { ...params, data: users })
+  return res.render('index', { ...params, data: users })
 })
 
 // get detail user
@@ -47,7 +47,7 @@ router.get('/show/:id', async (req, res) => {
   let user = await User.findOne({
     where: { id: req.params.id, role: 'user' }
   })
-  if (!user) res.render('index', { ...params, sub_page: 'not-found' })
+  if (!user) return res.render('index', { ...params, sub_page: 'not-found' })
 
   const activeProduct = await UserProduct.findAll({
     include: [
@@ -72,7 +72,7 @@ router.get('/show/:id', async (req, res) => {
 
   const user_products = { active: activeProduct, finished: finishedProduct }
 
-  res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: { user, user_products } })
+  return res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: { user, user_products } })
 })
 
 // create user service
@@ -131,5 +131,23 @@ router.delete('/delete/:id', async (req, res) => {
   })
   res.sendStatus(200)
 })
+
+router.put('/meetings/:userId/:productId', asyncHandler(async (req, res) => {
+  const exist = await UserProduct.findOne({
+    where: { user_id: req.params.userId, product_id: req.params.productId }
+  })
+  if (!exist) return res.render('index', { ...params, sub_page: 'not-found' })
+
+  await UserProduct.decrement('meeting_quota', { where: { user_id: req.params.userId, product_id: req.params.productId } })
+  // const userProduct = await UserProduct.findOne({
+  //   where: { user_id: req.params.userId, product_id: req.params.productId }
+  // })
+  // if (userProduct.meeting_quota <= 0) {
+  //   await UserProduct.update({ status: 'finished' }, { where: { user_id: req.params.userId, product_id: req.params.productId } })
+  // }
+
+  await Meeting.create({ user_id: req.params.userId, product_id: req.params.productId })
+  res.sendStatus(200)
+}))
 
 module.exports = router

@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { Product, EventDate, sequelize } = require('../../models/index')
+const { Product, EventDate, User, UserProduct, sequelize } = require('../../models/index')
 const { nanoid } = require('nanoid')
 const fs = require('fs')
 const path = require('path')
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
     ],
     where: { category_id: 'cat-event-1' }
   })
-  res.render('index', { ...params, data: events })
+  return res.render('index', { ...params, data: events })
 })
 
 // get detail event
@@ -41,13 +41,24 @@ router.get('/show/:id', async (req, res) => {
       category_id: 'cat-event-1'
     }
   })
-  if (!event) res.render('index', { ...params, sub_page: 'not-found' })
-  res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: event })
+
+  if (!event) return res.render('index', { ...params, sub_page: 'not-found' })
+
+  const user_products = await UserProduct.findAll({
+    include: [
+      {
+        model: User
+      }
+    ],
+    where: { product_id: req.params.id }
+  })
+
+  return res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: { event, user_products } })
 })
 
 // add event page
 router.get('/add', async (req, res) => {
-  res.render('index', { ...params, sub_page: 'add' })
+  return res.render('index', { ...params, sub_page: 'add' })
 })
 
 // add event service
@@ -81,7 +92,7 @@ router.post('/', uploadImage.single('img'), async (req, res) => {
     console.log('Error occurred during transaction:', error)
   }
 
-  res.json({ message: 'success' })
+  return res.sendStatus(201)
 })
 
 // edit event page
@@ -98,8 +109,8 @@ router.get('/edit/:id', async (req, res) => {
       category_id: 'cat-event-1'
     }
   })
-  if (!event) res.render('index', { ...params, sub_page: 'not-found' })
-  res.render('index', { ...params, sub_page: 'edit', detail: req.params.id, data: event })
+  if (!event) return res.render('index', { ...params, sub_page: 'not-found' })
+  return res.render('index', { ...params, sub_page: 'edit', detail: req.params.id, data: event })
 })
 
 // edit event service
@@ -151,7 +162,7 @@ router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
   } catch (error) {
     console.log('Error occurred during transaction:', error)
   }
-  res.json({ message: 'success' })
+  return res.sendStatus(200)
 })
 
 // delete event
@@ -159,7 +170,7 @@ router.delete('/delete/:id', async (req, res) => {
   const event = await Product.findOne({
     where: { id: req.params.id }
   })
-  if (!event) res.render('index', { ...params, sub_page: 'not-found' })
+  if (!event) return res.render('index', { ...params, sub_page: 'not-found' })
 
   if (event.img_url.includes(process.env.HOST)) {
     const img_url = event.img_url.replace(process.env.HOST, '')
@@ -181,7 +192,7 @@ router.delete('/delete/:id', async (req, res) => {
     where: { product_id: req.params.id }
   })
 
-  res.json({ message: 'success' })
+  return res.sendStatus(200)
 })
 
 

@@ -17,7 +17,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: 'user-YbKLaWaZBK',
+        id: 'user-YbKLgb8sfcaWaZBK',
         role: 'user',
         qr_code: encryptData('id=user-YbKLaWaZBK&tr=null'),
         email: 'hokky@gmail.com',
@@ -28,9 +28,9 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: 'user-BOeEA2rrUV',
+        id: 'user-BOeEA2b7ygfdrrUV',
         role: 'user',
-        qr_code: encryptData('id=user-BOeEA2rrUV&tr=inv-asd123'),
+        qr_code: encryptData('id=user-BOeEA2rrUV&tr=null'),
         email: 'agung@gmail.com',
         password: bcrypt.hashSync('123', 10),
         full_name: 'Agung Pernata',

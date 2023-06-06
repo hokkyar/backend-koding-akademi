@@ -15,7 +15,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   event_dates.init({
     product_id: DataTypes.STRING,
-    date: DataTypes.DATE
+    date: {
+      type: DataTypes.DATE,
+      set(value) {
+        const date = new Date(value)
+        date.setUTCHours(date.getUTCHours() - 7)
+        this.setDataValue('date', date)
+      }
+    }
   }, {
     sequelize,
     modelName: 'event_dates',

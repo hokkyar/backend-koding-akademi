@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { Product, Category } = require('../../models/index')
+const { Product, Category, UserProduct, User } = require('../../models/index')
 const { Op } = require('sequelize')
 const { nanoid } = require('nanoid')
 const fs = require('fs')
@@ -17,7 +17,6 @@ const params = {
 // get all courses
 router.get('/', async (req, res) => {
   const courses = await Product.findAll({
-    attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'duration'],
     include: [
       {
         model: Category,
@@ -32,7 +31,7 @@ router.get('/', async (req, res) => {
     }
   })
 
-  res.render('index', { ...params, data: courses })
+  return res.render('index', { ...params, data: courses })
 })
 
 // get detail course
@@ -52,19 +51,30 @@ router.get('/show/:id', async (req, res) => {
       id: req.params.id
     }
   })
-  if (!course) res.render('index', { ...params, sub_page: 'not-found' })
-  res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: course })
+
+  if (!course) return res.render('index', { ...params, sub_page: 'not-found' })
+
+  const user_products = await UserProduct.findAll({
+    include: [
+      {
+        model: User
+      }
+    ],
+    where: { product_id: req.params.id }
+  })
+
+  return res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: { course, user_products } })
 })
 
 // add course page
 router.get('/add', async (req, res) => {
-  res.render('index', { ...params, sub_page: 'add' })
+  return res.render('index', { ...params, sub_page: 'add' })
 })
 
 // add course service
 const uploadImage = require('../../middleware/uploadImage')
 router.post('/', uploadImage.single('img'), async (req, res) => {
-  const { name, price, category_id, duration } = req.body
+  const { name, price, category_id, duration, meetings } = req.body
 
   let img_url = 'https://th.bing.com/th/id/OIP.kzI1EUFN1_qi7eISbXDekgHaHK?pid=ImgDet&rs=1'
   if (req.file) {
@@ -76,8 +86,8 @@ router.post('/', uploadImage.single('img'), async (req, res) => {
   const description = (req.body.description === '') ? null : req.body.description
 
   const id = 'course-' + nanoid(16)
-  await Product.create({ id, img_url, name, price, discount_price, category_id, duration, description })
-  res.json({ message: 'success' })
+  await Product.create({ id, img_url, name, price, discount_price, category_id, duration, meetings, description })
+  return res.sendStatus(201)
 })
 
 // edit course page
@@ -97,13 +107,13 @@ router.get('/edit/:id', async (req, res) => {
       ]
     }
   })
-  if (!course) res.render('index', { ...params, sub_page: 'not-found' })
-  res.render('index', { ...params, sub_page: 'edit', detail: req.params.id, data: course })
+  if (!course) return res.render('index', { ...params, sub_page: 'not-found' })
+  return res.render('index', { ...params, sub_page: 'edit', detail: req.params.id, data: course })
 })
 
 // edit course service
 router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
-  const { name, price, category_id, duration, current_img } = req.body
+  const { name, price, category_id, duration, meetings, current_img } = req.body
 
   let img_url = current_img
   if (req.file) { // if user upload new image
@@ -127,21 +137,20 @@ router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
   const description = (req.body.description === '') ? null : req.body.description
 
   await Product.update({
-    name, img_url, price, category_id, duration, discount_price, description
+    name, img_url, price, category_id, duration, meetings, discount_price, description
   }, {
     where: { id: req.params.id }
   })
 
-  res.json({ message: 'success' })
+  return res.sendStatus(200)
 })
 
 // delete course service
 router.delete('/delete/:id', async (req, res) => {
-  console.log('MASOKKKK')
   const course = await Product.findOne({
     where: { id: req.params.id }
   })
-  if (!course) res.render('index', { ...params, sub_page: 'not-found' })
+  if (!course) return res.render('index', { ...params, sub_page: 'not-found' })
 
   if (course.img_url.includes(process.env.HOST)) {
     const img_url = course.img_url.replace(process.env.HOST, '')
@@ -159,7 +168,7 @@ router.delete('/delete/:id', async (req, res) => {
     where: { id: req.params.id }
   })
 
-  res.json({ message: 'success' })
+  return res.sendStatus(200)
 })
 
 module.exports = router

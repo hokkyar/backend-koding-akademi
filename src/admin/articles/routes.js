@@ -15,11 +15,11 @@ const params = {
 
 router.get('/', async (req, res) => {
   const articles = await Article.findAll()
-  res.render('index', { ...params, data: articles })
+  return res.render('index', { ...params, data: articles })
 })
 
 router.get('/add', async (req, res) => {
-  res.render('index', { ...params, sub_page: 'add' })
+  return res.render('index', { ...params, sub_page: 'add' })
 })
 
 const uploadImage = require('../../middleware/uploadImage')
@@ -31,19 +31,19 @@ router.post('/', uploadImage.single('img'), async (req, res) => {
   }
   const id = 'article-' + nanoid(16)
   await Article.create({ id, title, content, img_url })
-  res.sendStatus(201)
+  return res.sendStatus(201)
 })
 
 router.get('/show/:id', async (req, res) => {
   const article = await Article.findOne({ where: { id: req.params.id } })
-  if (!article) res.render('index', { ...params, sub_page: 'not-found' })
-  res.render('index', { ...params, sub_page: 'show', data: article, detail: req.params.id })
+  if (!article) return res.render('index', { ...params, sub_page: 'not-found' })
+  return res.render('index', { ...params, sub_page: 'show', data: article, detail: req.params.id })
 })
 
 router.get('/edit/:id', async (req, res) => {
   const article = await Article.findOne({ where: { id: req.params.id } })
-  if (!article) res.render('index', { ...params, sub_page: 'not-found' })
-  res.render('index', { ...params, sub_page: 'edit', data: article, detail: req.params.id })
+  if (!article) return res.render('index', { ...params, sub_page: 'not-found' })
+  return res.render('index', { ...params, sub_page: 'edit', data: article, detail: req.params.id })
 })
 
 router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
@@ -66,14 +66,14 @@ router.put('/edit/:id', uploadImage.single('img'), async (req, res) => {
   }
 
   await Article.update({ img_url, title, content }, { where: { id: req.params.id } })
-  res.sendStatus(200)
+  return res.sendStatus(200)
 })
 
 router.delete('/delete/:id', async (req, res) => {
   const article = await Article.findOne({
     where: { id: req.params.id }
   })
-  if (!article) res.render('index', { ...params, sub_page: 'not-found' })
+  if (!article) return res.render('index', { ...params, sub_page: 'not-found' })
 
   if (article.img_url.includes(process.env.HOST)) {
     const img_url = article.img_url.replace(process.env.HOST, '')
@@ -88,7 +88,7 @@ router.delete('/delete/:id', async (req, res) => {
   }
 
   await Article.destroy({ where: { id: req.params.id } })
-  res.sendStatus(200)
+  return res.sendStatus(200)
 })
 
 

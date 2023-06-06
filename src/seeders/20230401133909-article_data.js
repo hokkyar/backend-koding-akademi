@@ -5,38 +5,38 @@ const { nanoid } = require('nanoid')
 module.exports = {
   async up(queryInterface, Sequelize) {
     queryInterface.bulkInsert('articles', [
-      {
-        id: `article-${nanoid(16)}`,
-        img_url: 'https://www.kodingakademi.id/wp-content/uploads/2023/04/man-s-hands-typing-laptop-keyboard-edit.jpg',
-        title: 'Tailwind CSS: Pengertian dan Cara Instalasinya',
-        content: 'Tailwind CSS adalah sebuah framework CSS yang dapat digunakan untuk mengatur tampilan website dengan cepat dan mudah. Framework ini menggunakan pendekatan utilitas sebagai prioritas utama dan menyediakan semua blok pembangunan yang dibutuhkan untuk membuat desain yang unik tanpa gaya baku yang sulit diubah.Hal yang membedakannya dari framework CSS lainnya adalah kemampuan kustomisasinya yang tinggi dan sifatnya yang rendah- level, sehingga memberikan pengembang kontrol penuh atas tampilan antarmuka pengguna.Framework ini tidak menetapkan spesifikasi desain tertentu, sehingga pengembang dapat menggabungkan berbagai komponen untuk membuat desain khusus yang sesuai dengan kebutuhan mereka.Prosesnya melibatkan pengambilan file CSS “mentah” dan memprosesnya melalui sebuah file konfigurasi untuk menghasilkan output.',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id: `article-${nanoid(16)}`,
-        img_url: 'https://www.kodingakademi.id/wp-content/uploads/2023/03/beauty-with-friend-man-woman-communicate-students-study-computer-science-crop.jpg',
-        title: 'Kursus C++ di Bali',
-        content: 'C++ adalah bahasa pemrograman yang sangat populer di dunia teknologi saat ini. Bahasa pemrograman ini sering digunakan untuk membuat berbagai jenis aplikasi seperti desktop, game, perangkat lunak sistem operasi, aplikasi mobile, dan masih banyak lagi. Tidak hanya itu, C++ juga digunakan dalam berbagai proyek besar seperti Google, Microsoft, Amazon, dan banyak lagi perusahaan teknologi ternama.Karena kepopulerannya, banyak universitas dan perguruan tinggi di seluruh dunia yang menawarkan mata kuliah C++ sebagai bagian dari kurikulum Teknik Informatika.Sebagai bahasa pemrograman yang sangat dasar, C++ menjadi langkah awal yang penting untuk mempelajari konsep dasar pemrograman.',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id: `article-${nanoid(16)}`,
-        img_url: 'https://www.kodingakademi.id/wp-content/uploads/2023/02/closeup-caucasian-software-coder-hands-typing-keyboard-front-computer-screens-with-programming-interface-database-developer-sitting-desk-writing-algorithm-it-agency.jpg',
-        title: 'Visual Studio Code: Code Editor Terpopuler',
-        content: 'Visual Studio Code (VSCode) adalah editor open source gratis yang dikembangkan oleh Microsoft. Ini adalah alat populer yang digunakan oleh Developer untuk menulis, mengedit, dan men-debug kode dalam berbagai bahasa pemrograman termasuk JavaScript, Python, C++, dan banyak lainnya.Salah satu alasan utama Developer menggunakan VSCode adalah keserbagunaan dan fleksibilitasnya. Muncul dengan berbagai plugin dan add- on yang dapat kamu gunakan untuk menyesuaikan editor sesuai dengan kebutuhan dan preferensi khusus kamu.Ini juga memiliki serangkaian fitur yang kuat termasuk penyelesaian kode, debugging, dan penyorotan sintaks yang dapat membantu kamu menulis kode lebih efisien dan dengan lebih sedikit kesalahan. Jika kamu seorang Developer yang mencari editor kode yang kamul dan fleksibel yang dapat membantu kamu menulis kode dengan lebih efisien dan dengan lebih sedikit kesalahan, VSCode patut dipertimbangkan.Keserbagunaannya, kumpulan fitur yang kuat, dan integrasi yang erat dengan alat lain menjadikannya pilihan populer di kalangan Developer.',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id: `article-${nanoid(16)}`,
-        img_url: 'https://www.kodingakademi.id/wp-content/uploads/2023/02/team-it-programmers-talking-discussing-plan-new-project-together-modern-office.jpg',
-        title: 'Kursus Javascript di Bali',
-        content: 'JavaScript adalah bahasa pemrograman populer yang digunakan terutama untuk Web Development. Ini adalah bahasa client-side scripting, yang berarti berjalan di browser web pengguna dan digunakan untuk membuat halaman web interaktif dan dinamis. JavaScript digunakan untuk menambahkan interaktivitas ke halaman web, memungkinkan Developer untuk membuat elemen yang menanggapi tindakan pengguna.Misalnya, JavaScript dapat digunakan untuk membuat menu dropdown, pop- up, animasi, dan fitur interaktif lainnya.Ini juga dapat digunakan untuk memvalidasi input bentuk dan melakukan perhitungan. Selain client - side scripting, JavaScript juga dapat digunakan untuk server - side scripting menggunakan Node.js, runtime environment yang memungkinkan JavaScript berjalan di server.Ini menjadikan JavaScript bahasa serbaguna yang dapat digunakan untuk Web Development front - end dan back - end.',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
+      // {
+      //   id: `article-${nanoid(16)}`,
+      //   img_url: 'https://www.kodingakademi.id/wp-content/uploads/2023/04/man-s-hands-typing-laptop-keyboard-edit.jpg',
+      //   title: 'Tailwind CSS: Pengertian dan Cara Instalasinya',
+      //   content: 'Tailwind CSS adalah sebuah framework CSS yang dapat digunakan untuk mengatur tampilan website dengan cepat dan mudah. Framework ini menggunakan pendekatan utilitas sebagai prioritas utama dan menyediakan semua blok pembangunan yang dibutuhkan untuk membuat desain yang unik tanpa gaya baku yang sulit diubah.Hal yang membedakannya dari framework CSS lainnya adalah kemampuan kustomisasinya yang tinggi dan sifatnya yang rendah- level, sehingga memberikan pengembang kontrol penuh atas tampilan antarmuka pengguna.Framework ini tidak menetapkan spesifikasi desain tertentu, sehingga pengembang dapat menggabungkan berbagai komponen untuk membuat desain khusus yang sesuai dengan kebutuhan mereka.Prosesnya melibatkan pengambilan file CSS “mentah” dan memprosesnya melalui sebuah file konfigurasi untuk menghasilkan output.',
+      //   createdAt: new Date(),
+      //   updatedAt: new Date()
+      // },
+      // {
+      //   id: `article-${nanoid(16)}`,
+      //   img_url: 'https://www.kodingakademi.id/wp-content/uploads/2023/03/beauty-with-friend-man-woman-communicate-students-study-computer-science-crop.jpg',
+      //   title: 'Kursus C++ di Bali',
+      //   content: 'C++ adalah bahasa pemrograman yang sangat populer di dunia teknologi saat ini. Bahasa pemrograman ini sering digunakan untuk membuat berbagai jenis aplikasi seperti desktop, game, perangkat lunak sistem operasi, aplikasi mobile, dan masih banyak lagi. Tidak hanya itu, C++ juga digunakan dalam berbagai proyek besar seperti Google, Microsoft, Amazon, dan banyak lagi perusahaan teknologi ternama.Karena kepopulerannya, banyak universitas dan perguruan tinggi di seluruh dunia yang menawarkan mata kuliah C++ sebagai bagian dari kurikulum Teknik Informatika.Sebagai bahasa pemrograman yang sangat dasar, C++ menjadi langkah awal yang penting untuk mempelajari konsep dasar pemrograman.',
+      //   createdAt: new Date(),
+      //   updatedAt: new Date()
+      // },
+      // {
+      //   id: `article-${nanoid(16)}`,
+      //   img_url: 'https://www.kodingakademi.id/wp-content/uploads/2023/02/closeup-caucasian-software-coder-hands-typing-keyboard-front-computer-screens-with-programming-interface-database-developer-sitting-desk-writing-algorithm-it-agency.jpg',
+      //   title: 'Visual Studio Code: Code Editor Terpopuler',
+      //   content: 'Visual Studio Code (VSCode) adalah editor open source gratis yang dikembangkan oleh Microsoft. Ini adalah alat populer yang digunakan oleh Developer untuk menulis, mengedit, dan men-debug kode dalam berbagai bahasa pemrograman termasuk JavaScript, Python, C++, dan banyak lainnya.Salah satu alasan utama Developer menggunakan VSCode adalah keserbagunaan dan fleksibilitasnya. Muncul dengan berbagai plugin dan add- on yang dapat kamu gunakan untuk menyesuaikan editor sesuai dengan kebutuhan dan preferensi khusus kamu.Ini juga memiliki serangkaian fitur yang kuat termasuk penyelesaian kode, debugging, dan penyorotan sintaks yang dapat membantu kamu menulis kode lebih efisien dan dengan lebih sedikit kesalahan. Jika kamu seorang Developer yang mencari editor kode yang kamul dan fleksibel yang dapat membantu kamu menulis kode dengan lebih efisien dan dengan lebih sedikit kesalahan, VSCode patut dipertimbangkan.Keserbagunaannya, kumpulan fitur yang kuat, dan integrasi yang erat dengan alat lain menjadikannya pilihan populer di kalangan Developer.',
+      //   createdAt: new Date(),
+      //   updatedAt: new Date()
+      // },
+      // {
+      //   id: `article-${nanoid(16)}`,
+      //   img_url: 'https://www.kodingakademi.id/wp-content/uploads/2023/02/team-it-programmers-talking-discussing-plan-new-project-together-modern-office.jpg',
+      //   title: 'Kursus Javascript di Bali',
+      //   content: 'JavaScript adalah bahasa pemrograman populer yang digunakan terutama untuk Web Development. Ini adalah bahasa client-side scripting, yang berarti berjalan di browser web pengguna dan digunakan untuk membuat halaman web interaktif dan dinamis. JavaScript digunakan untuk menambahkan interaktivitas ke halaman web, memungkinkan Developer untuk membuat elemen yang menanggapi tindakan pengguna.Misalnya, JavaScript dapat digunakan untuk membuat menu dropdown, pop- up, animasi, dan fitur interaktif lainnya.Ini juga dapat digunakan untuk memvalidasi input bentuk dan melakukan perhitungan. Selain client - side scripting, JavaScript juga dapat digunakan untuk server - side scripting menggunakan Node.js, runtime environment yang memungkinkan JavaScript berjalan di server.Ini menjadikan JavaScript bahasa serbaguna yang dapat digunakan untuk Web Development front - end dan back - end.',
+      //   createdAt: new Date(),
+      //   updatedAt: new Date()
+      // },
       {
         id: `article-${nanoid(16)}`,
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2023/04/young-female-inventor-her-workshop.jpg',
@@ -65,7 +65,7 @@ module.exports = {
         id: `article-${nanoid(16)}`,
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2023/03/white-cyborg-finger-about-touch-human-finger-3d-rendering-edit.jpg',
         title: 'Artificial Intelligence : Pengertian dan Bagaimana Pengaruhnya',
-        content: '        <p><span style="font-weight: 700; font-family: Varela; user-select: text !important;"><em style="user-select: text !important;">Artificial Intelligence</em>&nbsp;: Pengertian dan Bagaimana Pengaruhnya</span><span style="font-family: Varela;">&nbsp;–&nbsp;</span><em style="font-family: Varela; user-select: text !important;">Artificial Intelligence&nbsp;</em><span style="font-family: Varela;">adalah simulasi proses kecerdasan manusia oleh mesin, terutama sistem komputer. Aplikasi spesifik AI meliputi&nbsp;</span><em style="font-family: Varela; user-select: text !important;">expert systems</em><span style="font-family: Varela;">,&nbsp;</span><em style="font-family: Varela; user-select: text !important;">natural language processing</em><span style="font-family: Varela;">,&nbsp;</span><em style="font-family: Varela; user-select: text !important;">speech recognition</em><span style="font-family: Varela;">&nbsp;dan&nbsp;<em>machine vision.</em></span></p><p style="margin: 10px 0px; -webkit-font-smoothing: antialiased; font-family: Varela; user-select: text !important;">Secara umum, sistem&nbsp;<em style="user-select: text !important;">Artificial Intelligence</em>&nbsp;dapat melakukan tugas-tugas yang umu<span style="font-family: Varela;">mnya terkait dengan fungsi kognitif manusia — seperti menafsirkan ucapan, bermain game, dan mengidentifikasi pola. Mereka biasanya belajar bagaimana melakukannya dengan memproses sejumlah besar data, mencari pola untuk dimodelkan dalam pengambilan keputusan mereka sendiri</span></p><p style="margin: 10px 0px; -webkit-font-smoothing: antialiased; font-family: Varela; user-select: text !important;"><span style="font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);">Dalam banyak kasus, manusia akan mengawasi proses pembelajaran AI, memperkuat keputusan yang baik dan mencegah keputusan yang buruk. Tetapi beberapa sistem AI dirancang untuk belajar tanpa pengawasan — misalnya, dengan memainkan video game berulang kali hingga mereka akhirnya mengetahui aturan dan cara... </span><span style="font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align); font-size: var(--bs-body-font-size);"><a href="https://www.kodingakademi.id/artificial-intelligence-pengertian-dan-bagaimana-pengaruhnya/" style=""><em>Baca Selengkapnya</em></a></span></p><br>',
+        content: '<p><span style="font-weight: 700; font-family: Varela; user-select: text !important;"><em style="user-select: text !important;">Artificial Intelligence</em>&nbsp;: Pengertian dan Bagaimana Pengaruhnya</span><span style="font-family: Varela;">&nbsp;–&nbsp;</span><em style="font-family: Varela; user-select: text !important;">Artificial Intelligence&nbsp;</em><span style="font-family: Varela;">adalah simulasi proses kecerdasan manusia oleh mesin, terutama sistem komputer. Aplikasi spesifik AI meliputi&nbsp;</span><em style="font-family: Varela; user-select: text !important;">expert systems</em><span style="font-family: Varela;">,&nbsp;</span><em style="font-family: Varela; user-select: text !important;">natural language processing</em><span style="font-family: Varela;">,&nbsp;</span><em style="font-family: Varela; user-select: text !important;">speech recognition</em><span style="font-family: Varela;">&nbsp;dan&nbsp;<em>machine vision.</em></span></p><p style="margin: 10px 0px; -webkit-font-smoothing: antialiased; font-family: Varela; user-select: text !important;">Secara umum, sistem&nbsp;<em style="user-select: text !important;">Artificial Intelligence</em>&nbsp;dapat melakukan tugas-tugas yang umu<span style="font-family: Varela;">mnya terkait dengan fungsi kognitif manusia — seperti menafsirkan ucapan, bermain game, dan mengidentifikasi pola. Mereka biasanya belajar bagaimana melakukannya dengan memproses sejumlah besar data, mencari pola untuk dimodelkan dalam pengambilan keputusan mereka sendiri</span></p><p style="margin: 10px 0px; -webkit-font-smoothing: antialiased; font-family: Varela; user-select: text !important;"><span style="font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);">Dalam banyak kasus, manusia akan mengawasi proses pembelajaran AI, memperkuat keputusan yang baik dan mencegah keputusan yang buruk. Tetapi beberapa sistem AI dirancang untuk belajar tanpa pengawasan — misalnya, dengan memainkan video game berulang kali hingga mereka akhirnya mengetahui aturan dan cara... </span><span style="font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align); font-size: var(--bs-body-font-size);"><a href="https://www.kodingakademi.id/artificial-intelligence-pengertian-dan-bagaimana-pengaruhnya/" style=""><em>Baca Selengkapnya</em></a></span></p><br>',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -81,7 +81,7 @@ module.exports = {
         id: `article-${nanoid(16)}`,
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2023/02/hand-using-laptop-computer-with-virtual-screen-document-online-approve-paperless-quality-assurance-erp-management-concept-crop.jpg',
         title: 'Bahasa Pemrograman PHP Apakah masih Menarik di 2023 ini?',
-        content: '        <p><span style="font-weight: 700; font-family: Varela; user-select: text !important;">Bahasa Pemrograman PHP Apakah masih Menarik di 2023 ini -&nbsp;</span><span style="font-family: Varela;">Ditahun-tahun mendatang, tidak akan ada penurunan dalam penggunaan aplikasi seluler. Tingkat pertumbuhan tahunan ukuran pasar dikatakan tumbuh pada 13,4% selama periode 2021-2030. Pertumbuhan yang cukup besar ini mempercepat kemajuan teknologi seperti&nbsp;</span><em style="font-family: Varela; user-select: text !important;">framework</em><span style="font-family: Varela;">, bahasa pemrogramman, teknologi canggih, dll. Jadi pertanyaan ya</span><span style="font-family: Varela;">ng muncul tentang masa depan PHP pada tahun 2023 bahkan lebih cerah dari sebelumnnya.</span></p><p><span style="font-family: Varela;">Dengan kecenderungan populasi yang luar biasa terhadap perangkat lunak &amp; solusi, ada ruang lingkup pertumbuhan yang sangat besar untuk setiap bahasa skrip. Setiap pengembangan web memiliki persyaratan yang berbeda, dan pemilik bisnis selalu mencari bahasa pemrograman yang paling mudah beradaptasi dan berteknologi maju untuk bisnisnya.</span></p><p><span style="font-family: Varela;">Bahasa pemrogramman PHP telah menjadi salah satu satu bahasa transformatif di arena teknologi selama lebih dari 20 tahun. Bahasa ini memiliki banyak peminat yang membuat bahasa skrip ini lebih populer daripada bahasa lainnya. Sekarang, untuk memahami lebih lanjut tentang PHP, mari kita lihat penawarannya ke pasar dan cakupannya lebih lanjut. <a href="https://www.kodingakademi.id/bahasa-pemrograman-php-apakah-masih-menarik-di-2023-ini/">Baca Selengkapnya</a></span><span style="font-family: Varela;"><br></span><br></p>',
+        content: '<p><span style="font-weight: 700; font-family: Varela; user-select: text !important;">Bahasa Pemrograman PHP Apakah masih Menarik di 2023 ini -&nbsp;</span><span style="font-family: Varela;">Ditahun-tahun mendatang, tidak akan ada penurunan dalam penggunaan aplikasi seluler. Tingkat pertumbuhan tahunan ukuran pasar dikatakan tumbuh pada 13,4% selama periode 2021-2030. Pertumbuhan yang cukup besar ini mempercepat kemajuan teknologi seperti&nbsp;</span><em style="font-family: Varela; user-select: text !important;">framework</em><span style="font-family: Varela;">, bahasa pemrogramman, teknologi canggih, dll. Jadi pertanyaan ya</span><span style="font-family: Varela;">ng muncul tentang masa depan PHP pada tahun 2023 bahkan lebih cerah dari sebelumnnya.</span></p><p><span style="font-family: Varela;">Dengan kecenderungan populasi yang luar biasa terhadap perangkat lunak &amp; solusi, ada ruang lingkup pertumbuhan yang sangat besar untuk setiap bahasa skrip. Setiap pengembangan web memiliki persyaratan yang berbeda, dan pemilik bisnis selalu mencari bahasa pemrograman yang paling mudah beradaptasi dan berteknologi maju untuk bisnisnya.</span></p><p><span style="font-family: Varela;">Bahasa pemrogramman PHP telah menjadi salah satu satu bahasa transformatif di arena teknologi selama lebih dari 20 tahun. Bahasa ini memiliki banyak peminat yang membuat bahasa skrip ini lebih populer daripada bahasa lainnya. Sekarang, untuk memahami lebih lanjut tentang PHP, mari kita lihat penawarannya ke pasar dan cakupannya lebih lanjut. <a href="https://www.kodingakademi.id/bahasa-pemrograman-php-apakah-masih-menarik-di-2023-ini/">Baca Selengkapnya</a></span><span style="font-family: Varela;"><br></span><br></p>',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -93,14 +93,6 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
-      // {
-      //   id: `article-${nanoid(16)}`,
-      //   img_url: '',
-      //   title: 'Judul',
-      //   content: '',
-      //   createdAt: new Date(),
-      //   updatedAt: new Date()
-      // },
     ]
     );
   },

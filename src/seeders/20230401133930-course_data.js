@@ -15,6 +15,7 @@ module.exports = {
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2022/09/tumbnail-c-web-2.jpg',
         quota: 100,
         duration: 6,
+        meetings: 4,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -28,6 +29,7 @@ module.exports = {
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2022/04/arduino-intermediate.jpg',
         quota: 100,
         duration: 3,
+        meetings: 4,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -41,6 +43,7 @@ module.exports = {
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2018/05/arduino-class-460x259.jpg',
         quota: 100,
         duration: 3,
+        meetings: 4,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -54,6 +57,7 @@ module.exports = {
         img_url: 'https://th.bing.com/th/id/OIP.TzDMsUKMYf12XPgPAJgopwHaEK?pid=ImgDet&rs=1',
         quota: 30,
         duration: 2,
+        meetings: 4,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -67,6 +71,7 @@ module.exports = {
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2022/03/logo-scratch.jpg',
         quota: 1000,
         duration: 3,
+        meetings: 4,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -80,6 +85,7 @@ module.exports = {
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2022/09/basic.jpg',
         quota: 1000,
         duration: 1,
+        meetings: 4,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -93,6 +99,7 @@ module.exports = {
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2020/11/ARDUINO-SMART-PARK-WEB-ICON2.jpg',
         quota: 30,
         duration: 1,
+        meetings: 4,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -106,6 +113,7 @@ module.exports = {
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2020/03/IMG-20201229-WA0005.jpg',
         quota: 1000,
         duration: 1,
+        meetings: 4,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -119,6 +127,7 @@ module.exports = {
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2021/09/HTML-CSS-WEB-ICON.jpg',
         quota: 100,
         duration: 3,
+        meetings: 4,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -132,6 +141,7 @@ module.exports = {
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2018/05/Laravel-logo.jpg',
         quota: 50,
         duration: 1,
+        meetings: 4,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -145,6 +155,7 @@ module.exports = {
         img_url: 'https://www.kodingakademi.id/wp-content/uploads/2021/06/engineer-package.jpg',
         quota: 1000,
         duration: 1,
+        meetings: 4,
         createdAt: new Date(),
         updatedAt: new Date()
       },

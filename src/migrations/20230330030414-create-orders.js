@@ -24,6 +24,15 @@ module.exports = {
       discount: {
         type: Sequelize.INTEGER.UNSIGNED
       },
+      custom_field_1: {
+        type: Sequelize.STRING
+      },
+      custom_field_2: {
+        type: Sequelize.STRING
+      },
+      custom_field_3: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

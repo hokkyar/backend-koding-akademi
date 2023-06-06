@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Products', {
+    await queryInterface.createTable('products', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -30,13 +30,20 @@ module.exports = {
         type: Sequelize.STRING
       },
       quota: {
-        type: Sequelize.INTEGER.UNSIGNED
+        type: Sequelize.INTEGER.UNSIGNED,
+        defaultValue: 0
       },
       participants: {
-        type: Sequelize.INTEGER.UNSIGNED
+        type: Sequelize.INTEGER.UNSIGNED,
+        defaultValue: 0
       },
       duration: {
-        type: Sequelize.INTEGER.UNSIGNED
+        type: Sequelize.INTEGER.UNSIGNED,
+        defaultValue: null
+      },
+      meetings: {
+        type: Sequelize.INTEGER.UNSIGNED,
+        defaultValue: 0
       },
       createdAt: {
         allowNull: false,

@@ -11,6 +11,8 @@ router.use('/dashboard', verifyAdminLogin, require('./dashboard/routes'))
 router.use('/profile', verifyAdminLogin, require('./profile/routes'))
 router.use('/faq', verifyAdminLogin, require('./faq/routes'))
 router.use('/contact', verifyAdminLogin, require('./contact/routes'))
+router.use('/transactions', verifyAdminLogin, require('./transactions/routes'))
+router.use('/meetings', verifyAdminLogin, require('./meetings/routes'))
 
 router.use('/login', require('./login/routes'))
 router.use('/logout', (req, res) => {
@@ -19,5 +21,14 @@ router.use('/logout', (req, res) => {
     return res.redirect('/admin/login')
   })
 })
+
+router.use('/', (req, res) => res.render('index', {
+  page: 'dashboard',
+  sub_page: 'not-found',
+  title: 'Dashboard',
+  sub: '',
+  detail: null,
+  data: null
+}))
 
 module.exports = router

@@ -1,7 +1,6 @@
 const router = require('express').Router()
 const { nanoid } = require('nanoid')
 const { Coupon, Product, sequelize, CouponProduct } = require('../../models/index')
-// const { Op } = require('sequelize')
 
 const params = {
   page: 'coupons',
@@ -16,12 +15,12 @@ router.get('/', async (req, res) => {
   const coupons = await Coupon.findAll()
   const products = await Product.findAll()
   const coupon_product = await CouponProduct.findAll()
-  res.render('index', { ...params, data: { coupons, products, coupon_product } })
+  return res.render('index', { ...params, data: { coupons, products, coupon_product } })
 })
 
 router.get('/show/:id', async (req, res) => {
   const coupon = await Coupon.findOne({ where: { id: req.params.id } })
-  if (!coupon) res.render('index', { ...params, sub_page: 'not-found' })
+  if (!coupon) return res.render('index', { ...params, sub_page: 'not-found' })
   const products = await CouponProduct.findAll({
     include: [
       {
@@ -30,7 +29,7 @@ router.get('/show/:id', async (req, res) => {
     ],
     where: { coupon_id: req.params.id }
   })
-  res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: { coupon, products } })
+  return res.render('index', { ...params, sub_page: 'show', detail: req.params.id, data: { coupon, products } })
 })
 
 router.post('/', async (req, res) => {
@@ -52,7 +51,7 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.log('Error occurred during transaction:', error)
   }
-  res.sendStatus(201)
+  return res.sendStatus(201)
 })
 
 router.put('/edit/:id', async (req, res) => {
@@ -74,12 +73,12 @@ router.put('/edit/:id', async (req, res) => {
   } catch (error) {
     console.log('Error occured during transaction', error)
   }
-  res.sendStatus(200)
+  return res.sendStatus(200)
 })
 
 router.delete('/delete/:id', async (req, res) => {
   await Coupon.destroy({ where: { id: req.params.id } })
-  res.sendStatus(200)
+  return res.sendStatus(200)
 })
 
 module.exports = router

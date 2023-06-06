@@ -31,13 +31,14 @@
     </div>
 
     <div class="my-2">
-      <h5 class="py-2 fw-bold text-center border">Products</h5>
+      <h5 class="py-2 fw-bold text-center border">Course & Event</h5>
       <% const lengthActive=data.user_products.active.length%>
 
         <ul class="nav nav-tabs nav-tabs-bordered">
           <li class="nav-item"> <button class="nav-link active" data-bs-toggle="tab"
               data-bs-target="#active">Active</button></li>
-          <li class="nav-item"> <button class="nav-link" data-bs-toggle="tab" data-bs-target="#expired">Expired</button>
+          <li class="nav-item"> <button class="nav-link" data-bs-toggle="tab"
+              data-bs-target="#expired">Finished</button>
           </li>
         </ul>
 
@@ -49,8 +50,8 @@
                 <p class="text-center w-100">No product active yet</p>
                 <% } %>
                   <% for( let i=0; i < lengthActive; i++ ) { %>
-                    <div class="card" style="width: 18rem;">
-                      <img src="<%= data.user_products.active[i].Product.img_url%>" class="card-img-top" alt="...">
+                    <div class="card" style="width: 17rem;">
+                      <img height="290" src="<%= data.user_products.active[i].Product.img_url %>" class="card-img-top">
                       <div class="card-body">
                         <h5 class="card-title">
                           <%= data.user_products.active[i].Product.name %>
@@ -60,7 +61,21 @@
                             <%= data.user_products.active[i].expired_date.toLocaleDateString('id-ID', options) %>
                           </span>
                         </p>
+                        <p>
+                          Meeting Quota: <%= data.user_products.active[i].meeting_quota %>
+                        </p>
+                        </p>
                       </div>
+                      <% if (data.user_products.active[i].meeting_quota===0 ||
+                        data.user_products.active[i].meeting_quota===null) { %>
+                        <button class="btn btn-success" disabled><i class="bi bi-person-fill-check"></i> Save
+                          Meeting</button>
+                        <% } else { %>
+                          <button data-url="/admin/meetings"
+                            data-productid="<%= JSON.stringify(data.user_products.active[i].Product.id) %>"
+                            class="btn btn-success meetingBtn"><i class="bi bi-person-fill-check"></i> Save
+                            Meeting</button>
+                          <% } %>
                     </div>
                     <% } %>
             </div>
@@ -74,7 +89,8 @@
                   <% } %>
                     <% for( let i=0; i < lengthFinished; i++ ) { %>
                       <div class="card" style="width: 18rem;">
-                        <img src="<%= data.user_products.finished[i].Product.img_url%>" class="card-img-top" alt="...">
+                        <img height="290" src="<%= data.user_products.finished[i].Product.img_url%>"
+                          class="card-img-top">
                         <div class="card-body">
                           <h5 class="card-title">
                             <%= data.user_products.finished[i].Product.name %>
@@ -83,6 +99,9 @@
                             Expired: <span class="text-danger">
                               <%= data.user_products.finished[i].expired_date.toLocaleDateString('id-ID', options) %>
                             </span>
+                          </p>
+                          <p>
+                            Meeting Quota: <%= data.user_products.finished[i].meeting_quota %>
                           </p>
                         </div>
                       </div>
@@ -144,6 +163,37 @@
               icon: 'success',
             }).then((result) => {
               window.location.href = '/admin/users'
+            })
+          },
+          error: function (err) {
+            swal({
+              title: 'Error!',
+              text: 'An error occured',
+              icon: 'error'
+            })
+          }
+        })
+      }
+    })
+  })
+
+  $('.meetingBtn').on('click', function () {
+    const productID = JSON.parse($(this).data('productid'))
+    swal({
+      title: "Are you sure?",
+      text: 'Save this Meeting?', icon: "warning", buttons: true,
+    }).then((confirm) => {
+      if (confirm) {
+        $.ajax({
+          url: `https://kodingapp.refillaja.id/admin/users/meetings/<%= data.user.id %>/${productID}`,
+          type: 'PUT',
+          success: function (result) {
+            swal({
+              title: 'Success!',
+              text: 'Meeting saved',
+              icon: 'success',
+            }).then((result) => {
+              window.location.href = '/admin/users/show/<%= data.user.id %>'
             })
           },
           error: function (err) {
