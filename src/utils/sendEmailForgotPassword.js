@@ -3,17 +3,17 @@ require('dotenv').config()
 const nodemailer = require('nodemailer')
 const sendEmailForgotPassword = async (email, id, token) => {
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: process.env.ADMIN_EMAIL_HOST,
+    port: process.env.ADMIN_EMAIL_PORT,
     auth: {
-      user: process.env.ADMIN_EMAIL,
-      pass: process.env.ADMIN_APP_PASSWORD
+      user: process.env.ADMIN_EMAIL_USERNAME,
+      pass: process.env.ADMIN_EMAIL_PASS
     }
   })
 
-  const host = process.env.NGROK || process.env.HOST
-  const link = `${host}/forgot-password?token=${token}&id=${id}`
+  const link = `${process.env.HOST}/forgot-password?token=${token}&id=${id}`
   await transporter.sendMail({
-    from: 'no-reply@koding-akademi',
+    from: process.env.ADMIN_EMAIL_USERNAME,
     to: email,
     subject: "Reset your password",
     html: "Hello,<br> Please Click on the link to reset your password.<br><a href=" + link + ">Click here</a>"
