@@ -1,4 +1,4 @@
-const { User, Order, OrderItem, Product, Cart, CartItem, UserProduct, Coupon, UserCoupon, Sequelize } = require('../../../models/index')
+const { User, Student, Order, OrderItem, Product, Cart, CartItem, UserProduct, Coupon, UserCoupon, Sequelize } = require('../../../models/index')
 const { Op } = require('sequelize')
 const { nanoid } = require('nanoid')
 const NotFoundError = require('../../../exceptions/NotFoundError')
@@ -40,9 +40,9 @@ exports.checkoutProductsService = async (productList, userId, couponId, custom_f
     }
 
     const orderId = `order-${nanoid(16)}`
-    const email = await getUserEmail(userId)
+    const { email, full_name, phone_number } = await getUserInfo(userId)
     const description = generateDescription(productNames)
-    const xenditInvoice = await createPayment(orderId, amount, email, description)
+    const xenditInvoice = await createPayment(orderId, amount, full_name, phone_number, email, description)
     await Order.create({
       id: orderId, user_id: userId, order_status: 'pending', total: amount, invoice_id: xenditInvoice.id, discount, custom_field_1, custom_field_2, custom_field_3
     })
@@ -169,12 +169,18 @@ async function getTotalAmount(productList) {
   return { amount, productNames }
 }
 
-async function getUserEmail(userId) {
-  const { email } = await User.findOne({
-    attributes: ['email'],
-    where: { id: userId }
+async function getUserInfo(userId) {
+  const student = await Student.findOne({
+    attributes: ['phone_number'],
+    include: [
+      {
+        model: User,
+        attributes: ['full_name', 'email']
+      }
+    ],
+    where: { user_id: userId }
   })
-  return email
+  return { email: student.User.email, full_name: student.User.full_name, phone_number: student.phone_number }
 }
 
 async function getZeroPriceProducts(cartId, productList, userId) {
