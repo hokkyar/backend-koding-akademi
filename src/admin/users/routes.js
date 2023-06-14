@@ -139,12 +139,12 @@ router.put('/meetings/:userId/:productId', asyncHandler(async (req, res) => {
   if (!exist) return res.render('index', { ...params, sub_page: 'not-found' })
 
   await UserProduct.decrement('meeting_quota', { where: { user_id: req.params.userId, product_id: req.params.productId } })
-  // const userProduct = await UserProduct.findOne({
-  //   where: { user_id: req.params.userId, product_id: req.params.productId }
-  // })
-  // if (userProduct.meeting_quota <= 0) {
-  //   await UserProduct.update({ status: 'finished' }, { where: { user_id: req.params.userId, product_id: req.params.productId } })
-  // }
+  const userProduct = await UserProduct.findOne({
+    where: { user_id: req.params.userId, product_id: req.params.productId }
+  })
+  if (userProduct.meeting_quota <= 0) {
+    await UserProduct.update({ status: 'finished' }, { where: { user_id: req.params.userId, product_id: req.params.productId } })
+  }
 
   await Meeting.create({ user_id: req.params.userId, product_id: req.params.productId })
   res.sendStatus(200)

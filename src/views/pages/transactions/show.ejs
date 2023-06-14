@@ -13,8 +13,8 @@
   <div class="p-4">
     <h2>ORDER INFO</h2>
     <% const options={weekday: 'long' , day: 'numeric' , month: 'long' , year: 'numeric' , hour: '2-digit' ,
-      minute: '2-digit' , second: '2-digit' } %>
-      <p>Ordered at: <%= data.createdAt.toLocaleDateString('id-ID', options) %>
+      minute: '2-digit' , second: '2-digit' , hour12: false, timeZone: "Asia/Makassar" } %>
+      <p>Ordered at: <%= data.createdAt.toLocaleDateString(undefined, options) %>
       </p>
       <p>User: <%= data.User.full_name %>
       </p>
@@ -34,7 +34,7 @@
 
       <% if (data.transaction[0]) { %>
         <h2>TRANSACTION INFO</h2>
-        <p>Paid at: <%= data.transaction[0].date.toLocaleDateString('id-ID', options) %>
+        <p>Paid at: <%= data.transaction[0].date.toLocaleDateString(undefined, options) %>
         </p>
         <p>Payment method: <%= data.transaction[0].payment_method %>
         </p>

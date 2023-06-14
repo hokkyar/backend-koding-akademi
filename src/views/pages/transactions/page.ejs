@@ -22,7 +22,9 @@
                     <%= i + 1 %>
                   </td>
                   <td>
-                    <%= data[i].createdAt.toLocaleString('id-ID').replace(/\./g, ":" ) %>
+                    <% const options={ day: "2-digit" , month: "2-digit" , year: "numeric" , hour: "2-digit" ,
+                      minute: "2-digit" , second: "2-digit" , hour12: false, timeZone: "Asia/Makassar" }%>
+                      <%= data[i].createdAt.toLocaleString(undefined, options)%>
                   </td>
                   <td>
                     <%= data[i].User.full_name %>
