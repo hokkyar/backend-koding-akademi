@@ -47,7 +47,6 @@ exports.xenditCallbackService = async ({ external_id, payment_method, status, am
         })
 
         const userId = user.User.id
-        const purchase_date = moment(paid_at)
 
         let orderedProducts = orderItems.map((orderItem) => {
           if (orderItem.selected_date) {
@@ -59,15 +58,15 @@ exports.xenditCallbackService = async ({ external_id, payment_method, status, am
               meeting_quota: 0
             }
           } else {
+            const purchase_date = moment(paid_at)
             const course_duration = orderItem.Product.duration
-            const course_meetings = orderItem.Product.meetings
             const expired_date = purchase_date.add(course_duration, 'months').format('YYYY-MM-DD')
             return {
               user_id: userId,
               product_id: orderItem.Product.id,
               status: 'active',
               expired_date,
-              meeting_quota: course_meetings
+              meeting_quota: orderItem.Product.meetings
             }
           }
         })

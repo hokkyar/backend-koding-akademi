@@ -17,6 +17,15 @@ router.get('/', async (req, res) => {
     include: [
       {
         model: User
+      },
+      {
+        model: OrderItem,
+        as: 'order',
+        include: [
+          {
+            model: Product
+          }
+        ]
       }
     ],
     order: [['createdAt', 'DESC']]

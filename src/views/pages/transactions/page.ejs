@@ -11,6 +11,7 @@
                 <th>Time</th>
                 <th>User</th>
                 <th>Status</th>
+                <th>Ordered Products</th>
                 <th>Total</th>
                 <th>Action</th>
               </tr>
@@ -31,6 +32,9 @@
                   </td>
                   <td class="<%= data[i].order_status === 'success' ? 'text-success' : 'text-danger'  %>">
                     <%= data[i].order_status %>
+                  </td>
+                  <td>
+                    <%= data[i].order.map(item=> item.Product.name).join(', ') %>
                   </td>
                   <td style="min-width: 150px;">
                     Rp <%= new Intl.NumberFormat('id-ID').format(data[i].total) %>

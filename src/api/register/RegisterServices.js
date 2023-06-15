@@ -15,16 +15,19 @@ exports.registerService = async ({ email, password, full_name, phone_number }) =
   if (user) throw new ConflictError('Email already exists')
 
   const user_id = `user-${nanoid(16)}`
-  const hashedPassword = await bcrypt.hash(password, 10)
+  const hashedPassword = bcrypt.hashSync(password, 10)
+  const qr_code = encryptData(`id=${user_id}&tr=null`)
+
   const email_token = `verify-${nanoid(8)}`
   const cartId = `cart-${nanoid(16)}`
 
   await User.create({
-    id: user_id, role: 'user', qr_code: encryptData(`id=${user_id}&tr=null`), email, password: hashedPassword, verified: false, full_name, phone_number
+    id: user_id, role: 'user', qr_code, email, password: hashedPassword, verified: false, full_name, phone_number
   })
   await Cart.create({ id: cartId, user_id })
   await Student.create({ user_id, phone_number, address: null, birth_date: null })
   await AuthToken.create({ token: email_token })
+
   await sendEmailVerification(email, user_id, email_token)
 
   return { user_id, email_token }

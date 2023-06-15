@@ -30,6 +30,15 @@ module.exports = {
         type: Sequelize.INTEGER.UNSIGNED,
         defaultValue: 0
       },
+      custom_field_1: {
+        type: Sequelize.STRING
+      },
+      custom_field_2: {
+        type: Sequelize.STRING
+      },
+      custom_field_3: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

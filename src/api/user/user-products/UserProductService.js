@@ -3,7 +3,7 @@ const { Op } = require('sequelize')
 
 exports.getUserProductService = async (userId, limit) => {
   const user_products = await UserProduct.findAll({
-    attributes: ['status', 'expired_date', 'meeting_quota'],
+    attributes: ['status', 'expired_date', 'meeting_quota', 'custom_field_1', 'custom_field_2', 'custom_field_3'],
     include: [
       {
         model: Product
@@ -25,7 +25,10 @@ exports.getUserProductService = async (userId, limit) => {
     description: product.Product.description,
     status: product.status,
     expired_date: product.expired_date,
-    meeting_quota: product.meeting_quota
+    meeting_quota: product.meeting_quota,
+    custom_field_1: product.custom_field_1,
+    custom_field_2: product.custom_field_2,
+    custom_field_3: product.custom_field_3
   }))
 
   return products
@@ -33,7 +36,7 @@ exports.getUserProductService = async (userId, limit) => {
 
 exports.getUserEventsService = async (userId, limit) => {
   const user_products = await UserProduct.findAll({
-    attributes: ['status', 'expired_date'],
+    attributes: ['status', 'expired_date', 'custom_field_1', 'custom_field_2', 'custom_field_3'],
     include: [
       {
         model: Product,
@@ -63,7 +66,10 @@ exports.getUserEventsService = async (userId, limit) => {
     participants: product.Product.participants,
     event_dates: product.Product.event_dates,
     status: product.status,
-    end_date: product.expired_date
+    end_date: product.expired_date,
+    custom_field_1: product.custom_field_1,
+    custom_field_2: product.custom_field_2,
+    custom_field_3: product.custom_field_3
   }))
 
   return products

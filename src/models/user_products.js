@@ -18,7 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     product_id: DataTypes.STRING,
     status: DataTypes.STRING,
     expired_date: DataTypes.DATE,
-    meeting_quota: DataTypes.INTEGER
+    meeting_quota: DataTypes.INTEGER,
+    custom_field_1: DataTypes.STRING,
+    custom_field_2: DataTypes.STRING,
+    custom_field_3: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'user_products',

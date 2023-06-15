@@ -22,6 +22,8 @@ router.post('/', async (req, res) => {
   if (!isPasswordMatched) return res.render('pages/login/page', { message: 'Invalid email or password' })
 
   req.session.user = { email }
+  req.session.cookie.expires = new Date(Date.now() + 7200000)
+
   return res.redirect('/admin/dashboard')
 })
 
