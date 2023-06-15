@@ -20,11 +20,13 @@
     <input type="hidden" name="current_img" value="<%= data.img_url %>">
     <div class="modal-body">
       <!-- IMG -->
-      <div class="d-flex mb-3 align-items-center gap-2">
-        <div class="col-2 text-center">
-          <img id="cover-img" src="<%= data.img_url %>" alt="Cover" width="100">
+      <div class="d-flex mb-3 align-items-center gap-2 flex-wrap flex-column">
+        <div class="col text-center">
+          <img id="cover-img" src="<%= data.img_url %>" alt="Cover" width="130" onclick="window.open(this.src)"
+            style="cursor: pointer;">
+          <br><em class="text-danger" style="font-size: 13px;">*maksimal 1MB</em>
         </div>
-        <div class="col-8">
+        <div class="col-10">
           <input type="file" name="img" accept="image/*" class="form-control" onchange="previewImage(event)">
         </div>
       </div>
@@ -157,6 +159,13 @@
   function previewImage(event) {
     const file = event.target.files[0]
     const reader = new FileReader()
+    if (file.size >= 1400000) {
+      swal({
+        title: 'Warning!',
+        text: 'Ukuran file terlalu besar. Maksimal 1 MB',
+        icon: 'warning'
+      })
+    }
     reader.onload = function () {
       $('#cover-img').attr('src', reader.result)
     }

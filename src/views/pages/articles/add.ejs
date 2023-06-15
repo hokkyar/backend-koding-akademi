@@ -1,26 +1,45 @@
 <h3 class="fw-bold text-center">Add Article</h3>
 
-<div class="d-flex bg-white p-4 rounded shadow-sm">
+<div class="modal fade" id="articlePreview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width: 420px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Article Preview</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
 
-  <div class="col-4 px-3">
-    <div class="border rounded w-full p-2" style="min-height: 450px; overflow: hidden;">
-      <img id="mobile-img" src="https://th.bing.com/th/id/OIP.kzI1EUFN1_qi7eISbXDekgHaHK?pid=ImgDet&rs=1"
-        alt="Preview Image" style="width: 100%;">
-      <h5 class="mt-3 mx-2" id="title-mobile" style="overflow-wrap: break-word;">Title</h5>
-      <div class="mx-2" id="content-mobile">Content</div>
+        <div class="rounded w-full p-2" style="min-height: 450px; overflow: hidden;">
+          <img id="mobile-img" src="https://th.bing.com/th/id/OIP.kzI1EUFN1_qi7eISbXDekgHaHK?pid=ImgDet&rs=1"
+            alt="Preview Image" style="width: 100%;">
+          <h5 class="mt-3 mx-2" id="title-mobile" style="overflow-wrap: break-word;">Title</h5>
+          <div class="mx-2" id="content-mobile">Content</div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
+</div>
+
+
+<div class="bg-white p-4 rounded shadow-sm">
+
+  <button class="btn btn-primary border" data-bs-toggle="modal" data-bs-target="#articlePreview">Preview</button>
 
   <form class="col" id="form" action="/admin/articles" method="post" enctype="multipart/form-data">
     <div class="modal-body">
 
       <!-- IMG -->
-      <div class="d-flex mb-3 align-items-center gap-2">
-        <div class="col-2 text-center">
+      <div class="d-flex mb-3 align-items-center gap-2 flex-wrap flex-column">
+        <div class="col text-center">
           <img id="cover-img" src="https://th.bing.com/th/id/OIP.kzI1EUFN1_qi7eISbXDekgHaHK?pid=ImgDet&rs=1" alt="Cover"
-            width="100">
+            width="130">
+          <br><em class="text-danger" style="font-size: 13px;">*maksimal 1MB</em>
         </div>
-        <div class="col-8">
+        <div class="col-10">
           <input type="file" name="img" accept="image/*" class="form-control" onchange="previewImage(event)">
         </div>
       </div>
@@ -83,6 +102,13 @@
   function previewImage(event) {
     const file = event.target.files[0]
     const reader = new FileReader()
+    if (file.size >= 1400000) {
+      swal({
+        title: 'Warning!',
+        text: 'Ukuran file terlalu besar. Maksimal 1 MB',
+        icon: 'warning'
+      })
+    }
     reader.onload = function () {
       $('#cover-img').attr('src', reader.result)
       $('#mobile-img').attr('src', reader.result)
