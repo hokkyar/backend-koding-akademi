@@ -1,5 +1,5 @@
 const router = require('express').Router()
-// const sharp = require('sharp')
+const sharp = require('sharp')
 const { Product, EventDate, User, UserProduct, sequelize } = require('../../models/index')
 const { nanoid } = require('nanoid')
 const fs = require('fs')

@@ -1,5 +1,5 @@
 const router = require('express').Router()
-// const sharp = require('sharp')
+const sharp = require('sharp')
 const { nanoid } = require('nanoid')
 const fs = require('fs')
 const path = require('path')

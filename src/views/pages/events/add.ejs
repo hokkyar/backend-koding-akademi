@@ -119,6 +119,7 @@
         }).then((result) => {
           window.location.href = '/admin/events'
         })
+        $('button[type="submit"]').prop('disabled', false)
       },
       error: function (err) {
         swal({
@@ -126,9 +127,9 @@
           text: 'An error occured',
           icon: 'error'
         })
+        $('button[type="submit"]').prop('disabled', false)
       }
     })
-    $('button[type="submit"]').prop('disabled', false)
   })
 
   function formatHarga(harga) {

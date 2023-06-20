@@ -97,7 +97,7 @@
   $('#deleteBtn').on('click', () => {
     swal({
       title: "Are you sure?",
-      text: '<%= data.name %> will be deleted',
+      text: '<%= data.course.name %> will be deleted',
       icon: "warning",
       buttons: true,
       dangerMode: true,
@@ -105,7 +105,7 @@
       .then((confirm) => {
         if (confirm) {
           $.ajax({
-            url: 'https://kodingapp.refillaja.id/admin/courses/delete/<%= data.id %>',
+            url: 'https://kodingapp.refillaja.id/admin/courses/delete/<%= data.course.id %>',
             type: 'DELETE',
             success: function (result) {
               swal({
