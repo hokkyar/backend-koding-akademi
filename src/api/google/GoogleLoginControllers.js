@@ -1,7 +1,8 @@
-const { getGoogleAccount } = require('./GoogleLoginServices')
+const { googleLoginService } = require('./GoogleLoginServices')
 
-exports.successGoogleLogin = async (req, res) => {
-  const data = await getGoogleAccount()
+exports.googleLoginController = async (req, res) => {
+  const { id, email, name } = req.body
+  const data = await googleLoginService(id, email, name)
   res.json({
     status: 'success',
     message: 'Login success',

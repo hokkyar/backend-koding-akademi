@@ -8,12 +8,7 @@ exports.userLogin = async (req, res) => {
     status: 'success',
     message: 'Login success',
     data: {
-      full_name: response.full_name,
-      phone_number: response.phone_number,
-      email: response.email,
-      qr_code: response.qr_code,
-      address: response.address,
-      birth_date: response.birth_date,
+      email: req.body.email,
       accessToken: response.accessToken,
       refreshToken: response.refreshToken
     },
