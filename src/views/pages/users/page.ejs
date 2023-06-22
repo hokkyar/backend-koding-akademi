@@ -179,6 +179,7 @@
         }).then((result) => {
           window.location.href = '/admin/users'
         })
+        $('button[type="submit"]').prop('disabled', false)
       },
       error: function (err) {
         swal({
@@ -186,9 +187,9 @@
           text: err.responseJSON.message,
           icon: 'error'
         })
+        $('button[type="submit"]').prop('disabled', false)
       }
     })
-    $('button[type="submit"]').prop('disabled', false)
   })
 
   $('.deleteBtn').on('click', function () {
