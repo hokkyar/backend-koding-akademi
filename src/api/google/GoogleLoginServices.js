@@ -7,6 +7,7 @@ const { encryptData } = require('../../utils/encryptData')
 
 exports.googleLoginService = async (userId, userEmail, userFullName) => {
   let response = {}
+  let accessToken, refreshToken
   try {
     await sequelize.transaction(async (t) => {
       const [user, created] = await User.findOrCreate({
@@ -27,10 +28,13 @@ exports.googleLoginService = async (userId, userEmail, userFullName) => {
         const cartId = `cart-${nanoid(16)}`
         await Cart.create({ id: cartId, user_id: `user-${userId}` }, { transaction: t })
         await Student.create({ user_id: `user-${userId}`, phone_number: null, address: null, birth_date: null }, { transaction: t })
-      }
 
-      const accessToken = jwt.sign({ id: `user-${userId}`, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
-      const refreshToken = jwt.sign({ id: `user-${userId}`, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
+        accessToken = jwt.sign({ id: `user-${userId}`, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
+        refreshToken = jwt.sign({ id: `user-${userId}`, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
+      } else {
+        accessToken = jwt.sign({ id: user.id, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
+        refreshToken = jwt.sign({ id: user.id, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
+      }
 
       await AuthToken.create({ token: refreshToken })
 
