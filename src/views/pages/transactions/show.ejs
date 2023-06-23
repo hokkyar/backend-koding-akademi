@@ -1,47 +1,104 @@
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th,
+  td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+</style>
+
 <section class="bg-white rounded shadow-sm">
 
-  <div class="d-flex gap-2 px-4 pt-4 pb-2">
-    <div>
-      <h5>
-        Invoice ID : <span class="text-secondary">
-          <%= data.invoice_id %>
-        </span>
-      </h5>
-    </div>
-  </div>
+  <p class="px-4 py-3 m-0 fw-bold">
+    NO TRANSACTION : <span class="text-secondary">
+      <% if (data.invoice_id) { %>
+        <%= data.invoice_id %>
+          <% }else{ %>
+            -
+            <% } %>
+    </span>
+  </p>
 
-  <div class="p-4">
-    <h2>ORDER INFO</h2>
-    <% const options={weekday: 'long' , day: 'numeric' , month: 'long' , year: 'numeric' , hour: '2-digit' ,
-      minute: '2-digit' , second: '2-digit' , hour12: false, timeZone: "Asia/Makassar" } %>
-      <p>Ordered at: <%= data.createdAt.toLocaleDateString(undefined, options) %>
-      </p>
-      <p>User: <%= data.User.full_name %>
-      </p>
-      <p>Status: <%= data.order_status %>
-      </p>
-      <p>Total: Rp <%= new Intl.NumberFormat('id-ID').format(data.total) %>
-      </p>
-      <p>Ordered products:
-      <ul>
-        <% for( let i=0; i < data.order.length; i++ ) { %>
-          <li>
-            <%= data.order[i].Product.name %>
-          </li>
-          <% } %>
-      </ul>
-      </p>
+  <% const options={weekday: 'long' , day: 'numeric' , month: 'long' , year: 'numeric' , hour: '2-digit' ,
+    minute: '2-digit' , second: '2-digit' , hour12: false, timeZone: "Asia/Makassar" } %>
+
+    <div class="px-4 py-2">
+      <h5 class="fs-5 fw-bold text-primary">ORDER INFO</h5>
+      <table>
+        <thead>
+          <th>Status</th>
+          <th>Customer</th>
+          <th>Ordered at</th>
+          <th>Total</th>
+        </thead>
+        <tbody>
+          <tr>
+            <% if (data.order_status==='success' ) { %>
+              <td class="text-success fw-bold">
+                <%= data.order_status.toUpperCase() %>
+              </td>
+              <% }else{ %>
+                <td class="text-danger fw-bold">
+                  <%= data.order_status.toUpperCase() %>
+                </td>
+                <% } %>
+                  <td>
+                    <%= data.User.full_name %>
+                  </td>
+                  <td>
+                    <%= data.createdAt.toLocaleDateString(undefined, options) %>
+                  </td>
+                  <td>
+                    Rp <%= new Intl.NumberFormat('id-ID').format(data.total) %>
+                  </td>
+          </tr>
+        </tbody>
+      </table>
 
       <% if (data.transaction[0]) { %>
-        <h2>TRANSACTION INFO</h2>
-        <p>Paid at: <%= data.transaction[0].date.toLocaleDateString(undefined, options) %>
-        </p>
-        <p>Payment method: <%= data.transaction[0].payment_method %>
-        </p>
-        <p>Bank name: <%= data.transaction[0].bank_name %>
-        </p>
+        <h5 class="fs-5 fw-bold mt-3 text-primary">PAYMENT DETAIL</h5>
+        <table>
+          <thead>
+            <th>Paid at</th>
+            <th>Payment Method</th>
+            <th>Bank Name</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <%= data.transaction[0].date.toLocaleDateString(undefined, options) %>
+              </td>
+              <td>
+                <%= data.transaction[0].payment_method %>
+              </td>
+              <td>
+                <%= data.transaction[0].bank_name %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <% } %>
 
-  </div>
+          <h5 class="fs-5 fw-bold mt-3 text-primary">ORDERED PRODUCTS</h5>
+          <ul>
+            <% for( let i=0; i < data.order.length; i++ ) { %>
+              <li class="my-2">
+                <img width="100" src="<%= data.order[i].Product.img_url %>" alt="">
+                <span class="mx-2">
+                  <%= data.order[i].Product.name %>
+                </span>
+              </li>
+              <% } %>
+          </ul>
+    </div>
 
 </section>
