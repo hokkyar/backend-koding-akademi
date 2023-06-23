@@ -32,6 +32,9 @@ exports.googleLoginService = async (userId, userEmail, userFullName) => {
         accessToken = jwt.sign({ id: `user-${userId}`, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
         refreshToken = jwt.sign({ id: `user-${userId}`, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
       } else {
+        if (!user.verified) {
+          await User.update({ verified: true }, { where: { id: user.id } })
+        }
         accessToken = jwt.sign({ id: user.id, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
         refreshToken = jwt.sign({ id: user.id, role: 'user' }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRED })
       }

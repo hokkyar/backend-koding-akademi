@@ -20,7 +20,7 @@ exports.userLoginService = async ({ email, password }) => {
     const token = `verify-${nanoid(8)}`
     await AuthToken.create({ token })
     await sendEmailVerification(email, user.id, token)
-    throw new AuthenticationError(`This account hasn't been verified. Check your inbox at (${email})`)
+    throw new AuthenticationError(`This account hasn't been verified. Check your email`)
   }
 
   const accessToken = jwt.sign({ id: user.id, role: 'user' }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRED })
