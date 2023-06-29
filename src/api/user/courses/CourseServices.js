@@ -20,7 +20,7 @@ exports.getCoursesService = async (category, promo, limit) => {
   }
 
   const courses = await Product.findAll({
-    attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'quota'],
+    attributes: ['id', 'name', 'price', 'discount_price', 'description', 'img_url', 'quota', 'meetings', 'duration'],
     include: [
       {
         model: Category,

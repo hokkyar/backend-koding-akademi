@@ -22,13 +22,18 @@ router.use('/logout', (req, res) => {
   })
 })
 
-router.use('/', (req, res) => res.render('index', {
-  page: 'dashboard',
-  sub_page: 'not-found',
-  title: 'Dashboard',
-  sub: '',
-  detail: null,
-  data: null
-}))
+router.use('/', (req, res, next) => {
+  if (!req.session.user) {
+    return res.redirect('/admin/login')
+  }
+  return res.render('index', {
+    page: 'dashboard',
+    sub_page: 'not-found',
+    title: 'Dashboard',
+    sub: '',
+    detail: null,
+    data: null
+  })
+})
 
 module.exports = router
